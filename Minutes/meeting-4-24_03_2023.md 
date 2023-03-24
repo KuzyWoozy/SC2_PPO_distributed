@@ -1,0 +1,22 @@
+## Supervisor Meeting 4
+**Date:** 24th March 2023
+
+**Location:** Bayes Center Room 2.02
+
+**Next meeting:** 31st March
+
+### Attendees:
+* Dr Evgenij Belikov
+* Daniil Kuznetsov
+
+### Discussion:
+* Talked about the success of running pytorch training examples on Archer 2 'lowpriority' queue, however other alternatives could still be looked into as Archer 2 lacks GPUs which may be crucial for training larger models.
+* How the RL problem could be scaled which will be useful for defining a set of workloads to evaluate parallelism on; suggestions were training steps and neural network parameter space.
+* Discussion on stocastic nature of solving RL problems, a large number of trials may need to be run with various hyperparameter configurations with success potentially depending on a lucky seed. This makes it difficult to estimate the resources required and hence more should be requested in an attempt to compensate for any failed seed trials.
+* Performance of GPUs still needs to be evaluated on Cirrus, should be the next focus.
+
+### Actions:
+* Add Archer 2 update risk of breaking the project to risk analysis.
+* Discuss/mention hardware that neural networks training could map to in the feasability study.
+* Carry out GPU performance testing on the prototype code to estimate required resources.
+
