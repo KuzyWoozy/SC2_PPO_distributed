@@ -9,7 +9,7 @@ from train import ENV, HIDDEN_SIZE, FRAME_SKIP, RaceEnvi
 
 
 # SETTINGS
-CHECKPOINT_PATH = ENV + "-" + "850000.chkpt"
+CHECKPOINT_PATH = "checkpoints/" + ENV + "-" + "850000.chkpt"
 
 def evaluate(env : src.envi.Envi, model : t.nn.Module) -> None:
     model.eval()
