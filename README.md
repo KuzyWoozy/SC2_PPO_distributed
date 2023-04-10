@@ -4,8 +4,8 @@ Implementation of the Twin Delayed DDPG Reinforcement Learning algorithm, uses O
 The code provided can be run on Cirrus with the OpenAI Gym CarRacing-v2 environment, experiments on other environments and ARCHER2 are not currently supported.
 
 <p float="middle">
-  <img src="images/ant.gif" width="700" />
-  <img src="images/car.gif" width="700" /> 
+  <img src="images/ant.gif" width="300" />
+  <img src="images/car.gif" width="300" /> 
 </p>
 
 ## Installing dependencies:
