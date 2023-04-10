@@ -1,4 +1,4 @@
-﻿# T3D Serial Prototype
+# T3D Serial Prototype
 Implementation of the Twin Delayed DDPG Reinforcement Learning algorithm, uses OpenAI Gym for its environments.
 
 The code provided can be run on Cirrus with the OpenAI Gym CarRacing-v2 environment, experiments on other environments and ARCHER2 are not currently supported.
@@ -25,7 +25,7 @@ The code provided can be run on Cirrus with the OpenAI Gym CarRacing-v2 environm
 
 ## Directory summary:
 - `Minutes/`
-    * Reactor simulation configuration file, structure has not changed from serial source. 
+    * Track of meeting notes, categorized by date of occurance.
 - `src/`
 	* envi.py
 		- Contains environment managers, wraps around OpenAI gym.
