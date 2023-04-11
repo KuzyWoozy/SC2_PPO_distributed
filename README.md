@@ -16,6 +16,7 @@ The code provided can be run on Cirrus with the OpenAI Gym CarRacing-v2 environm
 3. `make install`
 
 ## Running the prototype on Cirrus:
+* Modify 'cirrus_job.slurm' to update its source command with your virtual environment 'your_virtual_env/bin/activate'.
 * `sbatch cirrus_job.slurm`
 * Saved models will be periodically saved in 'checkpoints/'
 * Periodic evaluation performance can be observed in 'perf.csv'
