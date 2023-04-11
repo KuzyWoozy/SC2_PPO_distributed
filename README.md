@@ -13,8 +13,8 @@ The code provided can be run on Cirrus with the OpenAI Gym CarRacing-v2 environm
 ## Installing dependencies:
 1. Python 3.10+
 2. Create a virtual environment via `venv`.
-2.5 You may have to unload the python module before proceeding with installation of packages.
-3. `make install`
+3. You may have to unload the python module before proceeding with installation of packages.
+4. `make install`
 
 ## Running the prototype on Cirrus:
 * Modify 'cirrus_job.slurm' to update its source command with your virtual environment 'your_virtual_env/bin/activate'.
