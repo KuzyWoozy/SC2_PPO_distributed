@@ -1,4 +1,4 @@
-# T3D Serial Prototype
+# TD3 Serial Prototype
 Implementation of the Twin Delayed DDPG Reinforcement Learning algorithm, uses OpenAI Gym for its environments.
 
 The code provided can be run on Cirrus with the OpenAI Gym CarRacing-v2 environment, experiments on other environments and ARCHER2 are not currently supported.
@@ -34,7 +34,7 @@ The code provided can be run on Cirrus with the OpenAI Gym CarRacing-v2 environm
 	* replay.py
 		- Replay buffer implementation used in off-policy algorithms.
 	* train.py
-		- Support code for the T3D algorithm training procedure.
+		- Support code for the TD3 algorithm training procedure.
 	* misc.py
 		- Performance trackers and distributions.
 
