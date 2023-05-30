@@ -81,7 +81,6 @@ def main() -> None:
             noise = GaussianNoise([NOISE_STD, NOISE_STD, NOISE_STD]),
             perf = PerformanceTracker(max_steps = MAX_STEPS, frame_skip = FRAME_SKIP, rate = PERF_MEASURE, file = PERF_FILE))
 
-    
     trainer.train(ENV_INTERACTIONS, env, model)
 
     PERF_FILE.close()
