@@ -5,7 +5,7 @@ from pysc2.agents import base_agent
 from pysc2.lib import actions
 
 from src.Approximator import FDZApprox
-from src.Config import LEARNING_RATE
+from src.Config import LEARNING_RATE, PPO_CLIP, ENTROPY
 
 
 class RandomAgent(base_agent.BaseAgent):
@@ -29,10 +29,10 @@ class RandomAgent(base_agent.BaseAgent):
 
 class FDZAgent(base_agent.BaseAgent):
 
-    def __init__(self, check_manager = None) -> None:
+    def __init__(self, approx, check_manager = None) -> None:
         super().__init__()
 
-        self.approx = FDZApprox()
+        self.approx = approx
 
         self.optim = t.optim.Adam(self.approx.parameters(), maximize = False, lr = LEARNING_RATE)
 
@@ -65,6 +65,28 @@ class FDZAgent(base_agent.BaseAgent):
         self.check_manager = check_manager
         
 
+    def loss(self, func_args_dists, func_args_dists_old, actions, adv):
+        # Note that we're minimizing
+    
+        actor_gain = t.tensor([0.0])
+        entropy = t.tensor([0.0])
+        
+
+        adv_detached = adv.detach()
+
+        for out, out_old, action in zip(func_args_dists, func_args_dists_old, actions):
+
+            actor_gain -= t.min((out[:, action] / out_old[:, action]) * adv_detached, t.clip(out[:, action] / out_old[:, action], min = 1 - PPO_CLIP, max = 1 + PPO_CLIP) * adv_detached)
+
+            out_pos = out[out > 0.0]
+            entropy -= t.sum(out_pos * t.log(out_pos), axis = 0)
+
+        critic_loss = adv ** 2
+        
+        return actor_gain + critic_loss + (ENTROPY * entropy)
+
+
+
     def categorical_sample(self, probs):
         return t.distributions.Categorical(probs = probs).sample((1,)).item()
     
@@ -91,12 +113,14 @@ class FDZAgent(base_agent.BaseAgent):
        
         
 
-    def step(self, obs, state):
+    def step(self, obs):
         super().step(obs)
-
-        nn_repr = self.approx.apply_hidden_net(self.approx.apply_conv_net(state))
         
-        (actor_probs,) = self.approx("function_id", nn_repr)
+        state = self.convert_to_state(obs)
+        
+        nn_repr = self.approx(state, "hidden")
+
+        (actor_probs,) = self.approx(nn_repr, "function_id")
 
         mask = t.zeros((1, 11), dtype = t.float32)
 
@@ -114,8 +138,7 @@ class FDZAgent(base_agent.BaseAgent):
         
         # Add selected function as an argument
         action_nn_repr = t.cat((actor_choice_vector, nn_repr), dim = 1)
-
-        
+ 
         func_args_dists = [actor_probs_masked_norm]
         func_args_actions = [actor_choice]
 
@@ -125,7 +148,7 @@ class FDZAgent(base_agent.BaseAgent):
             if arg.name == "queued":
                 args.append([0]) # Do not queue anything for now
             else:
-                out = self.approx(arg.name, action_nn_repr)
+                out = self.approx(action_nn_repr, arg.name)
                 out_act = [self.categorical_sample(y) for y in out]
 
                 func_args_dists.extend(out)
@@ -133,15 +156,15 @@ class FDZAgent(base_agent.BaseAgent):
 
                 args.append(out_act)
 
+        return actions.FunctionCall(function_id, args), func_args_dists, func_args_actions
 
-        return actions.FunctionCall(function_id, args), func_args_dists, func_args_actions, self.approx.critic(nn_repr)
 
+    def nn_outs(self, obs, actor_choice):
+        state = self.convert_to_state(obs)
 
-    def step_old(self, approx_old, actor_choice, obs, state):
+        nn_repr = self.approx(state, "hidden")
 
-        nn_repr = approx_old.apply_hidden_net(approx_old.apply_conv_net(state))
-
-        (actor_probs,) = approx_old("function_id", nn_repr)
+        (actor_probs,) = self.approx(nn_repr, "function_id")
 
         mask = t.zeros((1, 11), dtype = t.float32)
 
@@ -150,7 +173,6 @@ class FDZAgent(base_agent.BaseAgent):
         actor_probs_masked = actor_probs * mask
         
         actor_probs_masked_norm = actor_probs_masked / t.sum(actor_probs_masked)
-
         function_id = self.nn_starcraft_mapping[actor_choice]
 
         actor_choice_vector = t.zeros((1, 11), dtype = t.float32)
@@ -158,21 +180,11 @@ class FDZAgent(base_agent.BaseAgent):
         
         # Add selected function as an argument
         action_nn_repr = t.cat((actor_choice_vector, nn_repr), dim = 1)
-
-        
+ 
         func_args_dists = [actor_probs_masked_norm]
 
-        args = []
-
         for arg in self.action_spec.functions[function_id].args:
-            if arg.name == "queued":
-                args.append([0]) # Do not queue anything for now
-            else:
-                func_args_dists.extend(approx_old(arg.name, action_nn_repr))
+            if arg.name != "queued":
+                func_args_dists.extend(self.approx(action_nn_repr, arg.name))
 
-        return func_args_dists
-
-
-    def critic(self, state):
-        return self.approx.critic(self.approx.apply_hidden_net(self.approx.apply_conv_net(state)))
-
+        return func_args_dists, self.approx(nn_repr, "critic")

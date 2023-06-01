@@ -3,13 +3,13 @@ import copy
 import torch as t
 
 from src.Checkpoint import CheckpointManager
-from src.Config import LAMBDA
+from src.Config import EPOCH_BATCH
 
 
-def run_train_loop(agent, env, max_frames = 0, episode_batch = 0):
+
+def run_train_loop(workaround, agent, env, max_episodes):
     total_episodes = 0
     total_frames = 0
-
 
     start_time = time.time()
 
@@ -17,64 +17,46 @@ def run_train_loop(agent, env, max_frames = 0, episode_batch = 0):
     act_spec = env.action_spec()[0]
     agent.setup(obs_spec, act_spec)
 
-    approx_old = copy.deepcopy(agent.approx)
-    approx_old.requires_grad_(False)
-
     try:
         while True:
+            if total_episodes >= max_episodes:
+                return
+
             total_episodes += 1
 
+            if agent.check_manager and agent.check_manager.time_to_save(total_episodes):
+                agent.check_manager.save(total_episodes, approx = agent.approx)
+            
             timestep_t = env.reset()[0]
 
             agent.reset()
 
-            if total_episodes % episode_batch == 1:
-                approx_old = copy.deepcopy(agent.approx)
-                approx_old.requires_grad_(False)
+            episode_info = []
+           
+            with t.no_grad():
+                # Sample a trajectory
+                while True:
+                    if timestep_t.last():
+                        break
 
+                    total_frames += 1
 
-            episode_info = [] 
+                    action, func_args_dists, func_args_actions = agent.step(timestep_t)
 
-            while True:
-
-                if timestep_t.last():
-                    break
-
-                total_frames += 1
-
-                
-                if agent.check_manager and agent.check_manager.time_to_save(total_frames):
-                    agent.check_manager.save(total_frames, approx = agent.approx)
-
-                if max_frames and total_frames >= max_frames:
-                    return
-                
-                state = agent.convert_to_state(timestep_t)
-
-                action, func_args_dists, func_args_actions, critic_val = agent.step(timestep_t, state)
-                func_args_dists_old = agent.step_old(approx_old, func_args_actions[0], timestep_t, state)
-
-                timestep_tt = env.step([action])[0]
-                
-                episode_info.append((timestep_tt.reward, state, critic_val, func_args_dists, func_args_dists_old, func_args_actions))
-
-                timestep_t = timestep_tt
-
-            
-            loss = t.tensor([0.0])
-            G = 0.0
-            for reward, state, critic_val, func_args_dists, func_args_dists_old, func_args_actions in reversed(episode_info):
-
-                G = reward + LAMBDA * G
-                ADV = G - critic_val[0]
-                
-                loss += agent.approx.loss(func_args_dists, func_args_actions, func_args_dists_old, ADV)
-                
-            agent.optim.zero_grad()
-            loss.backward()
-            agent.optim.step()
-
+                    timestep_tt = env.step([action])[0]
                     
+                    episode_info.append((timestep_tt.reward, timestep_t, func_args_dists, func_args_actions))
+                    timestep_t = timestep_tt
+            
+
+            for _ in range(EPOCH_BATCH):
+                # Could do an optimization here to process the first iteration faster
+                # by avoiding recalculation of dists
+
+                agent.optim.zero_grad()
+                workaround(episode_info).backward()
+                agent.optim.step()
+
 
     except KeyboardInterrupt:
         pass
