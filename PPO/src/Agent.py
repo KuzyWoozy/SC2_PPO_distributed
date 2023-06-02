@@ -5,7 +5,7 @@ from pysc2.agents import base_agent
 from pysc2.lib import actions
 
 from src.Approximator import FDZApprox
-from src.Config import LEARNING_RATE, PPO_CLIP, ENTROPY
+from src.Config import LEARNING_RATE, PPO_CLIP, ENTROPY, LAMBDA
 
 
 class RandomAgent(base_agent.BaseAgent):
@@ -71,7 +71,6 @@ class FDZAgent(base_agent.BaseAgent):
         actor_gain = t.tensor([0.0])
         entropy = t.tensor([0.0])
         
-
         adv_detached = adv.detach()
 
         for out, out_old, action in zip(func_args_dists, func_args_dists_old, actions):
@@ -84,7 +83,20 @@ class FDZAgent(base_agent.BaseAgent):
         critic_loss = adv ** 2
         
         return actor_gain + critic_loss + (ENTROPY * entropy)
+    
 
+    def mc_loss(self, episode_info):
+        
+        loss = t.tensor([0.0])
+        G = 0.0
+
+        for (reward, obs, func_args_dists_old, func_args_actions) in reversed(episode_info):
+            func_args_dists, critic_val = self.nn_outs(obs, func_args_actions[0])
+            G = reward + LAMBDA * G
+            ADV = G - critic_val[0]
+            
+            loss += self.loss(func_args_dists, func_args_dists_old, func_args_actions, ADV)
+        return loss
 
 
     def categorical_sample(self, probs):

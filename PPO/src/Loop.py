@@ -2,9 +2,10 @@ import time
 import copy
 import torch as t
 
-from src.Checkpoint import CheckpointManager
-from src.Config import EPOCH_BATCH
+import torch.distributed as dist
 
+from src.Checkpoint import CheckpointManager
+from src.Config import EPOCH_BATCH, ROOT
 
 
 def run_train_loop(workaround, agent, env, max_episodes):
@@ -24,7 +25,7 @@ def run_train_loop(workaround, agent, env, max_episodes):
 
             total_episodes += 1
 
-            if agent.check_manager and agent.check_manager.time_to_save(total_episodes):
+            if dist.get_rank() == ROOT and agent.check_manager and agent.check_manager.time_to_save(total_episodes):
                 agent.check_manager.save(total_episodes, approx = agent.approx)
             
             timestep_t = env.reset()[0]
@@ -47,8 +48,8 @@ def run_train_loop(workaround, agent, env, max_episodes):
                     
                     episode_info.append((timestep_tt.reward, timestep_t, func_args_dists, func_args_actions))
                     timestep_t = timestep_tt
+                
             
-
             for _ in range(EPOCH_BATCH):
                 # Could do an optimization here to process the first iteration faster
                 # by avoiding recalculation of dists
@@ -57,7 +58,7 @@ def run_train_loop(workaround, agent, env, max_episodes):
                 workaround(episode_info).backward()
                 agent.optim.step()
 
-
+                
     except KeyboardInterrupt:
         pass
     finally:
@@ -92,9 +93,7 @@ def run_evaluate_loop(agent, env):
 
                 total_frames += 1
                 
-                state = agent.convert_to_state(timestep_t)
-                
-                action, func_args_dists, func_args_actions, critic_val = agent.step(timestep_t, state)
+                action, func_args_dists, func_args_actions = agent.step(timestep_t)
 
                 timestep_tt = env.step([action])[0]
                 

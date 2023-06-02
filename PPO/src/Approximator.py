@@ -1,7 +1,7 @@
 import torch as t
 import copy
 
-from src.Config import NN_HIDDEN_LAYER, LAMBDA
+from src.Config import NN_HIDDEN_LAYER
 
 
 class FDZApprox(t.nn.Module):
@@ -77,7 +77,7 @@ class FDZApprox(t.nn.Module):
       
 
 # Required because DDP is stupid, wrapper so top level forward-backward is performed once
-class MonteCarloForwardWorkaround(t.nn.Module):
+class DistributedAgentWorkaround(t.nn.Module):
 
     def __init__(self, agent):
         super().__init__()
@@ -87,16 +87,6 @@ class MonteCarloForwardWorkaround(t.nn.Module):
     
     
     def forward(self, episode_info):
+        return self.agent.mc_loss(episode_info)
+
         
-        G = 0.0
-        loss = t.tensor([0.0])
-        
-        for (reward, obs, func_args_dists_old, func_args_actions) in reversed(episode_info):
-            func_args_dists, critic_val = self.agent.nn_outs(obs, func_args_actions[0])
-            
-            G = reward + LAMBDA * G
-            ADV = G - critic_val[0]
-            
-            loss += self.agent.loss(func_args_dists, func_args_dists_old, func_args_actions, ADV)
-        
-        return loss

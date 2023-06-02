@@ -11,27 +11,22 @@ from src.Agent import *
 from src.Checkpoint import CheckpointManager
 from src.Loop import run_train_loop
 from src.Config import DEBUG_MODE, MAX_EPISODES, CHECK_INTERVAL
-from src.Approximator import FDZApprox, MonteCarloForwardWorkaround
+from src.Approximator import FDZApprox, DistributedAgentWorkaround
 
 
 if DEBUG_MODE:
     t.autograd.set_detect_anomaly(True)
 
 
-
 def main(argv):
-
     dist.init_process_group(backend="gloo")
     
-    approx = FDZApprox()
+    agent = FDZAgent(FDZApprox(), check_manager = CheckpointManager("checkpoints", "findAndDefeatZ", CHECK_INTERVAL))
 
-    agent = FDZAgent(approx, check_manager = CheckpointManager("checkpoints", "findAndDefeatZ", CHECK_INTERVAL))
+    workaround = DDP(DistributedAgentWorkaround(agent), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
 
-    workaround = DDP(MonteCarloForwardWorkaround(agent), find_unused_parameters = True)
-    
     run_train_loop(workaround, agent, FDZ(agent), MAX_EPISODES)
         
-
 
 if __name__ == "__main__":
     app.run(main)
