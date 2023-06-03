@@ -58,22 +58,18 @@ class FDZAgent(base_agent.BaseAgent):
         # Function.ability(452, "Smart_minimap", cmd_minimap, 1)
 
         self.nn_starcraft_mapping = {
-                         0 : 453,
-                         1 : 334,
-                         2 : 331,
-                         3 : 451,
-                         4 : 332,
-                         5 : 12,
-                         6 : 3,
-                         7 : 4,
-                         8 : 1,
-                         9 : 333,
-                         10 : 0,
-                         11 : 2,
-                         12 : 274,
-                         13 : 13,
-                         14 : 7,
-                         15 : 452}
+                         0 : 334,
+                         1 : 451,
+                         2 : 12,
+                         3 : 3,
+                         4 : 4,
+                         5 : 333,
+                         6 : 0,
+                         7 : 2,
+                         8 : 274,
+                         9 : 13,
+                         10 : 7,
+                         11 : 452}
 
                          
         self.reverse_nn_starcraft_mapping = {v : k for k, v in self.nn_starcraft_mapping.items()}
@@ -117,7 +113,7 @@ class FDZAgent(base_agent.BaseAgent):
 
 
     def convert_to_state(self, obs):
-        MAX_UNIT_HEURISTIC = 105
+        MAX_UNIT_HEURISTIC = 100
 
         state = t.from_numpy(np.expand_dims(np.stack((
                 obs.observation.feature_screen.visibility_map / 3,

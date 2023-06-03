@@ -10,7 +10,7 @@ class FDZApprox(t.nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.num_actions = 16
+        self.num_actions = 12
 
         self.convolve1 = t.nn.Conv2d(12, 16, 8, stride = 4)
         self.convolve2 = t.nn.Conv2d(16, 32, 4, stride = 2)
@@ -22,15 +22,9 @@ class FDZApprox(t.nn.Module):
         self.patrol_minimap_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
         self.patrol_minimap_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
         
-        self.move_screen_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.move_screen_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-
         self.smart_screen_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
         self.smart_screen_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
         
-        self.move_minimap_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.move_minimap_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-
         self.attack_screen_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
         self.attack_screen_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
         
@@ -41,9 +35,6 @@ class FDZApprox(t.nn.Module):
 
         self.select_control_group_act_policy = t.nn.Linear(NN_HIDDEN_LAYER, 5)
         self.select_control_group_id_policy = t.nn.Linear(NN_HIDDEN_LAYER, 10)
-
-        self.move_camera_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.move_camera_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
 
         self.patrol_screen_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64) 
         self.patrol_screen_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
@@ -82,10 +73,6 @@ class FDZApprox(t.nn.Module):
         elif nn_type == "function_id":
             return (t.softmax(self.function_id_policy(x), dim = 1),)
 
-        # Stop_quick
-        elif nn_type == 453:
-            return [[0]], [], []
-        
         # Patrol_minimap
         elif nn_type == 334:
             x_dist = t.softmax(self.patrol_minimap_x_policy(x), dim = 1)
@@ -96,16 +83,6 @@ class FDZApprox(t.nn.Module):
             
             return [[0], [x_choice, y_choice]], [x_dist, y_dist], [x_choice, y_choice]
 
-        # Move_screen
-        elif nn_type == 331:
-            x_dist = t.softmax(self.move_screen_x_policy(x), dim = 1)
-            y_dist = t.softmax(self.move_screen_y_policy(x), dim = 1)
-            
-            x_choice = categorical_sample(x_dist)
-            y_choice = categorical_sample(y_dist)
-
-            return [[0], [x_choice, y_choice]], [x_dist, y_dist], [x_choice, y_choice]
-
         # Smart_screen
         elif nn_type == 451:
             x_dist = t.softmax(self.smart_screen_x_policy(x), dim = 1)
@@ -113,16 +90,6 @@ class FDZApprox(t.nn.Module):
 
             x_choice = categorical_sample(x_dist)
             y_choice = categorical_sample(y_dist) 
-
-            return [[0], [x_choice, y_choice]], [x_dist, y_dist], [x_choice, y_choice]
-
-        # Move_minimap
-        elif nn_type == 332:
-            x_dist = t.softmax(self.move_minimap_x_policy(x), dim = 1)
-            y_dist = t.softmax(self.move_minimap_y_policy(x), dim = 1)
-
-            x_choice = categorical_sample(x_dist)
-            y_choice = categorical_sample(y_dist)
 
             return [[0], [x_choice, y_choice]], [x_dist, y_dist], [x_choice, y_choice]
 
@@ -161,15 +128,6 @@ class FDZApprox(t.nn.Module):
 
             return [[group_act_choice], [group_id_choice]], [group_act_dist, group_id_dist], [group_act_choice, group_id_choice]
 
-        # Move_camera
-        elif nn_type == 1:
-            x_dist = t.softmax(self.move_camera_x_policy(x), dim = 1)
-            y_dist = t.softmax(self.move_camera_y_policy(x), dim = 1)
-
-            x_choice = categorical_sample(x_dist)
-            y_choice = categorical_sample(y_dist)
-
-            return [[x_choice, y_choice]], [x_dist, y_dist], [x_choice, y_choice]           
         
         # Patrol_screen 
         elif nn_type == 333:
