@@ -1,4 +1,5 @@
 from pysc2.agents.random_agent import RandomAgent
+
 from pysc2.env import sc2_env
 from pysc2.env.run_loop import run_loop
 from absl import app
@@ -9,7 +10,7 @@ def main(argv):
     agent = RandomAgent()
     
     with sc2_env.SC2Env(
-        map_name="FindAndDefeatZerglings",
+        map_name="DefeatZerglingsAndBanelings",
         battle_net_map=False,
         players=[sc2_env.Agent(sc2_env.Race.terran)],
         agent_interface_format=sc2_env.parse_agent_interface_format(

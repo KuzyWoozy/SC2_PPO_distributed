@@ -18,7 +18,7 @@ if DEBUG_MODE:
 def main(argv):
     agent = FDZAgent(FDZApprox(), CheckpointManager("checkpoints", "findAndDefeatZ"))
 
-    agent.check_manager.load(3_500, approx = agent.approx)
+    agent.check_manager.load(5000, approx = agent.approx)
 
     run_evaluate_loop(agent, FDZ(agent, viz = True))
         

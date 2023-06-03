@@ -76,6 +76,7 @@ def run_evaluate_loop(agent, env):
 
     obs_spec = env.observation_spec()[0]
     act_spec = env.action_spec()[0]
+    
     agent.setup(obs_spec, act_spec)
 
     try:

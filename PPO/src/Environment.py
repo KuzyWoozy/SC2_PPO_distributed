@@ -4,7 +4,7 @@ class FDZ(sc2_env.SC2Env):
 
     def __init__(self, agent, viz = False, seed = None):
         if viz:
-            super().__init__(map_name = "FindAndDefeatZerglings",
+            super().__init__(map_name = "DefeatRoaches",
                 battle_net_map = False,
                 players = [sc2_env.Agent(sc2_env.Race.terran)],
                 agent_interface_format=sc2_env.parse_agent_interface_format(
@@ -15,10 +15,11 @@ class FDZ(sc2_env.SC2Env):
                     action_space = "FEATURES"),
                 visualize = True,
                 step_mul = 8,
+                realtime = True,
                 random_seed = seed)
         
         else:
-            super().__init__(map_name = "FindAndDefeatZerglings",
+            super().__init__(map_name = "DefeatRoaches",
                 battle_net_map = False,
                 players = [sc2_env.Agent(sc2_env.Race.terran)],
                 agent_interface_format=sc2_env.parse_agent_interface_format(
