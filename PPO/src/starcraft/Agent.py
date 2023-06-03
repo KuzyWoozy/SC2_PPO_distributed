@@ -4,9 +4,8 @@ import torch as t
 from pysc2.agents import base_agent
 from pysc2.lib import actions
 
-from src.Misc import categorical_sample
-from src.Approximator import FDZApprox
-from src.Config import LEARNING_RATE, PPO_CLIP, ENTROPY, LAMBDA
+from src.Misc import CheckpointManager, categorical_sample
+from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE
 
 
 class RandomAgent(base_agent.BaseAgent):
@@ -15,6 +14,7 @@ class RandomAgent(base_agent.BaseAgent):
         super().__init__()
 
         self.acts = []
+
 
     def step(self, obs):
         super(RandomAgent, self).step(obs)
@@ -30,14 +30,15 @@ class RandomAgent(base_agent.BaseAgent):
         return actions.FunctionCall(function_id, args)
 
 
-class FDZAgent(base_agent.BaseAgent):
 
-    def __init__(self, approx, check_manager = None) -> None:
+class MiniStarAgent(base_agent.BaseAgent):
+
+    def __init__(self, policy) -> None:
         super().__init__()
 
-        self.approx = approx
+        self.policy = policy
 
-        self.optim = t.optim.Adam(self.approx.parameters(), maximize = False, lr = LEARNING_RATE)
+        self.optim = t.optim.Adam(policy.parameters(), maximize = False, lr = LEARNING_RATE)
 
         # Function.ability(453, "Stop_quick", cmd_quick, 3665)
         # Function.ability(334, "Patrol_minimap", cmd_minimap, 3795)
@@ -57,7 +58,7 @@ class FDZAgent(base_agent.BaseAgent):
         #                    lambda obs: obs.player_common.army_count > 0)
         # Function.ability(452, "Smart_minimap", cmd_minimap, 1)
 
-        self.nn_starcraft_mapping = {
+        self.policy2function = {
                          0 : 334,
                          1 : 451,
                          2 : 12,
@@ -72,47 +73,12 @@ class FDZAgent(base_agent.BaseAgent):
                          11 : 452}
 
                          
-        self.reverse_nn_starcraft_mapping = {v : k for k, v in self.nn_starcraft_mapping.items()}
+        self.function2policy = {v : k for k, v in self.policy2function.items()}
 
-        self.check_manager = check_manager
+        self.check_manager = CheckpointManager("checkpoints", MINIGAME_NAME, CHECK_INTERVAL)
         
 
-    def loss(self, func_args_dists, func_args_dists_old, actions, adv):
-        # Note that we're minimizing
-    
-        actor_gain = t.tensor([0.0])
-        entropy = t.tensor([0.0])
-        
-        adv_detached = adv.detach()
-
-        for out, out_old, action in zip(func_args_dists, func_args_dists_old, actions):
-
-            actor_gain -= t.min((out[:, action] / out_old[:, action]) * adv_detached, t.clip(out[:, action] / out_old[:, action], min = 1 - PPO_CLIP, max = 1 + PPO_CLIP) * adv_detached)
-
-            out_pos = out[out > 0.0]
-            entropy -= t.sum(out_pos * t.log(out_pos), axis = 0)
-
-        critic_loss = adv ** 2
-        
-        return actor_gain + critic_loss + (ENTROPY * entropy)
-    
-
-    def mc_loss(self, episode_info):
-        
-        loss = t.tensor([0.0])
-        G = 0.0
-
-        for (reward, obs, func_args_dists_old, func_args_actions) in reversed(episode_info):
-            func_args_dists, critic_val = self.nn_outs(obs, func_args_actions[0])
-            G = reward + LAMBDA * G
-            ADV = G - critic_val[0]
-            
-            loss += self.loss(func_args_dists, func_args_dists_old, func_args_actions, ADV)
-        return loss
-
-
-
-    def convert_to_state(self, obs):
+    def obs_to_state(self, obs):
         MAX_UNIT_HEURISTIC = 100
 
         state = t.from_numpy(np.expand_dims(np.stack((
@@ -132,29 +98,28 @@ class FDZAgent(base_agent.BaseAgent):
         
         return state
        
-        
 
     def step(self, obs):
         super().step(obs)
         
-        state = self.convert_to_state(obs)
+        state = self.obs_to_state(obs)
         
-        nn_repr = self.approx(state, "hidden")
+        nn_repr = self.policy(state, "hidden")
 
-        (actor_probs,) = self.approx(nn_repr, "function_id")
+        (actor_probs,) = self.policy(nn_repr, "function_id")
 
-        mask = t.zeros((1, self.approx.num_actions), dtype = t.float32)
+        mask = t.zeros((1, self.policy.get_num_actions()), dtype = t.float32)
 
-        mask[:, t.tensor([self.reverse_nn_starcraft_mapping[act] for act in obs.observation.available_actions if act in self.reverse_nn_starcraft_mapping])] = 1.0
+        mask[:, t.tensor([self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy])] = 1.0
         
         actor_probs_masked = actor_probs * mask
         
         actor_probs_masked_norm = actor_probs_masked / t.sum(actor_probs_masked)
 
         actor_choice = categorical_sample(actor_probs_masked_norm)
-        function_id = self.nn_starcraft_mapping[actor_choice]
+        function_id = self.policy2function[actor_choice]
 
-        args, func_args_dists, func_args_actions = self.approx(nn_repr, function_id)
+        args, func_args_dists, func_args_actions = self.policy(nn_repr, function_id, sample = True)
         func_args_dists.insert(0, actor_probs_masked_norm)
         func_args_actions.insert(0, actor_choice)
 
@@ -162,22 +127,30 @@ class FDZAgent(base_agent.BaseAgent):
 
 
     def nn_outs(self, obs, actor_choice):
-        state = self.convert_to_state(obs)
+        state = self.obs_to_state(obs)
 
-        nn_repr = self.approx(state, "hidden")
+        nn_repr = self.policy(state, "hidden")
 
-        (actor_probs,) = self.approx(nn_repr, "function_id")
+        (actor_probs,) = self.policy(nn_repr, "function_id")
 
-        mask = t.zeros((1, self.approx.num_actions), dtype = t.float32)
+        mask = t.zeros((1, self.policy.get_num_actions()), dtype = t.float32)
 
-        mask[:, t.tensor([self.reverse_nn_starcraft_mapping[act] for act in obs.observation.available_actions if act in self.reverse_nn_starcraft_mapping])] = 1.0
+        mask[:, t.tensor([self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy])] = 1.0
         
         actor_probs_masked = actor_probs * mask
         
         actor_probs_masked_norm = actor_probs_masked / t.sum(actor_probs_masked)
-        function_id = self.nn_starcraft_mapping[actor_choice]
+        function_id = self.policy2function[actor_choice]
         
-        _, func_args_dists, _ = self.approx(nn_repr, function_id)
+        func_args_dists = self.policy(nn_repr, function_id, sample = False)
+        
         func_args_dists.insert(0, actor_probs_masked_norm)
 
-        return func_args_dists, self.approx(nn_repr, "critic")
+        return func_args_dists, self.policy(nn_repr, "critic")
+
+    def save_if_rdy(self, agent_steps):
+        if agent_steps % CHECK_INTERVAL == 0:
+            self.check_manager.save(agent_steps, policy = self.policy)
+
+    def save(self, agent_steps):
+        self.check_manager.save(agent_steps, policy = self.policy)

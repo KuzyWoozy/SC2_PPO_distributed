@@ -3,30 +3,37 @@ from pysc2.env import sc2_env
 from absl import app
 
 import torch as t
-from torch.nn.parallel import DistributedDataParallel as DDP
 import torch.distributed as dist
 
-from src.Environment import FDZ
-from src.Agent import *
-from src.Checkpoint import CheckpointManager
-from src.Loop import run_train_loop
-from src.Config import DEBUG_MODE, MAX_EPISODES, CHECK_INTERVAL
-from src.Approximator import FDZApprox, DistributedAgentWorkaround
 
-
-if DEBUG_MODE:
-    t.autograd.set_detect_anomaly(True)
+from src.rl.Loop import train_loop
+from src.rl.Approximator import MiniStarPolicy
+from src.starcraft.Agent import MiniStarAgent
+from src.starcraft.Environment import StarcraftMinigame
+from src.Parallel import DistSyncSGD
+from src.Config import RUNMODE, MINIGAME_NAME
 
 
 def main(argv):
-    dist.init_process_group(backend="gloo")
+    # Initialize distributed module if necessary
+    if RUNMODE != "SERIAL":
+        dist.init_process_group(backend="gloo")
     
-    agent = FDZAgent(FDZApprox(), check_manager = CheckpointManager("checkpoints", "findAndDefeatZ", CHECK_INTERVAL))
+    # Choose policy
+    policy = MiniStarPolicy()
+   
+    # Apply a parallel enabling wrapper to policy
+    if RUNMODE == "DIST_SYNC":
+        policy = DistSyncSGD(policy)
 
-    workaround = DDP(DistributedAgentWorkaround(agent), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
+    # Choose agent
+    agent = MiniStarAgent(policy)
+    # Choose environment
+    environment = StarcraftMinigame(agent)
+    
+    # Begin the training process
+    train_loop(agent, environment)
 
-    run_train_loop(workaround, agent, FDZ(agent), MAX_EPISODES)
-        
 
 if __name__ == "__main__":
     app.run(main)

@@ -11,9 +11,6 @@ from src.Approximator import FDZApprox
 from src.Config import DEBUG_MODE
 
 
-if DEBUG_MODE:
-    t.autograd.set_detect_anomaly(True)
-
 
 def main(argv):
     agent = FDZAgent(FDZApprox(), CheckpointManager("checkpoints", "findAndDefeatZ"))

@@ -1,7 +1,7 @@
 # Hyperparam
 LEARNING_RATE = 1e-5
 
-EPOCH_BATCH = 4
+EPOCH_BATCH = 3
 
 LAMBDA = 0.99
 ENTROPY = 0.001
@@ -10,15 +10,13 @@ NN_HIDDEN_LAYER = 512
 
 PPO_CLIP = 0.2
 
-
 # Checkpointing
-CHECK_INTERVAL = 250
+CHECK_INTERVAL = 500_000
 
 # Environment
-MAX_EPISODES = 5000
-
-# Debug
-DEBUG_MODE = False
+MINIGAME_NAME = "FindAndDefeatZerglings"
+MAX_AGENT_STEPS = 20_000_000
 
 # Distributed
 ROOT = 0
+RUNMODE = "DIST_SYNC"

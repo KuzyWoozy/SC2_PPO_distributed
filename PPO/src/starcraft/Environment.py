@@ -1,10 +1,13 @@
 from pysc2.env import sc2_env
 
-class FDZ(sc2_env.SC2Env):
+from src.Config import MINIGAME_NAME
+
+
+class StarcraftMinigame(sc2_env.SC2Env):
 
     def __init__(self, agent, viz = False, seed = None):
         if viz:
-            super().__init__(map_name = "FindAndDefeatZerglings",
+            super().__init__(map_name = MINIGAME_NAME,
                 battle_net_map = False,
                 players = [sc2_env.Agent(sc2_env.Race.terran)],
                 agent_interface_format=sc2_env.parse_agent_interface_format(
@@ -19,7 +22,7 @@ class FDZ(sc2_env.SC2Env):
                 random_seed = seed)
         
         else:
-            super().__init__(map_name = "FindAndDefeatZerglings",
+            super().__init__(map_name = MINIGAME_NAME,
                 battle_net_map = False,
                 players = [sc2_env.Agent(sc2_env.Race.terran)],
                 agent_interface_format=sc2_env.parse_agent_interface_format(
