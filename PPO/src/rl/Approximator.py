@@ -7,7 +7,7 @@ from src.Config import NN_HIDDEN_LAYER
 
 class MiniStarPolicy(t.nn.Module):
 
-    def __init__(self, load_model = None):
+    def __init__(self):
         super().__init__()
 
         self.num_actions = 12
@@ -53,8 +53,6 @@ class MiniStarPolicy(t.nn.Module):
 
         self.critic = t.nn.Linear(NN_HIDDEN_LAYER, 1)
 
-        if load_model:
-            self.load_state_dict(t.load(load_model)["policy"])
 
 
     
@@ -224,5 +222,5 @@ class MiniStarPolicy(t.nn.Module):
             exit(1)
 
 
-    def save(self, check_manager, agent_steps):
-        check_manager.save(agent_steps, policy = self)
+    def get_state_dict(self):
+        return self.state_dict()

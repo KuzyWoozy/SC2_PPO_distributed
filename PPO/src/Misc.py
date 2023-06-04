@@ -21,18 +21,9 @@ class CheckpointManager:
         return False
     
 
-    def save(self, step : int, **kwargs : t.nn.Module) -> None:
-        t.save({key : kwargs[key].state_dict() for key in kwargs},\
-               self.directory + "/" + self.name + f"-{step}.chkpt")
+    def save(self, step : int, state_dict) -> None:
+        t.save(state_dict, self.directory + "/" + self.name + f"-{step}.chkpt")
     
-
-    def load(self, step, **kwargs : t.nn.Module) -> None:
-        
-        checkpoint = t.load(self.directory + "/" + self.name + f"-{step}.chkpt")
-
-        for key in kwargs:
-            kwargs[key].load_state_dict(checkpoint[key])
-
 
 def categorical_sample(probs):
     return t.distributions.Categorical(probs = probs).sample((1,)).item()
