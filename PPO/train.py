@@ -11,7 +11,7 @@ from src.rl.Approximator import MiniStarPolicy
 from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
 from src.Parallel import DistSyncSGD
-from src.Config import RUNMODE, MINIGAME_NAME
+from src.Config import RUNMODE
 
 
 def main(argv):

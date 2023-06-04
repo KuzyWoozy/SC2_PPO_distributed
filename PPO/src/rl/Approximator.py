@@ -7,7 +7,7 @@ from src.Config import NN_HIDDEN_LAYER
 
 class MiniStarPolicy(t.nn.Module):
 
-    def __init__(self):
+    def __init__(self, load_model = None):
         super().__init__()
 
         self.num_actions = 12
@@ -52,6 +52,10 @@ class MiniStarPolicy(t.nn.Module):
         self.smart_minimap_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
 
         self.critic = t.nn.Linear(NN_HIDDEN_LAYER, 1)
+
+        if load_model:
+            self.load_state_dict(t.load(load_model)["policy"])
+
 
     
     def apply_conv_net(self, inp):
@@ -216,5 +220,9 @@ class MiniStarPolicy(t.nn.Module):
             return [x_dist, y_dist]
 
         else:
-            print(f"{arg_type} IS NOT SUPPORTED")
+            print(f"{nn_type} IS NOT SUPPORTED")
             exit(1)
+
+
+    def save(self, check_manager, agent_steps):
+        check_manager.save(agent_steps, policy = self)

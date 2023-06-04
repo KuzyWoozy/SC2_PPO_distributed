@@ -1,6 +1,11 @@
 
 
+.PHONY: evaluate
+evaluate:
+	torchrun --rdzv-backend=c10d --rdzv-endpoint=localhost --nnodes=1 --nproc_per_node=1 evaluate.py
 
-.PHONY: run
-run:
+.PHONY: train
+train:
 	torchrun --rdzv-backend=c10d --rdzv-endpoint=localhost --nnodes=1 --nproc_per_node=4 train.py
+
+

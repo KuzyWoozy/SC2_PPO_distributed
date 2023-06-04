@@ -17,6 +17,7 @@ def train_loop(agent, env):
 
     try:
         while True:
+
             if total_agent_steps >= MAX_AGENT_STEPS:
                 agent.save(total_agent_steps)
                 sys.exit(0) # Note sure if a good way to handle
@@ -42,7 +43,6 @@ def train_loop(agent, env):
 
                     if dist.get_rank() == ROOT:
                         agent.save_if_rdy(total_agent_steps)
-                    
 
                     episode_info.append((timestep_tt.reward, timestep_t, func_args_dists, func_args_actions))
                     timestep_t = timestep_tt
@@ -51,6 +51,13 @@ def train_loop(agent, env):
                 agent.optim.zero_grad()
                 agent.policy.mc_loss(agent, episode_info).backward()
                 agent.optim.step()
+
+            
+            obs = episode_info[0][1]
+            state = agent.obs_to_state(obs)
+            nn_repr = agent.policy(state, "hidden")
+
+            print("Biggest activation in hidden", t.max(t.abs(nn_repr)))
 
                 
     except KeyboardInterrupt:
@@ -62,7 +69,7 @@ def train_loop(agent, env):
 
 
 
-def run_evaluate_loop(agent, env):
+def evaluate_loop(agent, env):
     total_episodes = 0
     total_frames = 0
 

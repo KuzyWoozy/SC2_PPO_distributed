@@ -3,22 +3,39 @@ from pysc2.env import sc2_env
 from absl import app
 import torch as t
 
-from src.Environment import FDZ
-from src.Agent import *
-from src.Checkpoint import CheckpointManager
-from src.Loop import run_evaluate_loop
-from src.Approximator import FDZApprox
-from src.Config import DEBUG_MODE
+import torch.distributed as dist
+
+
+from src.rl.Loop import evaluate_loop
+from src.rl.Approximator import MiniStarPolicy
+from src.starcraft.Agent import MiniStarAgent
+from src.starcraft.Environment import StarcraftMinigame
+from src.Config import RUNMODE
+from src.Parallel import DistSyncSGD
 
 
 
 def main(argv):
-    agent = FDZAgent(FDZApprox(), CheckpointManager("checkpoints", "findAndDefeatZ"))
+ 
+    # Initialize distributed module if necessary
+    if RUNMODE != "SERIAL":
+        dist.init_process_group(backend="gloo")
 
-    agent.check_manager.load(5000, approx = agent.approx)
+    policy = MiniStarPolicy("checkpoints/FindAndDefeatZerglings-1100.chkpt")
+    
+    # Apply a parallel enabling wrapper to policy
+    if RUNMODE == "DIST_SYNC":
+        policy = DistSyncSGD(policy)
 
-    run_evaluate_loop(agent, FDZ(agent, viz = True))
-        
+    # Choose agent
+    agent = MiniStarAgent(policy)
+
+    # Choose environment
+    environment = StarcraftMinigame(agent, viz = True)
+    
+    # Begin the training process
+    evaluate_loop(agent, environment)
+   
 
 if __name__ == "__main__":
     app.run(main)

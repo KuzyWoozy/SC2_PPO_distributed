@@ -63,4 +63,7 @@ class DistSyncSGD(t.nn.Module):
 
     def get_num_actions(self):
         return self.policy_dist.module.policy_ser.get_num_actions()
+    
+    def save(self, check_manager, agent_steps):
+        self.policy_dist.module.policy_ser.save(check_manager, agent_steps)
 

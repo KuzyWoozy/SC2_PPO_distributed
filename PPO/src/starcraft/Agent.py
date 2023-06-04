@@ -149,8 +149,9 @@ class MiniStarAgent(base_agent.BaseAgent):
         return func_args_dists, self.policy(nn_repr, "critic")
 
     def save_if_rdy(self, agent_steps):
-        if agent_steps % CHECK_INTERVAL == 0:
-            self.check_manager.save(agent_steps, policy = self.policy)
+        if self.check_manager.time_to_save(agent_steps):
+            self.save(agent_steps)
 
     def save(self, agent_steps):
-        self.check_manager.save(agent_steps, policy = self.policy)
+        self.policy.save(self.check_manager, agent_steps)
+
