@@ -20,34 +20,43 @@ def train_loop(agent, env):
 
             if total_agent_steps >= MAX_AGENT_STEPS:
                 agent.save(total_agent_steps)
-                sys.exit(0) # Note sure if a good way to handle
-
+                dist.destroy_process_group()
+            
             timestep_t = env.reset()[0]
 
             agent.reset()
 
             episode_info = []
+            shortcut = []
            
-            with t.no_grad():
-                # Sample a trajectory
-                while True:
-                    if timestep_t.last():
-                        break
+            # Sample a trajectory
+            while True:
+                if timestep_t.last():
+                    break
 
-                    action, func_args_dists, func_args_actions = agent.step(timestep_t)
+                action, func_args_dists, func_args_actions, crit = agent.step(timestep_t)
 
-                    timestep_tt = env.step([action])[0]
-                    
-                    
-                    total_agent_steps += 1
+                timestep_tt = env.step([action])[0]
+                
+                
+                total_agent_steps += 1
 
-                    if dist.get_rank() == ROOT:
-                        agent.save_if_rdy(total_agent_steps)
+                if dist.get_rank() == ROOT:
+                    agent.save_if_rdy(total_agent_steps)
 
-                    episode_info.append((timestep_tt.reward, timestep_t, func_args_dists, func_args_actions))
-                    timestep_t = timestep_tt
+                episode_info.append((timestep_tt.reward, timestep_t, [i.detach() for i in func_args_dists], func_args_actions))
 
-            for _ in range(EPOCH_BATCH):
+                shortcut.append((func_args_dists, crit))
+
+                timestep_t = timestep_tt
+
+
+            # first step optimization
+            agent.optim.zero_grad()
+            agent.policy.mc_loss(agent, episode_info, shortcut).backward()
+            agent.optim.step()
+
+            for _ in range(EPOCH_BATCH - 1):
                 agent.optim.zero_grad()
                 agent.policy.mc_loss(agent, episode_info).backward()
                 agent.optim.step()
