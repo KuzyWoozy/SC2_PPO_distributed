@@ -53,13 +53,6 @@ def train_loop(agent, env):
                 agent.optim.step()
 
             
-            obs = episode_info[0][1]
-            state = agent.obs_to_state(obs)
-            nn_repr = agent.policy(state, "hidden")
-
-            print("Biggest activation in hidden", t.max(t.abs(nn_repr)))
-
-                
     except KeyboardInterrupt:
         pass
     finally:
