@@ -59,7 +59,7 @@ class DistSyncSGD(t.nn.Module):
     def __init__(self, policy_ser):
         super().__init__()
 
-        self.policy_dist = DDP(MonteCarlo(policy_ser), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
+        self.policy_dist = DDP(MonteCarlo(policy_ser), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, )
 
     def forward(self, *args, **kwargs):
         return self.policy_dist.module.policy_ser(*args, **kwargs)

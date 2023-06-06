@@ -14,10 +14,18 @@ from src.Parallel import DistSyncSGD
 from src.Config import RUNMODE
 
 
+if RUNMODE == "SYNC_GPU":
+    t.backends.cuda.matmul.allow_tf32 = True
+    t.backends.cudnn.allow_tf32 = True
+
+
 def main(argv):
     # Initialize distributed module if necessary
     if RUNMODE != "SERIAL":
-        dist.init_process_group(backend="gloo")
+        if RUNMODE == "SYNC_GPU":
+            dist.init_process_group(backend="nccl")
+        else:
+            dist.init_process_group(backend="gloo")
     
     # Choose policy
     policy = MiniStarPolicy()
