@@ -129,7 +129,8 @@ class MiniStarAgent(base_agent.BaseAgent):
         func_args_dists.insert(0, actor_probs_masked_norm)
         func_args_actions.insert(0, actor_choice)
 
-        return actions.FunctionCall(function_id, args), func_args_dists, func_args_actions
+        return actions.FunctionCall(function_id, args), func_args_dists, func_args_actions, self.policy(nn_repr, "critic")
+
 
 
     def nn_outs(self, obs, actor_choice):

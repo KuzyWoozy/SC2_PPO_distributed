@@ -16,7 +16,7 @@ def main(argv):
     policy = MiniStarPolicy()
     
     # Choose agent
-    agent = MiniStarAgent(policy, load_model = "checkpoints/FindAndDefeatZerglings-300.chkpt")
+    agent = MiniStarAgent(policy, load_model = "checkpoints/FindAndDefeatZerglings-710000.chkpt")
 
     # Choose environment
     environment = StarcraftMinigame(agent, viz = True)
