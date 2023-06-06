@@ -50,7 +50,6 @@ def train_loop(agent, env):
 
                 timestep_t = timestep_tt
 
-
             # first step optimization
             agent.optim.zero_grad()
             agent.policy.mc_loss(agent, episode_info, shortcut).backward()
