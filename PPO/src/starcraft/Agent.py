@@ -5,8 +5,7 @@ from pysc2.agents import base_agent
 from pysc2.lib import actions
 
 from src.Misc import CheckpointManager, categorical_sample
-from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE
-
+from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE
 
 class RandomAgent(base_agent.BaseAgent):
     
@@ -100,7 +99,7 @@ class MiniStarAgent(base_agent.BaseAgent):
                 obs.observation.feature_minimap.camera,
                 obs.observation.feature_minimap.player_id / 16,
                 obs.observation.feature_minimap.player_relative / 4,
-                obs.observation.feature_minimap.selected), axis = 0), 0)).float()
+                obs.observation.feature_minimap.selected), axis = 0), 0)).to(device = self.policy.get_device(), dtype = DTYPE)
         
         return state
        
@@ -114,9 +113,9 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         (actor_probs,) = self.policy(nn_repr, "function_id")
 
-        mask = t.zeros((1, self.policy.get_num_actions()), dtype = t.float32)
+        mask = t.zeros((1, self.policy.get_num_actions()), dtype = DTYPE, device = self.policy.get_device())
 
-        mask[:, t.tensor([self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy])] = 1.0
+        mask[:, t.tensor([self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy], device = self.policy.get_device())] = 1.0
         
         actor_probs_masked = actor_probs * mask
         
@@ -140,9 +139,9 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         (actor_probs,) = self.policy(nn_repr, "function_id")
 
-        mask = t.zeros((1, self.policy.get_num_actions()), dtype = t.float32)
+        mask = t.zeros((1, self.policy.get_num_actions()), dtype = DTYPE, device = self.policy.get_device())
 
-        mask[:, t.tensor([self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy])] = 1.0
+        mask[:, t.tensor([self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy], device = self.policy.get_device())] = 1.0
         
         actor_probs_masked = actor_probs * mask
         

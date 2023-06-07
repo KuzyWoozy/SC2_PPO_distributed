@@ -1,3 +1,6 @@
+import torch as t
+
+
 # Hyperparam
 LEARNING_RATE = 3e-5
 
@@ -19,4 +22,8 @@ MAX_AGENT_STEPS = 5_000_000
 
 # Distributed
 ROOT = 0
-RUNMODE = "DIST_SYNC"
+
+SYNC = False
+GPU = True
+
+DTYPE = t.float32

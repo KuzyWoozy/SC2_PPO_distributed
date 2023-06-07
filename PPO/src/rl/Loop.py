@@ -36,13 +36,11 @@ def train_loop(agent, env):
 
                 action, func_args_dists, func_args_actions, crit = agent.step(timestep_t)
 
-                timestep_tt = env.step([action])[0]
-                
+                timestep_tt = env.step([action])[0] 
                 
                 total_agent_steps += 1
 
-                if dist.get_rank() == ROOT:
-                    agent.save_if_rdy(total_agent_steps)
+                agent.save_if_rdy(total_agent_steps)
 
                 episode_info.append((timestep_tt.reward, timestep_t, [i.detach() for i in func_args_dists], func_args_actions))
 
