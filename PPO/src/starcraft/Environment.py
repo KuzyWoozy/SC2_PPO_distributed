@@ -11,8 +11,8 @@ class StarcraftMinigame(sc2_env.SC2Env):
                 battle_net_map = False,
                 players = [sc2_env.Agent(sc2_env.Race.terran)],
                 agent_interface_format=sc2_env.parse_agent_interface_format(
-                    rgb_screen = [500, 500],
-                    rgb_minimap = [100, 100],
+                    #rgb_screen = [500, 500],
+                    #rgb_minimap = [100, 100],
                     feature_screen = [64, 64],
                     feature_minimap = [64, 64],
                     action_space = "FEATURES"),

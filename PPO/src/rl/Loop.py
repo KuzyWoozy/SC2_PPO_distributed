@@ -3,7 +3,7 @@ import torch as t
 
 import torch.distributed as dist
 
-from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH
+from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, GPU
 
 
 def train_loop(agent, env):
@@ -19,8 +19,10 @@ def train_loop(agent, env):
         while True:
 
             if total_agent_steps >= MAX_AGENT_STEPS:
-                agent.save(total_agent_steps)
-                dist.destroy_process_group()
+                if SYNC:
+                    if dist.get_rank() == ROOT:
+                        agent.save(total_agent_steps)
+                    dist.destroy_process_group()
             
             timestep_t = env.reset()[0]
 
@@ -39,8 +41,12 @@ def train_loop(agent, env):
                 timestep_tt = env.step([action])[0] 
                 
                 total_agent_steps += 1
-
-                agent.save_if_rdy(total_agent_steps)
+                
+                if SYNC:
+                    if dist.get_rank() == ROOT:
+                        agent.save_if_rdy(total_agent_steps)
+                else:
+                    agent.save_if_rdy(total_agent_steps)
 
                 episode_info.append((timestep_tt.reward, timestep_t, [i.detach() for i in func_args_dists], func_args_actions))
 
@@ -94,7 +100,7 @@ def evaluate_loop(agent, env):
 
                 total_frames += 1
                 
-                action, func_args_dists, func_args_actions = agent.step(timestep_t)
+                action, _, _, _ = agent.step(timestep_t)
 
                 timestep_tt = env.step([action])[0]
                 

@@ -28,15 +28,14 @@ def loss(func_args_dists, func_args_dists_old, actions, adv, device):
 
 class MonteCarlo(t.nn.Module):
 
-    def __init__(self, policy_ser, device):
+    def __init__(self, policy_ser):
         super().__init__()
         self.policy_ser = policy_ser
-        self.device = device
 
 
     def forward(self, agent, episode_info, shortcut):
-        episode_loss = t.tensor([0.0], dtype = DTYPE, device = self.device)
-        G = t.tensor([0.0], dtype = DTYPE, device = self.device)
+        episode_loss = t.tensor([0.0], dtype = DTYPE, device = self.policy_ser.get_device())
+        G = t.tensor([0.0], dtype = DTYPE, device = self.policy_ser.get_device())
 
         if shortcut:
             shortcut_length = len(shortcut)
@@ -50,19 +49,19 @@ class MonteCarlo(t.nn.Module):
             G = reward + LAMBDA * G
             ADV = G - critic_val[0]
        
-            episode_loss += loss(func_args_dists, func_args_dists_old, func_args_actions, ADV, self.device)
+            episode_loss += loss(func_args_dists, func_args_dists_old, func_args_actions, ADV, self.policy_ser.get_device())
         
         return episode_loss
 
 
 class SerialSGD(t.nn.Module):
 
-    def __init__(self, policy_ser, device):
+    def __init__(self, policy_ser):
         super().__init__()
 
-        mc = MonteCarlo(policy_ser, device)
+        mc = MonteCarlo(policy_ser)
 
-        mc.to(device = device, dtype = DTYPE)
+        mc.to(device = policy_ser.get_device(), dtype = DTYPE)
 
         self.policy = mc
 
@@ -79,20 +78,20 @@ class SerialSGD(t.nn.Module):
         return self.policy.policy_ser.get_state_dict()
     
     def get_device(self):
-        return self.policy.device
+        return self.policy.policy_ser.get_device()
 
 
 
 class DistSyncSGD(t.nn.Module):
 
-    def __init__(self, policy_ser, device):
+    def __init__(self, policy_ser):
         super().__init__()
 
-        mc = MonteCarlo(policy_ser, device)
+        mc = MonteCarlo(policy_ser)
 
-        mc.to(device = device, dtype = DTYPE)
+        mc.to(device = policy_ser.get_device(), dtype = DTYPE)
 
-        self.policy_dist = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
+        self.policy_dist = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [policy_ser.get_device()])
 
 
     def forward(self, *args, **kwargs):
@@ -108,4 +107,4 @@ class DistSyncSGD(t.nn.Module):
         return self.policy_dist.module.policy_ser.get_state_dict()
 
     def get_device(self):
-        return self.policy_dist.module.device
+        return self.policy_dist.module.policy_ser.get_device()

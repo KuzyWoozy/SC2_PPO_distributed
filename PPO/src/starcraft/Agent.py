@@ -5,7 +5,7 @@ from pysc2.agents import base_agent
 from pysc2.lib import actions
 
 from src.Misc import CheckpointManager, categorical_sample
-from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE
+from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD
 
 class RandomAgent(base_agent.BaseAgent):
     
@@ -32,7 +32,7 @@ class RandomAgent(base_agent.BaseAgent):
 
 class MiniStarAgent(base_agent.BaseAgent):
 
-    def __init__(self, policy, load_model = None) -> None:
+    def __init__(self, policy) -> None:
         super().__init__()
 
         self.policy = policy
@@ -75,12 +75,9 @@ class MiniStarAgent(base_agent.BaseAgent):
         self.function2policy = {v : k for k, v in self.policy2function.items()}
 
         self.check_manager = CheckpointManager("checkpoints", MINIGAME_NAME, CHECK_INTERVAL)
-
-        if load_model:
-            checkpoint = t.load(load_model)
-            
-            self.policy.load_state_dict(checkpoint["policy"])
-            self.optim.load_state_dict(checkpoint["optim"])
+        
+        if CHECK_LOAD:
+            self.optim.load_state_dict(t.load(CHECK_LOAD)["optim"])
         
 
     def obs_to_state(self, obs):

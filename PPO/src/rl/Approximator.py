@@ -7,52 +7,53 @@ from src.Config import NN_HIDDEN_LAYER
 
 class MiniStarPolicy(t.nn.Module):
 
-    def __init__(self):
+    def __init__(self, device):
         super().__init__()
 
         self.num_actions = 12
 
-        self.convolve1 = t.nn.Conv2d(12, 16, 8, stride = 4)
-        self.convolve2 = t.nn.Conv2d(16, 32, 4, stride = 2)
+        self.convolve1 = t.nn.Conv2d(12, 16, 8, stride = 4, device = device)
+        self.convolve2 = t.nn.Conv2d(16, 32, 4, stride = 2, device = device)
 
-        self.actor_dense1 = t.nn.Linear(1152, NN_HIDDEN_LAYER)
-        self.actor_dense2 = t.nn.Linear(NN_HIDDEN_LAYER, NN_HIDDEN_LAYER)
+        self.actor_dense1 = t.nn.Linear(1152, NN_HIDDEN_LAYER, device = device)
+        self.actor_dense2 = t.nn.Linear(NN_HIDDEN_LAYER, NN_HIDDEN_LAYER, device = device)
 
-        self.function_id_policy = t.nn.Linear(NN_HIDDEN_LAYER, self.num_actions)
-        self.patrol_minimap_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.patrol_minimap_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
+        self.function_id_policy = t.nn.Linear(NN_HIDDEN_LAYER, self.num_actions, device = device)
+        self.patrol_minimap_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
+        self.patrol_minimap_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
         
-        self.smart_screen_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.smart_screen_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
+        self.smart_screen_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
+        self.smart_screen_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
         
-        self.attack_screen_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.attack_screen_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
+        self.attack_screen_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
+        self.attack_screen_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
         
-        self.select_rect_x1_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.select_rect_y1_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.select_rect_x2_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.select_rect_y2_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
+        self.select_rect_x1_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
+        self.select_rect_y1_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
+        self.select_rect_x2_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
+        self.select_rect_y2_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
 
-        self.select_control_group_act_policy = t.nn.Linear(NN_HIDDEN_LAYER, 5)
-        self.select_control_group_id_policy = t.nn.Linear(NN_HIDDEN_LAYER, 10)
+        self.select_control_group_act_policy = t.nn.Linear(NN_HIDDEN_LAYER, 5, device = device)
+        self.select_control_group_id_policy = t.nn.Linear(NN_HIDDEN_LAYER, 10, device = device)
 
-        self.patrol_screen_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64) 
-        self.patrol_screen_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
+        self.patrol_screen_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device) 
+        self.patrol_screen_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
 
-        self.select_point_add_policy = t.nn.Linear(NN_HIDDEN_LAYER, 2)
-        self.select_point_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.select_point_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
+        self.select_point_add_policy = t.nn.Linear(NN_HIDDEN_LAYER, 2, device = device)
+        self.select_point_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
+        self.select_point_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
 
-        self.attack_minimap_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.attack_minimap_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
+        self.attack_minimap_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
+        self.attack_minimap_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
 
-        self.select_army_add_policy = t.nn.Linear(NN_HIDDEN_LAYER, 2)
+        self.select_army_add_policy = t.nn.Linear(NN_HIDDEN_LAYER, 2, device = device)
 
-        self.smart_minimap_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
-        self.smart_minimap_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64)
+        self.smart_minimap_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
+        self.smart_minimap_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
 
-        self.critic = t.nn.Linear(NN_HIDDEN_LAYER, 1)
+        self.critic = t.nn.Linear(NN_HIDDEN_LAYER, 1, device = device)
 
+        self.device = device
 
 
     
@@ -224,3 +225,6 @@ class MiniStarPolicy(t.nn.Module):
 
     def get_state_dict(self):
         return self.state_dict()
+
+    def get_device(self):
+        return self.device
