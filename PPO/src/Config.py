@@ -1,9 +1,11 @@
 import torch as t
 
+DEBUG = False
+
 # Hyperparam
 LEARNING_RATE = 3e-5
 
-EPOCH_BATCH = 3
+EPOCH_BATCH = 3 # MUST BE GREATER THAN 1 FOR CORRECTNESS (doesn't rly make sense for it to be <= 1 given PPO)
 
 LAMBDA = 0.99
 ENTROPY = 0.001
