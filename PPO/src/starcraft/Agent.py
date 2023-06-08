@@ -110,9 +110,11 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         (actor_probs,) = self.policy(nn_repr, "function_id")
 
-        mask = t.zeros((1, self.policy.get_num_actions()), dtype = DTYPE, device = self.policy.get_device())
+        actor_probs = actor_probs.to(t.device("cpu"))
 
-        mask[:, t.tensor([self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy], device = self.policy.get_device())] = 1.0
+        mask = t.zeros((1, self.policy.get_num_actions()), dtype = DTYPE, device = t.device("cpu"))
+
+        mask[:, t.tensor([self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy], device = t.device("cpu"))] = 1.0
         
         actor_probs_masked = actor_probs * mask
         
@@ -122,7 +124,7 @@ class MiniStarAgent(base_agent.BaseAgent):
         function_id = self.policy2function[actor_choice]
 
         args, func_args_dists, func_args_actions = self.policy(nn_repr, function_id, sample = True)
-        func_args_dists.insert(0, actor_probs_masked_norm)
+        func_args_dists.insert(0, actor_probs_masked_norm.to(dtype = DTYPE, device = self.policy.get_device()))
         func_args_actions.insert(0, actor_choice)
 
         return actions.FunctionCall(function_id, args), func_args_dists, func_args_actions, self.policy(nn_repr, "critic")
