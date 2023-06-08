@@ -11,7 +11,7 @@ from src.rl.Approximator import MiniStarPolicy
 from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
 from src.Parallel import DistSyncSGD, SerialSGD
-from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, CHECK_LOAD
+from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, CHECK_LOAD, DEBUG
 
 
 t.set_default_dtype(DTYPE)
@@ -20,6 +20,9 @@ if GPU:
     t.backends.cuda.matmul.allow_tf32 = True
     t.backends.cudnn.allow_tf32 = True
     t.backends.cudnn.benchmark = True
+
+if DEBUG:
+    t.autograd.set_detect_anomaly(True, check_nan=True)
 
 
 def main(argv):
