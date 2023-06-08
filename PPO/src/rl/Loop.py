@@ -56,8 +56,8 @@ def train_loop(agent, env):
                 timestep_t = timestep_tt
 
             
-            if isinstance(self.policy, DistSyncSGD):
-                with self.policy.policy_dist.no_sync():
+            if isinstance(agent.policy, DistSyncSGD):
+                with agent.policy.policy_dist.no_sync():
                     agent.optim.zero_grad()
                     agent.policy.mc_loss(agent, episode_info, shortcut).backward()
                     agent.optim.step()

@@ -15,7 +15,8 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-CHECK_LOAD = None
+CHECK_LOAD = "checkpoints/FindAndDefeatZerglings-1000.chkpt"
+#CHECK_LOAD = None
 CHECK_INTERVAL = 1_000
 
 # Environment
@@ -27,6 +28,6 @@ DTYPE = t.float32
 # Distributed
 ROOT = 0
 PROCS_PER_NODE = 4
-SYNC = False
-GPU = True
+SYNC = True
+GPU = False
 

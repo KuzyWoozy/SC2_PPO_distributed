@@ -2,7 +2,7 @@ import torch as t
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from src.Config import LAMBDA, PPO_CLIP, ENTROPY, DTYPE
+from src.Config import LAMBDA, PPO_CLIP, ENTROPY, DTYPE, GPU
 
 
 
@@ -91,7 +91,11 @@ class DistSyncSGD(t.nn.Module):
 
         mc.to(device = policy_ser.get_device(), dtype = DTYPE)
 
-        self.policy_dist = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [policy_ser.get_device()])
+        if GPU:
+            self.policy_dist = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [policy_ser.get_device()])
+        else:
+            self.policy_dist = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
+
 
 
     def forward(self, *args, **kwargs):
