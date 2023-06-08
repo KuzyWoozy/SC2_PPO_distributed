@@ -3,6 +3,7 @@ import torch as t
 
 import torch.distributed as dist
 
+from src.Parallel import DistSyncSGD
 from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, GPU
 
 
@@ -54,15 +55,33 @@ def train_loop(agent, env):
 
                 timestep_t = timestep_tt
 
-            # first step optimization
-            agent.optim.zero_grad()
-            agent.policy.mc_loss(agent, episode_info, shortcut).backward()
-            agent.optim.step()
+            
+            if isinstance(self.policy, DistSyncSGD):
+                with self.policy.policy_dist.no_sync():
+                    agent.optim.zero_grad()
+                    agent.policy.mc_loss(agent, episode_info, shortcut).backward()
+                    agent.optim.step()
 
-            for _ in range(EPOCH_BATCH - 1):
+                    for _ in range(EPOCH_BATCH - 2):
+                        agent.optim.zero_grad()
+                        agent.policy.mc_loss(agent, episode_info).backward()
+                        agent.optim.step()
+
                 agent.optim.zero_grad()
                 agent.policy.mc_loss(agent, episode_info).backward()
                 agent.optim.step()
+
+            else:
+                agent.optim.zero_grad()
+                agent.policy.mc_loss(agent, episode_info, shortcut).backward()
+                agent.optim.step()
+
+                for _ in range(EPOCH_BATCH - 1):
+                    agent.optim.zero_grad()
+                    agent.policy.mc_loss(agent, episode_info).backward()
+                    agent.optim.step()
+            
+
 
             
     except KeyboardInterrupt:
