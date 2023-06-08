@@ -19,6 +19,7 @@ t.set_default_dtype(DTYPE)
 if GPU:
     t.backends.cuda.matmul.allow_tf32 = True
     t.backends.cudnn.allow_tf32 = True
+    t.backends.cudnn.benchmark = True
 
 
 def main(argv):
