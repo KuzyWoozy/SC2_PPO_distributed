@@ -96,7 +96,7 @@ class MiniStarAgent(base_agent.BaseAgent):
                 obs.observation.feature_minimap.camera,
                 obs.observation.feature_minimap.player_id / 16,
                 obs.observation.feature_minimap.player_relative / 4,
-                obs.observation.feature_minimap.selected), axis = 0), 0)).to(device = self.policy.get_device(), dtype = DTYPE)
+                obs.observation.feature_minimap.selected), axis = 0), 0)).to(dtype = DTYPE, device = self.policy.get_device())
         
         return state
        
@@ -110,7 +110,7 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         (actor_probs,) = self.policy(nn_repr, "function_id")
 
-        actor_probs = actor_probs.to(t.device("cpu"))
+        actor_probs = actor_probs.to(dtype = DTYPE, device = t.device("cpu"))
 
         mask = t.zeros((1, self.policy.get_num_actions()), dtype = DTYPE, device = t.device("cpu"))
 
@@ -118,13 +118,13 @@ class MiniStarAgent(base_agent.BaseAgent):
         
         actor_probs_masked = actor_probs * mask
         
-        actor_probs_masked_norm = actor_probs_masked / t.sum(actor_probs_masked)
+        actor_probs_masked_norm = (actor_probs_masked / t.sum(actor_probs_masked)).pin_memory()
 
         actor_choice = categorical_sample(actor_probs_masked_norm)
         function_id = self.policy2function[actor_choice]
 
         args, func_args_dists, func_args_actions = self.policy(nn_repr, function_id, sample = True)
-        func_args_dists.insert(0, actor_probs_masked_norm.to(dtype = DTYPE, device = self.policy.get_device()))
+        func_args_dists.insert(0, actor_probs_masked_norm.to(dtype = DTYPE, device = self.policy.get_device(), non_blocking = True))
         func_args_actions.insert(0, actor_choice)
 
         return actions.FunctionCall(function_id, args), func_args_dists, func_args_actions, self.policy(nn_repr, "critic")

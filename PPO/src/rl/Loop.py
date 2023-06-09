@@ -81,8 +81,6 @@ def train_loop(agent, env):
                     agent.policy.mc_loss(agent, episode_info).backward()
                     agent.optim.step()
             
-
-
             
     except KeyboardInterrupt:
         pass

@@ -16,6 +16,7 @@ def loss(func_args_dists, func_args_dists_old, actions, adv, device):
 
 
     for out, out_old, action in zip(func_args_dists, func_args_dists_old, actions):
+
         actor_gain -= t.min((out[:, action] / out_old[:, action]) * adv_detached, t.clip(out[:, action] / out_old[:, action], min = 1 - PPO_CLIP, max = 1 + PPO_CLIP) * adv_detached)
 
         out_pos = out[out > 0.0]
@@ -61,7 +62,7 @@ class SerialSGD(t.nn.Module):
 
         mc = MonteCarlo(policy_ser)
 
-        mc.to(device = policy_ser.get_device(), dtype = DTYPE)
+        mc.to(dtype = DTYPE, device = policy_ser.get_device())
 
         self.policy = mc
 
@@ -89,8 +90,8 @@ class DistSyncSGD(t.nn.Module):
 
         mc = MonteCarlo(policy_ser)
 
-        mc.to(device = policy_ser.get_device(), dtype = DTYPE)
-
+        mc.to(dtype = DTYPE, device = policy_ser.get_device())
+        
         if GPU:
             self.policy_dist = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [policy_ser.get_device()])
         else:

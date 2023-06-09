@@ -19,6 +19,7 @@ class MiniStarPolicy(t.nn.Module):
         self.actor_dense2 = t.nn.Linear(NN_HIDDEN_LAYER, NN_HIDDEN_LAYER, device = device)
 
         self.function_id_policy = t.nn.Linear(NN_HIDDEN_LAYER, self.num_actions, device = device)
+        
         self.patrol_minimap_x_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
         self.patrol_minimap_y_policy = t.nn.Linear(NN_HIDDEN_LAYER, 64, device = device)
         

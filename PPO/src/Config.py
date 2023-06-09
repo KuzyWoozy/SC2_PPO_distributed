@@ -28,6 +28,6 @@ DTYPE = t.float32
 # Distributed
 ROOT = 0
 PROCS_PER_NODE = 4
-SYNC = True
-GPU = False
+SYNC = False
+GPU = True
 
