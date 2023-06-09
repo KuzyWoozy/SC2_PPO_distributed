@@ -40,7 +40,7 @@ def train_loop(agent, env):
                 action, func_args_dists, func_args_actions, crit = agent.step(timestep_t)
 
                 timestep_tt = env.step([action])[0] 
-                
+
                 total_agent_steps += 1
                 
                 if SYNC:
@@ -55,7 +55,7 @@ def train_loop(agent, env):
 
                 timestep_t = timestep_tt
 
-            
+            """
             if isinstance(agent.policy, DistSyncSGD):
                 with agent.policy.policy_dist.no_sync():
                     agent.optim.zero_grad()
@@ -70,17 +70,21 @@ def train_loop(agent, env):
                 agent.optim.zero_grad()
                 agent.policy.mc_loss(agent, episode_info).backward()
                 agent.optim.step()
+            """
+            """
+            print("starting backprop")
 
-            else:
+            agent.optim.zero_grad()
+            agent.policy.mc_loss(agent, episode_info, shortcut).backward()
+            agent.optim.step()
+
+            for _ in range(EPOCH_BATCH - 1):
                 agent.optim.zero_grad()
-                agent.policy.mc_loss(agent, episode_info, shortcut).backward()
+                agent.policy.mc_loss(agent, episode_info).backward()
                 agent.optim.step()
 
-                for _ in range(EPOCH_BATCH - 1):
-                    agent.optim.zero_grad()
-                    agent.policy.mc_loss(agent, episode_info).backward()
-                    agent.optim.step()
-            
+            print("finished backprop")
+            """
             
     except KeyboardInterrupt:
         pass

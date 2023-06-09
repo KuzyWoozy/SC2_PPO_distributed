@@ -19,7 +19,7 @@ t.set_default_dtype(DTYPE)
 if GPU:
     t.backends.cuda.matmul.allow_tf32 = True
     t.backends.cudnn.allow_tf32 = True
-    t.backends.cudnn.benchmark = True
+    # t.backends.cudnn.benchmark = True
 
 if DEBUG:
     t.autograd.set_detect_anomaly(True, check_nan=True)
@@ -39,18 +39,19 @@ def main(argv):
             device = t.device("cuda")
         else:
             device = t.device("cpu")
+    
 
     # Choose policy
-    policy = MiniStarPolicy(device)
+    policy = MiniStarPolicy()
         
     if CHECK_LOAD:
         policy.load_state_dict(t.load(CHECK_LOAD)["policy"])
 
     # Apply a parallel enabling wrapper to policy
     if SYNC:
-        policy = DistSyncSGD(policy)
+        policy = DistSyncSGD(policy, device)
     else:
-        policy = SerialSGD(policy)
+        policy = SerialSGD(policy, device)
 
     # Choose agent
     agent = MiniStarAgent(policy)
