@@ -59,6 +59,7 @@ class MiniStarAgent(base_agent.BaseAgent):
             self.optim.load_state_dict(t.load(CHECK_LOAD)["optim"])
         
 
+
     def obs_to_state(self, obs):
         MAX_UNIT_HEURISTIC = 100
 
@@ -90,32 +91,29 @@ class MiniStarAgent(base_agent.BaseAgent):
         
         state = self.obs_to_state(obs)
         
-        mask = t.zeros((1, NUM_ACTIONS), dtype = DTYPE, device = self.policy.device)
 
-        mask[:, t.tensor([self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy], device = self.policy.device)] = 1.0
+        mask = t.zeros((1, NUM_ACTIONS), dtype = DTYPE, device = t.device("cpu"), pin_memory = True)
+        mask[:, [self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy]] = 1.0
+
+        mask = mask.to(dtype = DTYPE, device = self.policy.device, non_blocking = True)
 
         actor_prob, x1_prob, y1_prob, x2_prob, y2_prob, cg_act, cg_id, point_add, army_add, crit = self.policy(state)
 
         actor_prob_masked = actor_prob * mask
         actor_prob_masked_norm = (actor_prob_masked / t.sum(actor_prob_masked))
-        actor_choice = categorical_sample(actor_prob_masked_norm)
+        actor_prob_masked_norm_cpu = actor_prob_masked_norm.to(dtype = DTYPE, device = t.device("cpu"))
+        actor_choice = categorical_sample(actor_prob_masked_norm_cpu)
         function_id = self.policy2function[actor_choice]
-
 
         args, args_probs, args_flat = self.sample_args(function_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act, cg_id, point_add, army_add)
 
         args_probs.insert(0, actor_prob_masked_norm)
         args_flat.insert(0, actor_choice)
 
-        return actions.FunctionCall(function_id, args), args_probs, args_flat, crit
+        return actions.FunctionCall(function_id, args), args_probs, args_flat, mask, crit
 
 
-    def nn_outs(self, obs, actor_choice):
-        state = self.obs_to_state(obs)
-
-        mask = t.zeros((1, NUM_ACTIONS), dtype = DTYPE, device = self.policy.device)
-        mask[:, t.tensor([self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy], device = self.policy.device)] = 1.0
-        
+    def nn_outs(self, state, mask, actor_choice):
         actor_prob, x1_prob, y1_prob, x2_prob, y2_prob, cg_act, cg_id, point_add, army_add, crit = self.policy(state)
 
         actor_prob_masked = actor_prob * mask        
@@ -141,42 +139,66 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         # Patrol_minimap
         if func_id == 334:
-            x1_choice = categorical_sample(x1_prob)
-            y1_choice = categorical_sample(y1_prob)
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
             return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         # Smart_screen
         elif func_id == 451:
-            x1_choice = categorical_sample(x1_prob)
-            y1_choice = categorical_sample(y1_prob) 
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
+
             return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         # Attack_screen
         elif func_id == 12:
-            x1_choice = categorical_sample(x1_prob)
-            y1_choice = categorical_sample(y1_prob)
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
             return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         # Select_rect
         elif func_id == 3:
-            x1_choice = categorical_sample(x1_prob)
-            y1_choice = categorical_sample(y1_prob) 
-            x2_choice = categorical_sample(x2_prob)
-            y2_choice = categorical_sample(y2_prob)
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            x2_prob_cpu = x2_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y2_prob_cpu = y2_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
+            x2_choice = categorical_sample(x2_prob_cpu)
+            y2_choice = categorical_sample(y2_prob_cpu)
+
             return [[0], [x1_choice, y1_choice], [x2_choice, y2_choice]], [x1_prob, y1_prob, x2_prob, y2_prob], [x1_choice, y1_choice, x2_choice, y2_choice]
 
 
         # Select_control_group
         elif func_id == 4:
-            cg_act_choice = categorical_sample(cg_act_prob) 
-            cg_id_choice = categorical_sample(cg_id_prob)
+            cg_act_prob_cpu = cg_act_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            cg_id_prob_cpu = cg_id_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+            cg_act_choice = categorical_sample(cg_act_prob_cpu) 
+            cg_id_choice = categorical_sample(cg_id_prob_cpu)
             return [[cg_act_choice], [cg_id_choice]], [cg_act_prob, cg_id_prob], [cg_act_choice, cg_id_choice]
 
         
         # Patrol_screen 
         elif func_id == 333:
-            x1_choice = categorical_sample(x1_prob)
-            y1_choice = categorical_sample(y1_prob)
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
             return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         # No_op
@@ -185,9 +207,13 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         # Select_point
         elif func_id == 2:
-            point_add_choice = categorical_sample(point_add_prob)
-            x1_choice = categorical_sample(x1_prob)
-            y1_choice = categorical_sample(y1_prob)
+            point_add_prob_cpu = point_add_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+            point_add_choice = categorical_sample(point_add_prob_cpu)
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
             return [[point_add_choice], [x1_choice, y1_choice]], [point_add_prob, x1_prob, y1_prob], [point_add_choice, x1_choice, y1_choice]
             
 
@@ -197,19 +223,27 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         # Attack_minimap
         elif func_id == 13:
-            x1_choice = categorical_sample(x1_prob)
-            y1_choice = categorical_sample(y1_prob)
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
             return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         # Select army
         elif func_id == 7:
-            army_add_choice = categorical_sample(army_add_prob)
+            army_add_prob_cpu = army_add_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            
+            army_add_choice = categorical_sample(army_add_prob_cpu)
             return [[army_add_choice]], [army_add_prob], [army_add_choice]
 
         # Smart minimap
         elif func_id == 452:
-            x1_choice = categorical_sample(x1_prob)
-            y1_choice = categorical_sample(y1_prob)
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
             return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         else:

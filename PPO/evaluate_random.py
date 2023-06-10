@@ -3,7 +3,6 @@ from pysc2.agents.random_agent import RandomAgent
 from pysc2.env import sc2_env
 from pysc2.env.run_loop import run_loop
 from absl import app
-import torch as t
 
 
 def main(argv):

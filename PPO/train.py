@@ -1,5 +1,3 @@
-from pysc2.agents.random_agent import RandomAgent
-from pysc2.env import sc2_env
 from absl import app
 
 import random
@@ -13,6 +11,7 @@ from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
 from src.Parallel import DistSyncSGD, SerialSGD
 from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, CHECK_LOAD, DEBUG, SEED
+from src.Misc import module_params_count, verify_config
 
 
 if SEED is not None: 
@@ -28,11 +27,16 @@ if GPU:
 
 if DEBUG:
     t.autograd.set_detect_anomaly(True, check_nan=True)
+    if GPU:
+        t.cuda.set_sync_debug_mode(1) # Objectively best flag to ever be implemented in a library
 
 t.set_default_dtype(DTYPE)
 
 
 def main(argv):
+    
+    verify_config()
+
     # Initialize distributed module if necessary
     if SYNC:
         if GPU:
@@ -59,6 +63,8 @@ def main(argv):
         policy = DistSyncSGD(policy, device)
     else:
         policy = SerialSGD(policy, device)
+
+    print("Model parameter count:", module_params_count(policy))
 
     # Choose agent
     agent = MiniStarAgent(policy)

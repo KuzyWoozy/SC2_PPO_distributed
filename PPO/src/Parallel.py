@@ -2,7 +2,7 @@ import torch as t
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from src.Config import LAMBDA, PPO_CLIP, ENTROPY, DTYPE, GPU
+from src.Config import LAMBDA, PPO_CLIP, DTYPE, GPU
 
 
 
@@ -14,7 +14,7 @@ class MonteCarlo(t.nn.Module):
         self.policy_ser = policy_ser
         self.device = device
     
-    def loss(self, func_args_dists, func_args_dists_old, actions, adv):
+    def loss(self, actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, actions, adv):
         # Note that we're minimizing
 
         actor_gain = t.tensor([0.0], dtype = DTYPE, device = self.device)
@@ -27,31 +27,31 @@ class MonteCarlo(t.nn.Module):
             # Trick to avoid having to avoid conditional
             entropy -= t.sum(out * t.log(out + 1e-8))
 
-        critic_loss = adv ** 2
-
-        return actor_gain + critic_loss + (ENTROPY * entropy)
-
+        critic_loss += adv ** 2
+        
 
 
     def forward(self, agent, episode_info, shortcut):
-        episode_loss = t.tensor([0.0], dtype = DTYPE, device = self.device)
+        actor_gain = t.tensor([0.0], dtype = DTYPE, device = self.device) 
+        critic_loss = t.tensor([0.0], dtype = DTYPE, device = self.device)
+        entropy = t.tensor([0.0], dtype = DTYPE, device = self.device)
+
         G = t.tensor([0.0], dtype = DTYPE, device = self.device)
 
         if shortcut:
             shortcut_length = len(shortcut)
 
-        for i, (reward, obs, func_args_dists_old, func_args_actions) in enumerate(reversed(episode_info)):
+        for i, (reward, state, mask, func_args_dists_old, func_args_actions) in enumerate(reversed(episode_info)):
             if shortcut:
                 func_args_dists, critic_val = shortcut[shortcut_length - 1 - i]
             else:
-                func_args_dists, critic_val = agent.nn_outs(obs, func_args_actions[0])
+                func_args_dists, critic_val = agent.nn_outs(state, mask, func_args_actions[0])
 
             G = reward + LAMBDA * G
             ADV = G - critic_val[0]
        
-            episode_loss += self.loss(func_args_dists, func_args_dists_old, func_args_actions, ADV)
-        
-        return episode_loss
+            self.loss(actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, func_args_actions, ADV)
+        return actor_gain + critic_loss + entropy
 
 
 class SerialSGD(t.nn.Module):
@@ -59,8 +59,9 @@ class SerialSGD(t.nn.Module):
     def __init__(self, policy_ser, device):
         super().__init__()
         
+        policy_ser = policy_ser.to(dtype = DTYPE, device = device)
+        
         if GPU:
-            policy_ser = policy_ser.to(dtype = DTYPE, device = device)
             policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 12, 64, 64), dtype = DTYPE, device = device),))
 
         self.policy = MonteCarlo(policy_ser, device)

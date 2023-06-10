@@ -1,10 +1,9 @@
-import time, copy, sys
+import time
 import torch as t
 
 import torch.distributed as dist
 
-from src.Parallel import DistSyncSGD
-from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, GPU
+from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, DTYPE 
 
 
 def train_loop(agent, env):
@@ -18,7 +17,6 @@ def train_loop(agent, env):
 
     try:
         while True:
-
             if total_agent_steps >= MAX_AGENT_STEPS:
                 if SYNC:
                     if dist.get_rank() == ROOT:
@@ -41,7 +39,7 @@ def train_loop(agent, env):
                 if timestep_t.last():
                     break
 
-                action, func_args_dists, func_args_actions, crit = agent.step(timestep_t)
+                action, func_args_dists, func_args_actions, mask, crit = agent.step(timestep_t)
 
                 timestep_tt = env.step([action])[0] 
 
@@ -53,7 +51,7 @@ def train_loop(agent, env):
                 else:
                     agent.save_if_rdy(total_agent_steps)
 
-                episode_info.append((timestep_tt.reward, timestep_t, [i.detach() for i in func_args_dists], func_args_actions))
+                episode_info.append((t.tensor([timestep_tt.reward], dtype = DTYPE, device = agent.policy.device), agent.obs_to_state(timestep_t), mask, [i.detach() for i in func_args_dists], func_args_actions))
 
                 shortcut.append((func_args_dists, crit))
 

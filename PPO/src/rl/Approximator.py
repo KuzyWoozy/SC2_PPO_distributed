@@ -1,5 +1,4 @@
 import torch as t
-import copy
 
 from src.Config import NN_HIDDEN_LAYER, NUM_ACTIONS
 
@@ -28,6 +27,7 @@ class MiniStarPolicy(t.nn.Module):
 
 
     def forward(self, inp):
+
         hid = t.relu(self.actor_dense2(t.relu(self.actor_dense1(t.flatten(t.relu(self.convolve2(t.relu(self.convolve1(inp)))), start_dim = 1)))))
 
         return t.softmax(self.function_id(hid), dim = 1),\

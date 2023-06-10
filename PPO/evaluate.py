@@ -1,5 +1,3 @@
-from pysc2.agents.random_agent import RandomAgent
-from pysc2.env import sc2_env
 from absl import app
 import torch as t
 
