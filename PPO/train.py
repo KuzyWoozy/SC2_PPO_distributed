@@ -2,27 +2,34 @@ from pysc2.agents.random_agent import RandomAgent
 from pysc2.env import sc2_env
 from absl import app
 
+import random
+import numpy as np
 import torch as t
 import torch.distributed as dist
-
 
 from src.rl.Loop import train_loop
 from src.rl.Approximator import MiniStarPolicy
 from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
 from src.Parallel import DistSyncSGD, SerialSGD
-from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, CHECK_LOAD, DEBUG
+from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, CHECK_LOAD, DEBUG, SEED
 
 
-t.set_default_dtype(DTYPE)
+if SEED is not None: 
+    random.seed(SEED)
+    t.manual_seed(SEED)
+    np.random.seed(SEED)
+
 
 if GPU:
     t.backends.cuda.matmul.allow_tf32 = True
     t.backends.cudnn.allow_tf32 = True
-    # t.backends.cudnn.benchmark = True
+    t.backends.cudnn.benchmark = False if SEED else True
 
 if DEBUG:
     t.autograd.set_detect_anomaly(True, check_nan=True)
+
+t.set_default_dtype(DTYPE)
 
 
 def main(argv):

@@ -24,7 +24,11 @@ def train_loop(agent, env):
                     if dist.get_rank() == ROOT:
                         agent.save(total_agent_steps)
                     dist.destroy_process_group()
-            
+                else:
+                    agent.save(total_agent_steps)
+                break
+                
+
             timestep_t = env.reset()[0]
 
             agent.reset()
@@ -56,7 +60,7 @@ def train_loop(agent, env):
                 timestep_t = timestep_tt
 
             """
-            if isinstance(agent.policy, DistSyncSGD):
+            if SYNC:
                 with agent.policy.policy_dist.no_sync():
                     agent.optim.zero_grad()
                     agent.policy.mc_loss(agent, episode_info, shortcut).backward()
@@ -71,9 +75,7 @@ def train_loop(agent, env):
                 agent.policy.mc_loss(agent, episode_info).backward()
                 agent.optim.step()
             """
-            """
-            print("starting backprop")
-
+            
             agent.optim.zero_grad()
             agent.policy.mc_loss(agent, episode_info, shortcut).backward()
             agent.optim.step()
@@ -83,8 +85,6 @@ def train_loop(agent, env):
                 agent.policy.mc_loss(agent, episode_info).backward()
                 agent.optim.step()
 
-            print("finished backprop")
-            """
             
     except KeyboardInterrupt:
         pass
