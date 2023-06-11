@@ -14,6 +14,7 @@ class MonteCarlo(t.nn.Module):
         self.policy_ser = policy_ser
         self.device = device
     
+    @t.compile()
     def loss(self, actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, actions, adv):
         # Note that we're minimizing
 
@@ -29,8 +30,6 @@ class MonteCarlo(t.nn.Module):
 
         critic_loss += adv ** 2
         
-
-
     def forward(self, agent, episode_info, shortcut):
         actor_gain = t.tensor([0.0], dtype = DTYPE, device = self.device) 
         critic_loss = t.tensor([0.0], dtype = DTYPE, device = self.device)

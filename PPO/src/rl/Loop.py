@@ -3,20 +3,30 @@ import torch as t
 
 import torch.distributed as dist
 
-from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, DTYPE 
+from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, DTYPE, TIMING_EPISODE_DELAY
+
+
+@t.compile()
+def step(agent, loss):
+    loss.backward()
+    agent.optim.step()
+    agent.optim.zero_grad()
 
 
 def train_loop(agent, env):
     total_agent_steps = 0
-
-    start_time = time.time()
-
+    episode = 0
+    
     obs_spec = env.observation_spec()[0]
     act_spec = env.action_spec()[0]
     agent.setup(obs_spec, act_spec)
 
     try:
         while True:
+
+            if episode == TIMING_EPISODE_DELAY:
+                start_time = time.time()
+
             if total_agent_steps >= MAX_AGENT_STEPS:
                 if SYNC:
                     if dist.get_rank() == ROOT:
@@ -73,16 +83,15 @@ def train_loop(agent, env):
                 agent.policy.mc_loss(agent, episode_info).backward()
                 agent.optim.step()
             """
+           
             
-            agent.optim.zero_grad()
-            agent.policy.mc_loss(agent, episode_info, shortcut).backward()
-            agent.optim.step()
-
+            loss = agent.policy.mc_loss(agent, episode_info, shortcut)
+            step(agent, loss)
             for _ in range(EPOCH_BATCH - 1):
-                agent.optim.zero_grad()
-                agent.policy.mc_loss(agent, episode_info).backward()
-                agent.optim.step()
-
+                loss = agent.policy.mc_loss(agent, episode_info)
+                step(agent, loss)
+            
+            episode += 1 # Completed
             
     except KeyboardInterrupt:
         pass

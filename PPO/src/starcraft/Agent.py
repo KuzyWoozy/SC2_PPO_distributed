@@ -59,7 +59,7 @@ class MiniStarAgent(base_agent.BaseAgent):
             self.optim.load_state_dict(t.load(CHECK_LOAD)["optim"])
         
 
-
+    @t.compile()
     def obs_to_state(self, obs):
         MAX_UNIT_HEURISTIC = 100
 
@@ -84,8 +84,6 @@ class MiniStarAgent(base_agent.BaseAgent):
         return state
        
 
-
-    
     def step(self, obs):
         super().step(obs)
         
@@ -112,7 +110,7 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         return actions.FunctionCall(function_id, args), args_probs, args_flat, mask, crit
 
-
+    @t.compile()
     def nn_outs(self, state, mask, actor_choice):
         actor_prob, x1_prob, y1_prob, x2_prob, y2_prob, cg_act, cg_id, point_add, army_add, crit = self.policy(state)
 
@@ -135,6 +133,7 @@ class MiniStarAgent(base_agent.BaseAgent):
     def save(self, agent_steps):
         self.check_manager.save(agent_steps, {"policy" : self.policy.get_state_dict(), "optim" : self.optim.state_dict()})
 
+    @t.compile()
     def sample_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
 
         # Patrol_minimap
@@ -250,7 +249,7 @@ class MiniStarAgent(base_agent.BaseAgent):
             print(f"{func_id} IS NOT SUPPORTED")
             sys.exit(1)
 
-
+    @t.compile()
     def probs_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
 
         # Patrol_minimap

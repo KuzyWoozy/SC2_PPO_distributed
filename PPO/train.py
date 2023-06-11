@@ -58,11 +58,15 @@ def main(argv):
     if CHECK_LOAD:
         policy.load_state_dict(t.load(CHECK_LOAD)["policy"])
 
+    
+
     # Apply a parallel enabling wrapper to policy
     if SYNC:
         policy = DistSyncSGD(policy, device)
     else:
         policy = SerialSGD(policy, device)
+    
+    policy = t.compile(policy)
 
     print("Model parameter count:", module_params_count(policy))
 
@@ -70,6 +74,7 @@ def main(argv):
     agent = MiniStarAgent(policy)
     # Choose environment
     environment = StarcraftMinigame(agent)
+
     
     # Begin the training process
     train_loop(agent, environment)
