@@ -66,7 +66,6 @@ def main(argv):
     else:
         policy = SerialSGD(policy, device)
     
-    policy = t.compile(policy)
 
     print("Model parameter count:", module_params_count(policy))
 

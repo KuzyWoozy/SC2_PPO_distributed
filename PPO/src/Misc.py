@@ -28,12 +28,8 @@ class CheckpointManager:
         t.save(state_dict, self.directory + "/" + self.name + f"-{step}.chkpt")
     
 
+@t.compile()
 def categorical_sample(probs):
-
-    if probs.device != t.device("cpu"):
-        print(probs, probs.device)
-        exit()
-
     return t.distributions.Categorical(probs = probs).sample((1,)).item()
 
 

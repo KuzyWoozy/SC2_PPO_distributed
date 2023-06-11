@@ -25,7 +25,7 @@ class MiniStarPolicy(t.nn.Module):
         self.select_army_add = t.nn.Linear(NN_HIDDEN_LAYER, 2)
         self.critic = t.nn.Linear(NN_HIDDEN_LAYER, 1)
 
-
+    
     def forward(self, inp):
 
         hid = t.relu(self.actor_dense2(t.relu(self.actor_dense1(t.flatten(t.relu(self.convolve2(t.relu(self.convolve1(inp)))), start_dim = 1)))))
