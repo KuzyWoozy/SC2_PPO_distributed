@@ -65,7 +65,7 @@ def main(argv):
         policy = DistSyncSGD(policy, device)
     else:
         policy = SerialSGD(policy, device)
-    
+   
 
     print("Model parameter count:", module_params_count(policy))
 

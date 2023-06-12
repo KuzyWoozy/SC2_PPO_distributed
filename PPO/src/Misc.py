@@ -28,7 +28,6 @@ class CheckpointManager:
         t.save(state_dict, self.directory + "/" + self.name + f"-{step}.chkpt")
     
 
-@t.compile()
 def categorical_sample(probs):
     return t.distributions.Categorical(probs = probs).sample((1,)).item()
 

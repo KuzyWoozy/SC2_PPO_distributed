@@ -6,10 +6,6 @@ import torch.distributed as dist
 from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, DTYPE, TIMING_EPISODE_DELAY
 
 
-def step(agent, loss):
-    loss.backward()
-    agent.optim.step()
-    agent.optim.zero_grad()
 
 
 def train_loop(agent, env):
@@ -84,11 +80,13 @@ def train_loop(agent, env):
             """
            
             
-            loss = agent.policy.mc_loss(agent, episode_info, shortcut)
-            step(agent, loss)
+            agent.policy.mc_loss(agent, episode_info, shortcut).backward()
+            agent.optim.step()
+            agent.optim.zero_grad()
             for _ in range(EPOCH_BATCH - 1):
-                loss = agent.policy.mc_loss(agent, episode_info)
-                step(agent, loss)
+                agent.policy.mc_loss(agent, episode_info).backward()
+                agent.optim.step()
+                agent.optim.zero_grad()
             
             episode += 1 # Completed
             

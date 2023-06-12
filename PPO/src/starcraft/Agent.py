@@ -77,7 +77,7 @@ class MiniStarAgent(base_agent.BaseAgent):
                 obs.observation.feature_minimap.selected), axis = 0), 0)).type(DTYPE)
         
         if GPU:
-            state = state.pin_memory().to(dtype = DTYPE, device = self.policy.device, non_blocking = True)
+            state = state.to(dtype = DTYPE, device = self.policy.device)
 
         return state
        
@@ -105,10 +105,10 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         args_probs.insert(0, actor_prob_masked_norm)
         args_flat.insert(0, actor_choice)
-
+        
         return actions.FunctionCall(function_id, args), args_probs, args_flat, mask, crit
 
-    @t.compile()
+    
     def nn_outs(self, state, mask, actor_choice):
         actor_prob, x1_prob, y1_prob, x2_prob, y2_prob, cg_act, cg_id, point_add, army_add, crit = self.policy(state)
 
@@ -131,7 +131,6 @@ class MiniStarAgent(base_agent.BaseAgent):
     def save(self, agent_steps):
         self.check_manager.save(agent_steps, {"policy" : self.policy.get_state_dict(), "optim" : self.optim.state_dict()})
 
-    @t.compile() 
     def sample_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
 
         # Patrol_minimap

@@ -14,7 +14,7 @@ class MonteCarlo(t.nn.Module):
         self.policy_ser = policy_ser
         self.device = device
     
-    @t.compile() 
+
     def loss(self, actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, actions, adv):
         # Note that we're minimizing
 
@@ -24,7 +24,7 @@ class MonteCarlo(t.nn.Module):
         adv_detached = adv.detach()
 
         for out, out_old, action in zip(func_args_dists, func_args_dists_old, actions):
-            actor_gain -= t.min((out[:, action] / out_old[:, action]) * adv_detached, t.clip(out[:, action] / out_old[:, action], min = 1 - PPO_CLIP, max = 1 + PPO_CLIP) * adv_detached)
+            actor_gain -= t.min((out[:, action] / out_old[:, action]) * adv_detached, t.clip(out[:, action] / out_old[:, action], min = 1 - PPO_CLIP, max = 1 + PPO_CLIP) * adv_detached)          
             # Trick to avoid having to avoid conditional
             entropy -= t.sum(out * t.log(out + 1e-8))
 
