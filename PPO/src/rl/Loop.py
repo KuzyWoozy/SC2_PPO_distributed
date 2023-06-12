@@ -6,7 +6,6 @@ import torch.distributed as dist
 from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, DTYPE, TIMING_EPISODE_DELAY
 
 
-@t.compile()
 def step(agent, loss):
     loss.backward()
     agent.optim.step()
