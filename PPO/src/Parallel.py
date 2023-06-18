@@ -6,14 +6,12 @@ from src.Config import LAMBDA, PPO_CLIP, DTYPE, GPU
 
 
 
-
 class MonteCarlo(t.nn.Module):
 
     def __init__(self, policy_ser, device):
         super().__init__()
         self.policy_ser = policy_ser
         self.device = device
-    
 
     def loss(self, actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, actions, adv):
         # Note that we're minimizing
@@ -30,26 +28,29 @@ class MonteCarlo(t.nn.Module):
 
         critic_loss += adv ** 2
         
-    def forward(self, agent, episode_info, shortcut):
-        actor_gain = t.tensor([0.0], dtype = DTYPE, device = self.device) 
+    
+    def forward(self, agent, episode_info, shortcut, bootstrap):
+        actor_gain = t.tensor([0.0], dtype = DTYPE, device = self.device)
         critic_loss = t.tensor([0.0], dtype = DTYPE, device = self.device)
         entropy = t.tensor([0.0], dtype = DTYPE, device = self.device)
 
-        G = t.tensor([0.0], dtype = DTYPE, device = self.device)
+        G = bootstrap.detach()
 
         if shortcut:
-            shortcut_length = len(shortcut)
+            for (reward, _, _, func_args_dists_old, func_args_actions), (func_args_dists, critic_val) in zip(reversed(episode_info), reversed(shortcut)):
 
-        for i, (reward, state, mask, func_args_dists_old, func_args_actions) in enumerate(reversed(episode_info)):
-            if shortcut:
-                func_args_dists, critic_val = shortcut[shortcut_length - 1 - i]
-            else:
+                G = reward + LAMBDA * G
+                ADV = G - critic_val[0]
+           
+                self.loss(actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, func_args_actions, ADV)
+        else:
+            for reward, state, mask, func_args_dists_old, func_args_actions in reversed(episode_info):
                 func_args_dists, critic_val = agent.nn_outs(state, mask, func_args_actions[0])
 
-            G = reward + LAMBDA * G
-            ADV = G - critic_val[0]
-       
-            self.loss(actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, func_args_actions, ADV)
+                G = reward + LAMBDA * G
+                ADV = G - critic_val[0]
+           
+                self.loss(actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, func_args_actions, ADV)
         return actor_gain + critic_loss + entropy
 
 
@@ -69,8 +70,8 @@ class SerialSGD(t.nn.Module):
     def forward(self, *args, **kwargs):
         return self.policy.policy_ser(*args, **kwargs)
 
-    def mc_loss(self, agent, episode_info, shortcut = None):
-        return self.policy(agent, episode_info, shortcut)
+    def mc_loss(self, agent, episode_info, shortcut, bootstrap):
+        return self.policy(agent, episode_info, shortcut, bootstrap)
 
     def get_state_dict(self):
         return self.policy.policy_ser.state_dict()
@@ -81,29 +82,21 @@ class DistSyncSGD(t.nn.Module):
     def __init__(self, policy_ser, device):
         super().__init__()
 
-        mc = MonteCarlo(policy_ser)
+        policy_ser = policy_ser.to(dtype = DTYPE, device = device)
 
-        mc = mc.to(dtype = DTYPE, device = device)
-        
         if GPU:
-            self.policy_dist = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [policy_ser.get_device()])
+            self.policy = DDP(MonteCarlo(policy_ser, device), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [policy_ser.get_device()])
         else:
-            self.policy_dist = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
-
+            self.policy = DDP(MonteCarlo(policy_ser, device), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
+        
         self.device = device
 
 
     def forward(self, *args, **kwargs):
-        return self.policy_dist.module.policy_ser(*args, **kwargs)
+        return self.policy.module.policy_ser(*args, **kwargs)
 
-    def mc_loss(self, agent, episode_info, shortcut = None):
-        return self.policy_dist(agent, episode_info, shortcut)
+    def mc_loss(self, agent, episode_info, shortcut, bootstrap):
+        return self.policy(agent, episode_info, shortcut, bootstrap)
 
-    def get_num_actions(self):
-        return self.policy_dist.module.policy_ser.get_num_actions()
-    
     def get_state_dict(self):
-        return self.policy_dist.module.policy_ser.get_state_dict()
-
-    def get_device(self):
-        return self.device
+        return self.policy.module.policy_ser.state_dict()

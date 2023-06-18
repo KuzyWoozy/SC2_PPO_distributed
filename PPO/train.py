@@ -69,12 +69,25 @@ def main(argv):
 
     print("Model parameter count:", module_params_count(policy))
 
-    # Choose agent
-    agent = MiniStarAgent(policy)
-    # Choose environment
-    environment = StarcraftMinigame(agent)
 
-    
+
+
+    if SYNC:
+        for i in range(PROCS_PER_NODE):
+            if dist.get_rank() == i:
+                # Choose agent
+                agent = MiniStarAgent(policy)
+                # Choose environment
+                environment = StarcraftMinigame(agent)
+            dist.barrier()
+    else:
+        # Choose agent
+        agent = MiniStarAgent(policy)
+        # Choose environment
+        environment = StarcraftMinigame(agent)
+
+
+    print("Starting training", flush = True) 
     # Begin the training process
     train_loop(agent, environment)
 
