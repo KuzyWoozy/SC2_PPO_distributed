@@ -91,6 +91,11 @@ def train_loop(agent, env):
                     
                     if terminate:
                         break
+                    
+                    maxi = 0
+                    for par in agent.policy.parameters():
+                        maxi = max(maxi, t.max(par))
+                    print("MAXIMUM", maxi)
 
                 timestep_t = timestep_tt
                 

@@ -16,16 +16,13 @@ class MonteCarlo(t.nn.Module):
     def loss(self, actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, actions, adv):
         # Note that we're minimizing
 
-        actor_gain = t.tensor([0.0], dtype = DTYPE, device = self.device)
-        entropy = t.tensor([0.0], dtype = DTYPE, device = self.device)
-        
         adv_detached = adv.detach()
 
         for out, out_old, action in zip(func_args_dists, func_args_dists_old, actions):
             actor_gain -= t.min((out[:, action] / out_old[:, action]) * adv_detached, t.clip(out[:, action] / out_old[:, action], min = 1 - PPO_CLIP, max = 1 + PPO_CLIP) * adv_detached)          
             # Trick to avoid having to avoid conditional
             entropy -= t.sum(out * t.log(out + 1e-8))
-
+        
         critic_loss += adv ** 2
         
     
@@ -51,6 +48,7 @@ class MonteCarlo(t.nn.Module):
                 ADV = G - critic_val[0]
            
                 self.loss(actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, func_args_actions, ADV)
+        
         return actor_gain + critic_loss + entropy
 
 
