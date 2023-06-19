@@ -84,7 +84,7 @@ def train_loop(agent, env):
                     else:
                         network_update(agent, episode_info, shortcut, terminate)
                         for _ in range(max(EPOCH_BATCH - 1, 0)):
-                            network_update(agent, episode_info, None, terminate)
+                            network_update(agent, episode_info, None, terminate) 
 
                     episode_info = []
                     shortcut = []

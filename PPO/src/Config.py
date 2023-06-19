@@ -3,7 +3,7 @@ import torch as t
 DEBUG = False
 
 # Hyperparam
-LEARNING_RATE = 1e-4
+LEARNING_RATE = 3e-3
 
 EPOCH_BATCH = 5 # MUST BE GREATER THAN 1 FOR CORRECTNESS (doesn't rly make sense for it to be <= 1 given PPO)
 
@@ -16,8 +16,8 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-# CHECK_LOAD = "checkpoints/FindAndDefeatZerglings-1000.chkpt"
-CHECK_LOAD = None
+CHECK_LOAD = "checkpoints/FindAndDefeatZerglings-10000.chkpt"
+#CHECK_LOAD = None
 CHECK_INTERVAL = 10_000
 
 # Environment

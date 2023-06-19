@@ -9,14 +9,14 @@ class MiniStarPolicy(t.nn.Module):
         super().__init__()
 
         self.convolve1 = t.nn.Conv2d(12, 6, 5, stride = 1, padding = "same")
-        self.convolve2 = t.nn.Conv2d(6, 12, 3, stride = 1, padding = "same")
+        self.convolve2 = t.nn.Conv2d(6, 8, 3, stride = 1, padding = "same")
 
-        self.hidden = t.nn.Linear(49152, NN_HIDDEN_LAYER)
+        self.hidden = t.nn.Linear(32768, NN_HIDDEN_LAYER)
         
         self.function_id = t.nn.Linear(NN_HIDDEN_LAYER, NUM_ACTIONS)
         
-        self.coords1 = t.nn.Conv2d(12, 1, 1, stride = 1)
-        self.coords2 = t.nn.Conv2d(12, 1, 1, stride = 1)
+        self.coords1 = t.nn.Conv2d(8, 1, 1, stride = 1)
+        self.coords2 = t.nn.Conv2d(8, 1, 1, stride = 1)
 
         self.select_control_group_act = t.nn.Linear(NN_HIDDEN_LAYER, 5)
         self.select_control_group_id = t.nn.Linear(NN_HIDDEN_LAYER, 10)
@@ -28,6 +28,7 @@ class MiniStarPolicy(t.nn.Module):
     def forward(self, inp):
         
         convolution = t.relu(self.convolve2(t.relu(self.convolve1(inp))))
+
         hid = t.relu(self.hidden(t.flatten(convolution, start_dim = 1)))
 
         return t.softmax(self.function_id(hid), dim = 1),\

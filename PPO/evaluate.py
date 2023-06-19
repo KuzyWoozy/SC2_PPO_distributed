@@ -13,10 +13,13 @@ from src.Config import CHECK_LOAD
 
 def main(argv):
     
-    policy = MiniStarPolicy(t.device("cpu"))
+    policy = MiniStarPolicy()
     
     if CHECK_LOAD:
         policy.load_state_dict(t.load(CHECK_LOAD, map_location = t.device("cpu"))["policy"])
+
+    for para in policy.parameters():
+        print(para)
 
     # Choose agent
     agent = MiniStarAgent(policy)
