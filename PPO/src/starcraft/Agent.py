@@ -77,7 +77,7 @@ class MiniStarAgent(base_agent.BaseAgent):
                 obs.observation.feature_minimap.selected), axis = 0), 0)).type(DTYPE)
         
         if GPU:
-            state = state.to(device = self.policy.device)
+            state = state.to(dtype = DTYPE, device = self.policy.device)
 
         return state
        
@@ -85,40 +85,42 @@ class MiniStarAgent(base_agent.BaseAgent):
     def step(self, obs):
         super().step(obs)
         
-        state = self.obs_to_state(obs) 
+        state = self.obs_to_state(obs)
+        
 
-        mask = t.zeros((1, NUM_ACTIONS), dtype = DTYPE, device = t.device("cpu"))
+        mask = t.zeros((1, NUM_ACTIONS), dtype = DTYPE, device = t.device("cpu"), pin_memory = True)
         mask[:, [self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy]] = 1.0
-        mask = mask.to(dtype = DTYPE, device = self.policy.device)
 
-        policy_distributions = self.policy(state)
+        mask = mask.to(dtype = DTYPE, device = self.policy.device, non_blocking = True)
 
-        actor_prob_masked = policy_distributions[0] * mask
+        actor_prob, x1_prob, y1_prob, x2_prob, y2_prob, cg_act, cg_id, point_add, army_add, crit = self.policy(state)
+
+        actor_prob_masked = actor_prob * mask
         actor_prob_masked_norm = (actor_prob_masked / t.sum(actor_prob_masked))
         actor_prob_masked_norm_cpu = actor_prob_masked_norm.to(dtype = DTYPE, device = t.device("cpu"))
         actor_choice = categorical_sample(actor_prob_masked_norm_cpu)
         function_id = self.policy2function[actor_choice]
 
-        args, args_probs, args_flat = self.sample_args(function_id, *policy_distributions[1:-1])
+        args, args_probs, args_flat = self.sample_args(function_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act, cg_id, point_add, army_add)
 
         args_probs.insert(0, actor_prob_masked_norm)
         args_flat.insert(0, actor_choice)
         
-        return actions.FunctionCall(function_id, args), args_probs, args_flat, mask, policy_distributions[-1]
+        return actions.FunctionCall(function_id, args), args_probs, args_flat, mask, crit
 
     
     def nn_outs(self, state, mask, actor_choice):
-        policy_distributions = self.policy(state)
+        actor_prob, x1_prob, y1_prob, x2_prob, y2_prob, cg_act, cg_id, point_add, army_add, crit = self.policy(state)
 
-        actor_prob_masked = policy_distributions[0] * mask        
+        actor_prob_masked = actor_prob * mask        
         actor_prob_masked_norm = actor_prob_masked / t.sum(actor_prob_masked)
         function_id = self.policy2function[actor_choice]
         
-        args_probs = self.probs_args(function_id, *policy_distributions[1:-1])
+        args_probs = self.probs_args(function_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act, cg_id, point_add, army_add)
         
         args_probs.insert(0, actor_prob_masked_norm)
 
-        return args_probs, policy_distributions[-1]
+        return args_probs, crit
 
 
     def save_if_rdy(self, agent_steps):
@@ -129,57 +131,51 @@ class MiniStarAgent(base_agent.BaseAgent):
     def save(self, agent_steps):
         self.check_manager.save(agent_steps, {"policy" : self.policy.get_state_dict(), "optim" : self.optim.state_dict()})
 
-    def sample_args(self, func_id, coords1_prob, coords2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
+    def sample_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
 
         # Patrol_minimap
         if func_id == 334:
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            
-            coords1_choice = categorical_sample(coords1_prob_cpu)
-            
-            x1_choice = coords1_choice % 64
-            y1_choice = coords1_choice // 64
-            
-            return [[0], [x1_choice, y1_choice]], [coords1_prob], [coords1_choice]
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
+            return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         # Smart_screen
         elif func_id == 451:
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            
-            coords1_choice = categorical_sample(coords1_prob_cpu)
-            
-            x1_choice = coords1_choice % 64
-            y1_choice = coords1_choice // 64
-            
-            return [[0], [x1_choice, y1_choice]], [coords1_prob], [coords1_choice]
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
+
+            return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         # Attack_screen
         elif func_id == 12:
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            
-            coords1_choice = categorical_sample(coords1_prob_cpu)
-            
-            x1_choice = coords1_choice % 64
-            y1_choice = coords1_choice // 64
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
 
-            return [[0], [x1_choice, y1_choice]], [coords1_prob], [coords1_choice]
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
+            return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         # Select_rect
         elif func_id == 3:
-            
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            coords2_prob_cpu = coords2_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            x2_prob_cpu = x2_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y2_prob_cpu = y2_prob.to(dtype = DTYPE, device = t.device("cpu"))
 
-            coords1_choice = categorical_sample(coords1_prob_cpu)
-            coords2_choice = categorical_sample(coords2_prob_cpu)
 
-            x1_choice = coords1_choice % 64
-            y1_choice = coords1_choice // 64
-            x2_choice = coords2_choice % 64
-            y2_choice = coords2_choice // 64
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
+            x2_choice = categorical_sample(x2_prob_cpu)
+            y2_choice = categorical_sample(y2_prob_cpu)
 
-            
-            return [[0], [x1_choice, y1_choice], [x2_choice, y2_choice]], [coords1_prob, coords2_prob], [coords1_choice, coords2_choice]
+            return [[0], [x1_choice, y1_choice], [x2_choice, y2_choice]], [x1_prob, y1_prob, x2_prob, y2_prob], [x1_choice, y1_choice, x2_choice, y2_choice]
 
 
         # Select_control_group
@@ -194,15 +190,12 @@ class MiniStarAgent(base_agent.BaseAgent):
         
         # Patrol_screen 
         elif func_id == 333:
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            
-            coords1_choice = categorical_sample(coords1_prob_cpu)
-            
-            x1_choice = coords1_choice % 64
-            y1_choice = coords1_choice // 64
-            
-            return [[0], [x1_choice, y1_choice]], [coords1_prob], [coords1_choice]
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
 
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
+            return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         # No_op
         elif func_id == 0:
@@ -211,15 +204,13 @@ class MiniStarAgent(base_agent.BaseAgent):
         # Select_point
         elif func_id == 2:
             point_add_prob_cpu = point_add_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
 
             point_add_choice = categorical_sample(point_add_prob_cpu)
-            coords1_choice = categorical_sample(coords1_prob_cpu)
-            
-            x1_choice = coords1_choice % 64
-            y1_choice = coords1_choice // 64
-            
-            return [[point_add_choice], [x1_choice, y1_choice]], [point_add_prob, coords1_prob], [point_add_choice, coords1_choice]
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
+            return [[point_add_choice], [x1_choice, y1_choice]], [point_add_prob, x1_prob, y1_prob], [point_add_choice, x1_choice, y1_choice]
             
 
         # HoldPosition_quick
@@ -228,14 +219,12 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         # Attack_minimap
         elif func_id == 13:
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            
-            coords1_choice = categorical_sample(coords1_prob_cpu)
-            
-            x1_choice = coords1_choice % 64
-            y1_choice = coords1_choice // 64
-            
-            return [[0], [x1_choice, y1_choice]], [coords1_prob], [coords1_choice]
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
+            return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         # Select army
         elif func_id == 7:
@@ -246,37 +235,34 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         # Smart minimap
         elif func_id == 452:
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            
-            coords1_choice = categorical_sample(coords1_prob_cpu)
-            
-            x1_choice = coords1_choice % 64
-            y1_choice = coords1_choice // 64
-            
-            return [[0], [x1_choice, y1_choice]], [coords1_prob], [coords1_choice]
+            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+
+            x1_choice = categorical_sample(x1_prob_cpu)
+            y1_choice = categorical_sample(y1_prob_cpu)
+            return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         else:
             print(f"{func_id} IS NOT SUPPORTED")
             sys.exit(1)
 
-
-    def probs_args(self, func_id, coord1_prob, coord2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
+    def probs_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
 
         # Patrol_minimap
         if func_id == 334:
-            return [coord1_prob]
+            return [x1_prob, y1_prob]
 
         # Smart_screen
         elif func_id == 451:
-            return [coord1_prob]
+            return [x1_prob, y1_prob]
 
         # Attack_screen
         elif func_id == 12:
-            return [coord1_prob]
+            return [x1_prob, y1_prob]
 
         # Select_rect
         elif func_id == 3:
-            return [coord1_prob, coord2_prob]
+            return [x1_prob, y1_prob, x2_prob, y2_prob]
 
         # Select_control_group
         elif func_id == 4:
@@ -284,7 +270,7 @@ class MiniStarAgent(base_agent.BaseAgent):
         
         # Patrol_screen 
         elif func_id == 333:
-            return [coord1_prob]
+            return [x1_prob, y1_prob]
 
         # No_op
         elif func_id == 0:
@@ -292,7 +278,7 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         # Select_point
         elif func_id == 2:
-            return [point_add_prob, coord1_prob]
+            return [point_add_prob, x1_prob, y1_prob]
             
         # HoldPosition_quick
         elif func_id == 274:
@@ -300,7 +286,7 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         # Attack_minimap
         elif func_id == 13:
-            return [coord1_prob]
+            return [x1_prob, y1_prob]
 
         # Select army
         elif func_id == 7:
@@ -308,7 +294,7 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         # Smart minimap
         elif func_id == 452:
-            return [coord1_prob]
+            return [x1_prob, y1_prob]
 
         else:
             print(f"{func_id} IS NOT SUPPORTED")
