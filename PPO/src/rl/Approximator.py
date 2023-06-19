@@ -12,7 +12,6 @@ class MiniStarPolicy(t.nn.Module):
         self.convolve2 = t.nn.Conv2d(16, 32, 4, stride = 2)
 
         self.actor_dense1 = t.nn.Linear(1152, NN_HIDDEN_LAYER)
-        self.actor_dense2 = t.nn.Linear(NN_HIDDEN_LAYER, NN_HIDDEN_LAYER)
 
         self.function_id = t.nn.Linear(NN_HIDDEN_LAYER, NUM_ACTIONS)
         self.x1 = t.nn.Linear(NN_HIDDEN_LAYER, 64)
@@ -28,7 +27,7 @@ class MiniStarPolicy(t.nn.Module):
     
     def forward(self, inp):
 
-        hid = t.relu(self.actor_dense2(t.relu(self.actor_dense1(t.flatten(t.relu(self.convolve2(t.relu(self.convolve1(inp)))), start_dim = 1)))))
+        hid = t.relu(self.actor_dense1(t.flatten(t.relu(self.convolve2(t.relu(self.convolve1(inp)))), start_dim = 1)))
 
         return t.softmax(self.function_id(hid), dim = 1),\
                 t.softmax(self.x1(hid), dim = 1),\
