@@ -77,7 +77,7 @@ class MiniStarAgent(base_agent.BaseAgent):
                 obs.observation.feature_minimap.selected), axis = 0), 0)).type(DTYPE)
         
         if GPU:
-            state = state.to(dtype = DTYPE, device = self.policy.device)
+            state = state.to(device = self.policy.device)
 
         return state
        
@@ -88,13 +88,12 @@ class MiniStarAgent(base_agent.BaseAgent):
         state = self.obs_to_state(obs)
         
 
-        mask = t.zeros((1, NUM_ACTIONS), dtype = DTYPE, device = t.device("cpu"), pin_memory = True)
+        mask = t.zeros((1, NUM_ACTIONS), dtype = DTYPE, device = t.device("cpu"))
         mask[:, [self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy]] = 1.0
 
-        mask = mask.to(dtype = DTYPE, device = self.policy.device, non_blocking = True)
+        mask = mask.to(dtype = DTYPE, device = self.policy.device)
 
         actor_prob, x1_prob, y1_prob, x2_prob, y2_prob, cg_act, cg_id, point_add, army_add, crit = self.policy(state)
-
         actor_prob_masked = actor_prob * mask
         actor_prob_masked_norm = (actor_prob_masked / t.sum(actor_prob_masked))
         actor_prob_masked_norm_cpu = actor_prob_masked_norm.to(dtype = DTYPE, device = t.device("cpu"))

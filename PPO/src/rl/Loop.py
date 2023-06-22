@@ -3,7 +3,7 @@ import torch as t
 
 import torch.distributed as dist
 
-from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ
+from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
 
 
 def network_update(agent, episode_info, shortcut, terminate):
@@ -39,16 +39,25 @@ def train_loop(agent, env):
 
             if episodes == TIMING_EPISODE_DELAY:
                 start_timer = time.time()
+            
 
+            if PROFILE and SYNC:
+                non_reduced_steps = steps
+                steps_tensor = t.tensor([steps])
+                dist.all_reduce(steps_tensor)
+                steps = steps_tensor.item()
+                
             if steps >= MAX_AGENT_STEPS:
                 if SYNC:
                     if dist.get_rank() == ROOT:
                         agent.save(steps)
-                    dist.destroy_process_group()
                 else:
                     agent.save(steps)
                 break
-                
+            
+            if PROFILE and SYNC:
+                steps = non_reduced_steps
+
             timestep_t, = env.reset()
             episode_steps = 0
             
@@ -102,6 +111,14 @@ def train_loop(agent, env):
         pass
     finally:
         elapsed_time = time.time() - start_timer
+        
+        if SYNC:
+            if PROFILE:
+                if dist.get_rank() == ROOT:
+                    with open("output.txt", "a+") as f:
+                        f.write(f"{dist.get_world_size()}, {elapsed_time}\n")  
+            dist.destroy_process_group()
+        
         print("Took %.3f seconds for %s steps" % (
             elapsed_time, steps))
 
@@ -124,9 +141,6 @@ def evaluate_loop(agent, env):
             
             agent.reset()
 
-            episode_info = []
-            shortcut = []
-           
             # Sample a trajectory
             while True:
                
@@ -134,33 +148,11 @@ def evaluate_loop(agent, env):
 
                 timestep_tt, = env.step([action])
                 
-                if SYNC:
-                    if dist.get_rank() == ROOT:
-                        agent.save_if_rdy(steps)
-                else:
-                    agent.save_if_rdy(steps)
-
-                episode_info.append((t.tensor([timestep_tt.reward], dtype = DTYPE, device = agent.policy.device), agent.obs_to_state(timestep_t), mask, [i.detach() for i in func_args_dists], func_args_actions))
-                shortcut.append((func_args_dists, crit))
 
                 episode_steps += 1           
-                if (episode_step % TRAJ == 0) or (terminate := timestep_tt.last()):
-                    if SYNC:
-                        with agent.policy.policy.no_sync():
-                            network_update(agent, episode_info, shortcut, bootstrap)
-                            for _ in range(max(EPOCH_BATCH - 2, 0)):
-                                network_update(agent, episode_info, None, bootstrap)
-                        network_update(agent, episode_info, None, bootstrap)
-                    else:
-                        network_update(agent, episode_info, shortcut, bootstrap)
-                        for _ in range(max(EPOCH_BATCH - 1, 0)):
-                            network_update(agent, episode_info, None, bootstrap)
-
-                    episode_info = []
-                    shortcut = []
-                    
-                    if terminate:
-                        break
+                
+                if timestep_tt.last():
+                    break
 
                 timestep_t = timestep_tt
                 
@@ -172,5 +164,6 @@ def evaluate_loop(agent, env):
         pass
     finally:
         elapsed_time = time.time() - start_timer
+        
         print("Took %.3f seconds for %s steps" % (
             elapsed_time, steps))

@@ -69,10 +69,21 @@ def main(argv):
 
     print("Model parameter count:", module_params_count(policy))
 
-
     if SYNC:
-        for i in range(PROCS_PER_NODE):
-            if dist.get_rank() == i:
+
+        buff = min(PROCS_PER_NODE, 16)
+
+        for i in range(0, PROCS_PER_NODE, buff):
+            for j in range(buff):
+                if dist.get_rank() == i + j:
+                    # Choose agent
+                    agent = MiniStarAgent(policy)
+                    # Choose environment
+                    environment = StarcraftMinigame(agent)
+            dist.barrier()
+
+        for j in range(PROCS_PER_NODE % buff):
+            if dist.get_rank() == i + j:
                 # Choose agent
                 agent = MiniStarAgent(policy)
                 # Choose environment

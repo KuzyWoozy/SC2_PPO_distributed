@@ -18,7 +18,8 @@ class StarcraftMinigame(sc2_env.SC2Env):
                     action_space = "FEATURES"),
                 visualize = True,
                 step_mul = 8,
-                random_seed = SEED)
+                random_seed = SEED,
+                ensure_available_actions = False)
         
         else:
             super().__init__(map_name = MINIGAME_NAME,
@@ -30,4 +31,5 @@ class StarcraftMinigame(sc2_env.SC2Env):
                 visualize = False,
                 realtime = False,
                 step_mul = 8,
-                random_seed = SEED)
+                random_seed = SEED,
+                ensure_available_actions = False)

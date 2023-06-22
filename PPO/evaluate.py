@@ -6,6 +6,7 @@ from src.rl.Loop import evaluate_loop
 from src.rl.Approximator import MiniStarPolicy
 from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
+from src.Parallel import SerialSGD
 
 from src.Config import CHECK_LOAD
 
@@ -20,6 +21,8 @@ def main(argv):
 
     for para in policy.parameters():
         print(para)
+
+    policy = SerialSGD(policy, t.device("cpu"))
 
     # Choose agent
     agent = MiniStarAgent(policy)
