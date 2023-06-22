@@ -2,6 +2,8 @@ import torch as t
 
 DEBUG = False
 
+ATARI_NET = False
+
 # Hyperparam
 LEARNING_RATE = 3e-5
 
@@ -16,8 +18,8 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-CHECK_LOAD = "checkpoints/DefeatRoaches-500000.chkpt"
-#CHECK_LOAD = None
+#CHECK_LOAD = "checkpoints/DefeatRoaches-500000.chkpt"
+CHECK_LOAD = None
 CHECK_INTERVAL = 10_000
 
 # Environment

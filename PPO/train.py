@@ -6,11 +6,11 @@ import torch as t
 import torch.distributed as dist
 
 from src.rl.Loop import train_loop
-from src.rl.Approximator import MiniStarPolicy
+from src.rl.Approximator import AtariNet, FullyConv
 from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
 from src.Parallel import DistSyncSGD, SerialSGD
-from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, CHECK_LOAD, DEBUG, SEED
+from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, CHECK_LOAD, DEBUG, SEED, ATARI_NET
 from src.Misc import module_params_count, verify_config
 
 
@@ -53,7 +53,11 @@ def main(argv):
     
 
     # Choose policy
-    policy = MiniStarPolicy()
+
+    if ATARI_NET:
+        policy = AtariNet()
+    else:
+        policy = FullyConv()
         
     if CHECK_LOAD:
         policy.load_state_dict(t.load(CHECK_LOAD)["policy"])
@@ -68,6 +72,8 @@ def main(argv):
    
 
     print("Model parameter count:", module_params_count(policy))
+
+    exit()
 
     if SYNC:
 

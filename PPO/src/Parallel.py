@@ -73,7 +73,13 @@ class SerialSGD(t.nn.Module):
 
     def get_state_dict(self):
         return self.policy.policy_ser.state_dict()
+   
+    def sample_args(self, *args, **kwargs):
+        return self.policy.policy_ser.sample_args(*args, **kwargs)
     
+    def probs_args(self, *args, **kwargs):
+        return self.policy.policy_ser.probs_args(*args, **kwargs)
+
 
 class DistSyncSGD(t.nn.Module):
 
@@ -98,3 +104,10 @@ class DistSyncSGD(t.nn.Module):
 
     def get_state_dict(self):
         return self.policy.module.policy_ser.state_dict()
+
+    def sample_args(self, *args, **kwargs):
+        return self.policy.module.policy_ser.sample_args(*args, **kwargs)
+    
+    def probs_args(self, *args, **kwargs):
+        return self.policy.module.policy_ser.probs_args(*args, **kwargs)
+
