@@ -2,7 +2,7 @@ import torch as t
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from src.Config import LAMBDA, PPO_CLIP, DTYPE, GPU
+from src.Config import GAMMA, PPO_CLIP, DTYPE, GPU, ENTROPY
 
 
 
@@ -19,10 +19,10 @@ class MonteCarlo(t.nn.Module):
         adv_detached = adv.detach()
 
         for out, out_old, action in zip(func_args_dists, func_args_dists_old, actions):
-            actor_gain -= t.min((out[:, action] / out_old[:, action]) * adv_detached, t.clip(out[:, action] / out_old[:, action], min = 1 - PPO_CLIP, max = 1 + PPO_CLIP) * adv_detached)          
+            actor_gain += t.min((out[:, action] / out_old[:, action]) * adv_detached, t.clip(out[:, action] / out_old[:, action], min = 1 - PPO_CLIP, max = 1 + PPO_CLIP) * adv_detached)          
             # Trick to avoid having to avoid conditional
             entropy -= t.sum(out * t.log(out + 1e-8))
-        
+            
         critic_loss += adv ** 2
         
     
@@ -36,7 +36,7 @@ class MonteCarlo(t.nn.Module):
         if shortcut:
             for (reward, _, _, func_args_dists_old, func_args_actions), (func_args_dists, critic_val) in zip(reversed(episode_info), reversed(shortcut)):
 
-                G = reward + LAMBDA * G
+                G = reward + GAMMA * G
                 ADV = G - critic_val[0]
            
                 self.loss(actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, func_args_actions, ADV)
@@ -44,12 +44,12 @@ class MonteCarlo(t.nn.Module):
             for reward, state, mask, func_args_dists_old, func_args_actions in reversed(episode_info):
                 func_args_dists, critic_val = agent.nn_outs(state, mask, func_args_actions[0])
 
-                G = reward + LAMBDA * G
+                G = reward + GAMMA * G
                 ADV = G - critic_val[0]
            
                 self.loss(actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, func_args_actions, ADV)
         
-        return actor_gain + critic_loss + entropy
+        return (-actor_gain) + critic_loss - (ENTROPY * entropy)
 
 
 class SerialSGD(t.nn.Module):
@@ -73,7 +73,13 @@ class SerialSGD(t.nn.Module):
 
     def get_state_dict(self):
         return self.policy.policy_ser.state_dict()
+   
+    def sample_args(self, *args, **kwargs):
+        return self.policy.policy_ser.sample_args(*args, **kwargs)
     
+    def probs_args(self, *args, **kwargs):
+        return self.policy.policy_ser.probs_args(*args, **kwargs)
+
 
 class DistSyncSGD(t.nn.Module):
 
@@ -98,3 +104,10 @@ class DistSyncSGD(t.nn.Module):
 
     def get_state_dict(self):
         return self.policy.module.policy_ser.state_dict()
+
+    def sample_args(self, *args, **kwargs):
+        return self.policy.module.policy_ser.sample_args(*args, **kwargs)
+    
+    def probs_args(self, *args, **kwargs):
+        return self.policy.module.policy_ser.probs_args(*args, **kwargs)
+

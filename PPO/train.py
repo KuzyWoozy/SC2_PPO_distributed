@@ -6,11 +6,11 @@ import torch as t
 import torch.distributed as dist
 
 from src.rl.Loop import train_loop
-from src.rl.Approximator import MiniStarPolicy
+from src.rl.Approximator import AtariNet, FullyConv
 from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
 from src.Parallel import DistSyncSGD, SerialSGD
-from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, CHECK_LOAD, DEBUG, SEED
+from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, CHECK_LOAD, DEBUG, SEED, ATARI_NET
 from src.Misc import module_params_count, verify_config
 
 
@@ -37,11 +37,12 @@ def main(argv):
     
     verify_config()
 
+    
     # Initialize distributed module if necessary
     if SYNC:
         if GPU:
             dist.init_process_group(backend="nccl")
-            device = t.device("cuda", dist.get_rank() % PROCS_PER_NODE) 
+            device = t.device("cuda", dist.get_rank() % PROCS_PER_NODE)
         else:
             dist.init_process_group(backend="gloo")
             device = t.device("cpu")
@@ -53,7 +54,10 @@ def main(argv):
     
 
     # Choose policy
-    policy = MiniStarPolicy()
+    if ATARI_NET:
+        policy = AtariNet()
+    else:
+        policy = FullyConv()
         
     if CHECK_LOAD:
         policy.load_state_dict(t.load(CHECK_LOAD)["policy"])
@@ -69,10 +73,23 @@ def main(argv):
 
     print("Model parameter count:", module_params_count(policy))
 
-
     if SYNC:
-        for i in range(PROCS_PER_NODE):
-            if dist.get_rank() == i:
+            
+        # An attempt to improve 'bootup' performance, fails to work consistently in practise for larger values
+
+        buff = min(PROCS_PER_NODE, 2)
+
+        for i in range(0, PROCS_PER_NODE, buff):
+            for j in range(buff):
+                if dist.get_rank() == i + j:
+                    # Choose agent
+                    agent = MiniStarAgent(policy)
+                    # Choose environment
+                    environment = StarcraftMinigame(agent)
+            dist.barrier()
+
+        for j in range(PROCS_PER_NODE % buff):
+            if dist.get_rank() == i + j:
                 # Choose agent
                 agent = MiniStarAgent(policy)
                 # Choose environment
