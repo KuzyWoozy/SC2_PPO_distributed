@@ -37,11 +37,12 @@ def main(argv):
     
     verify_config()
 
+    
     # Initialize distributed module if necessary
     if SYNC:
         if GPU:
             dist.init_process_group(backend="nccl")
-            device = t.device("cuda", dist.get_rank() % PROCS_PER_NODE) 
+            device = t.device("cuda", dist.get_rank() % PROCS_PER_NODE)
         else:
             dist.init_process_group(backend="gloo")
             device = t.device("cpu")
@@ -53,7 +54,6 @@ def main(argv):
     
 
     # Choose policy
-
     if ATARI_NET:
         policy = AtariNet()
     else:
@@ -73,11 +73,11 @@ def main(argv):
 
     print("Model parameter count:", module_params_count(policy))
 
-    exit()
-
     if SYNC:
+            
+        # An attempt to improve 'bootup' performance, fails to work consistently in practise for larger values
 
-        buff = min(PROCS_PER_NODE, 16)
+        buff = min(PROCS_PER_NODE, 2)
 
         for i in range(0, PROCS_PER_NODE, buff):
             for j in range(buff):

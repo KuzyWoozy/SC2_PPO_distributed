@@ -3,24 +3,25 @@ import torch as t
 
 
 from src.rl.Loop import evaluate_loop
-from src.rl.Approximator import MiniStarPolicy
+from src.rl.Approximator import AtariNet, FullyConv
 from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
 from src.Parallel import SerialSGD
 
-from src.Config import CHECK_LOAD
+from src.Config import CHECK_LOAD, ATARI_NET
 
 
 
 def main(argv):
     
-    policy = MiniStarPolicy()
+    if ATARI_NET:
+        policy = AtariNet()
+    else:
+        policy = FullyConv()
     
+
     if CHECK_LOAD:
         policy.load_state_dict(t.load(CHECK_LOAD, map_location = t.device("cpu"))["policy"])
-
-    for para in policy.parameters():
-        print(para)
 
     policy = SerialSGD(policy, t.device("cpu"))
 
@@ -28,10 +29,10 @@ def main(argv):
     agent = MiniStarAgent(policy)
 
     # Choose environment
-    environment = StarcraftMinigame(agent, viz = True)
+    environment = StarcraftMinigame(agent, viz = False)
     
     # Begin the training process
-    evaluate_loop(agent, environment)
+    print("Evaluation score:", evaluate_loop(agent, environment, 100))
    
 
 if __name__ == "__main__":

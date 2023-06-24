@@ -39,7 +39,7 @@ def verify_config():
     assert LEARNING_RATE < 0.1 and "Learning rate too high (>= 0.1)"
     assert EPOCH_BATCH > 1 and "Must be more than one (> 1), why are you using PPO if you want less?"
     assert GAMMA >= 0.0 and GAMMA <= 1.0 and "Lambda must be in range [0.0, 1.0]"
-    assert ENTROPY < 0.1 and "Entropy too high (>= 0.1)"
+    assert ENTROPY < 1.0 and "Entropy too high (>= 1.0)"
     assert NN_HIDDEN_LAYER > 0 and "Hidden layer must be positive (> 0)"
     assert NUM_ACTIONS > 0 and "Number of actions must be positive (> 0)"
     assert PPO_CLIP > 0.0 and "Clip must be positive (> 0)"
