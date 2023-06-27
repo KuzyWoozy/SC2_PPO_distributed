@@ -4,19 +4,20 @@ import numpy as np
 
 from absl import app
 
-from src.Agent import FDZAgent
-from src.Environment import FDZ
-from src.Loop import run_train_loop
-from src.Config import EPISODE_BATCH
+from src.Parallel import SerialSGD
+from src.starcraft.Agent import MiniStarAgent
+from src.starcraft.Environment import StarcraftMinigame
+from src.rl.Approximator import AtariNet
+from src.rl.Loop import train_loop
 
-from test.oracle.Agent import FDZAgent as FDZAgent_oracle
-from test.oracle.Environment import FDZ as FDZ_oracle 
-from test.oracle.Loop import run_train_loop as run_train_loop_oracle
+from test.oracle.Parallel import SerialSGD as SerialSGD_oracle
+from test.oracle.starcraft.Agent import MiniStarAgent as MiniStarAgent_oracle
+from test.oracle.starcraft.Environment import StarcraftMinigame as StarcraftMinigame_oracle
+from test.oracle.rl.Approximator import AtariNet as AtariNet_oracle
+from test.oracle.rl.Loop import train_loop as train_loop_oracle
 
 
 SEED = 0
-TEST_STEPS = 1500
-
 
 
 def reset_seed():
@@ -31,31 +32,39 @@ def assert_models(model1, model2):
 
 
 def test_oracle():
-    
-    reset_seed()
-    target = FDZAgent()
+   
+    device = t.device("cpu")
 
+    reset_seed()
+    target = SerialSGD(AtariNet(), device) 
+    
     def train_target(argv):                
-        env = FDZ(target, seed = SEED)
-        run_train_loop(target, env, episode_batch = EPISODE_BATCH, max_frames = TEST_STEPS)
+        # Choose agent
+        agent = MiniStarAgent(target)
+        # Choose environment
+        environment = StarcraftMinigame(agent)
+        train_loop(agent, environment)
 
     try:
         app.run(train_target)
     except SystemExit:
         pass
-    
 
     reset_seed()
-    orac = FDZAgent_oracle()
+    orac = SerialSGD_oracle(AtariNet_oracle(), device) 
     
-    def train_oracle(argv):                
-        env = FDZ_oracle(orac, seed = SEED)
-        run_train_loop_oracle(orac, env, episode_batch = EPISODE_BATCH, max_frames = TEST_STEPS)
+    def train_oracle(argv):
+        # Choose agent
+        agent = MiniStarAgent_oracle(orac)
+        # Choose environment
+        environment = StarcraftMinigame_oracle(agent)
+        train_loop_oracle(agent, environment)
 
+    # Begin the training process
     try:
         app.run(train_oracle)
     except SystemExit:
         pass
     
 
-    assert_models(target.approx, orac.approx)
+    assert_models(target, orac)

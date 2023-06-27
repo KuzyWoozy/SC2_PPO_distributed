@@ -1,7 +1,7 @@
 import torch as t
 
 from src.Config import NN_HIDDEN_LAYER, NUM_ACTIONS, DTYPE
-from src.Misc import categorical_sample
+from test.oracle.Misc import categorical_sample
 
 class AtariNet(t.nn.Module):
 

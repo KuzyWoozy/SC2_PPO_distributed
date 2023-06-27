@@ -18,6 +18,7 @@ class StarcraftMinigame(sc2_env.SC2Env):
                     action_space = "FEATURES"),
                 visualize = True,
                 step_mul = 8,
+                realtime = False,
                 random_seed = SEED,
                 ensure_available_actions = False)
         

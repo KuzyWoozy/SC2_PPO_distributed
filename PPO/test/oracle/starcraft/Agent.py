@@ -5,7 +5,7 @@ import torch as t
 from pysc2.agents import base_agent
 from pysc2.lib import actions
 
-from src.Misc import CheckpointManager, categorical_sample
+from test.oracle.Misc import CheckpointManager, categorical_sample
 from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, NUM_ACTIONS
 
 

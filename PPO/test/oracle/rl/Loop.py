@@ -3,7 +3,7 @@ import torch as t
 
 import torch.distributed as dist
 
-from src.Parallel import SerialSGD
+from test.oracle.Parallel import SerialSGD
 from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
 
 
