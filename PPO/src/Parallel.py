@@ -37,7 +37,7 @@ class MonteCarlo(t.nn.Module):
 
         if shortcut:
             for (reward, _, _, func_args_dists_old, func_args_actions), (func_args_dists, critic_val) in zip(reversed(episode_info), reversed(shortcut)):
-
+                
                 G = reward + GAMMA * G
                 ADV = G - critic_val[0]
            
@@ -50,7 +50,7 @@ class MonteCarlo(t.nn.Module):
                 ADV = G - critic_val[0]
            
                 self.loss(actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, func_args_actions, ADV)
-        
+       
         return ((-actor_gain) + critic_loss - (ENTROPY * entropy)) / episode_length
 
 
@@ -62,7 +62,7 @@ class SerialSGD(t.nn.Module):
         policy_ser = policy_ser.to(dtype = DTYPE, device = device)
         
         if GPU:
-            policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 12, 64, 64), dtype = DTYPE, device = device),))
+            policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 5, 64, 64), dtype = DTYPE, device = device),))
 
         self.policy = MonteCarlo(policy_ser, device)
         self.device = device
@@ -91,7 +91,7 @@ class DistSyncSGD(t.nn.Module):
         policy_ser = policy_ser.to(dtype = DTYPE, device = device)
 
         if GPU:
-            self.policy = DDP(MonteCarlo(policy_ser, device), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [policy_ser.get_device()])
+            self.policy = DDP(MonteCarlo(policy_ser, device), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [device])
         else:
             self.policy = DDP(MonteCarlo(policy_ser, device), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
         

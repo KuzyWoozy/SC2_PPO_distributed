@@ -8,7 +8,7 @@ class AtariNet(t.nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.convolve1 = t.nn.Conv2d(6, 16, 8, stride = 4)
+        self.convolve1 = t.nn.Conv2d(5, 16, 8, stride = 4)
         self.convolve2 = t.nn.Conv2d(16, 32, 4, stride = 2)
 
         self.actor_dense1 = t.nn.Linear(1152, NN_HIDDEN_LAYER)
@@ -42,24 +42,14 @@ class AtariNet(t.nn.Module):
 
     def sample_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
 
-        # Move_screen
-        if func_id == 331:
+        # Smart_screen
+        if func_id == 451:
             x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
             y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
 
             x1_choice = categorical_sample(x1_prob_cpu)
             y1_choice = categorical_sample(y1_prob_cpu)
 
-            return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
-
-        # Attack_screen
-        elif func_id == 12:
-            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-
-
-            x1_choice = categorical_sample(x1_prob_cpu)
-            y1_choice = categorical_sample(y1_prob_cpu)
             return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
 
         # Select_rect
@@ -121,12 +111,8 @@ class AtariNet(t.nn.Module):
 
     def probs_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
 
-        # Move_screen
-        if func_id == 331:
-            return [x1_prob, y1_prob]
-
-        # Attack_screen
-        elif func_id == 12:
+        # Smart_screen
+        if func_id == 451:
             return [x1_prob, y1_prob]
 
         # Select_rect
@@ -163,7 +149,7 @@ class FullyConv(t.nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.convolve1 = t.nn.Conv2d(6, 4, 5, stride = 1, padding = "same")
+        self.convolve1 = t.nn.Conv2d(5, 4, 5, stride = 1, padding = "same")
         self.convolve2 = t.nn.Conv2d(4, 6, 3, stride = 1, padding = "same")
 
         self.hidden = t.nn.Linear(24576, NN_HIDDEN_LAYER)
@@ -197,8 +183,8 @@ class FullyConv(t.nn.Module):
 
     def sample_args(self, func_id, coords1_prob, coords2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
 
-        # Move_screen
-        if func_id == 331:
+        # Smart_screen
+        if func_id == 451:
             coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
             
             coords1_choice = categorical_sample(coords1_prob_cpu)
@@ -208,16 +194,6 @@ class FullyConv(t.nn.Module):
             
             return [[0], [x1_choice, y1_choice]], [coords1_prob], [coords1_choice]
 
-        # Attack_screen
-        elif func_id == 12:
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            
-            coords1_choice = categorical_sample(coords1_prob_cpu)
-            
-            x1_choice = coords1_choice % 64
-            y1_choice = coords1_choice // 64
-
-            return [[0], [x1_choice, y1_choice]], [coords1_prob], [coords1_choice]
 
         # Select_rect
         elif func_id == 3:
@@ -284,11 +260,7 @@ class FullyConv(t.nn.Module):
     def probs_args(self, func_id, coord1_prob, coord2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
 
         # Smart_screen
-        if func_id == 331:
-            return [coord1_prob]
-
-        # Attack_screen
-        elif func_id == 12:
+        if func_id == 451:
             return [coord1_prob]
 
         # Select_rect

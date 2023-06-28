@@ -18,8 +18,7 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         self.optim = t.optim.Adam(policy.parameters(), maximize = False, lr = LEARNING_RATE)
         
-        # Function.ability(331, "Move_screen", cmd_screen, 3794)
-        # Function.ability(12, "Attack_screen", cmd_screen, 3674)
+        # Function.ability(451, "Smart_screen", cmd_screen, 1)
         # Function.ui_func(3, "select_rect", select_rect)
         # Function.ui_func(4, "select_control_group", control_group)
         # Function.ui_func(0, "no_op", no_op)
@@ -28,7 +27,7 @@ class MiniStarAgent(base_agent.BaseAgent):
         # Function.ui_func(7, "select_army", select_army,
         
         self.policy2function = {
-                         0 : 331,
+                         0 : 451,
                          1 : 3,
                          2 : 4,
                          3 : 0,
@@ -49,9 +48,8 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         state = t.from_numpy(np.expand_dims(np.stack((
                 #obs.observation.feature_screen.visibility_map / 3,
-                obs.observation.feature_screen.player_id / 16,
                 obs.observation.feature_screen.player_relative / 4,
-                obs.observation.feature_screen.unit_type / MAX_UNIT_HEURISTIC,
+                obs.observation.feature_screen.unit_type,
                 obs.observation.feature_screen.selected,
                 obs.observation.feature_screen.unit_hit_points_ratio / 255,
                 obs.observation.feature_screen.unit_density_aa / 255
@@ -88,7 +86,7 @@ class MiniStarAgent(base_agent.BaseAgent):
         actor_prob_masked_norm_cpu = actor_prob_masked_norm.to(dtype = DTYPE, device = t.device("cpu"))
         actor_choice = categorical_sample(actor_prob_masked_norm_cpu)
         function_id = self.policy2function[actor_choice]
-       
+      
         args, args_probs, args_flat = self.policy.sample_args(function_id, *policy_distributions[1:-1])
 
         args_probs.insert(0, actor_prob_masked_norm)
