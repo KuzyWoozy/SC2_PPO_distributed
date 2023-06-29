@@ -30,7 +30,7 @@ def main(argv):
     
 
     # Choose environment
-    environment = StarcraftMinigame(agent, viz = False)
+    environment = StarcraftMinigame(agent, viz = True)
     
     # Begin the training process
     print("Evaluation score:", evaluate_loop(agent, environment, 100))
