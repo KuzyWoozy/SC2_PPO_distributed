@@ -9,17 +9,20 @@ from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, DTYPE, TIMING_E
 
 def network_update(agent, episode_info, shortcut, terminate):
     
+    agent.optim.zero_grad()
+    
     if terminate:
         bootstrap = t.tensor([0.0], dtype = DTYPE, device = agent.policy.device)
+        agent.policy.mc_loss(agent, episode_info, shortcut, bootstrap).backward()
     else:
-        _, state, mask, _, func_args_actions = episode_info.pop(-1)
+        _, state, mask, _, func_args_actions = episode_info[-1]
         if shortcut:
-            _, (bootstrap,) = shortcut.pop(-1)
+            _, (bootstrap,) = shortcut[-1]
+            agent.policy.mc_loss(agent, episode_info[:-1], shortcut[:-1], bootstrap).backward()
         else:
             _, (bootstrap,) = agent.nn_outs(state, mask, func_args_actions[0])
+            agent.policy.mc_loss(agent, episode_info[:-1], shortcut, bootstrap).backward()
 
-    agent.optim.zero_grad()
-    agent.policy.mc_loss(agent, episode_info, shortcut, bootstrap).backward()
     agent.optim.step()
 
 
@@ -120,8 +123,7 @@ def train_loop(agent, env):
                 shortcut.append((func_args_dists, crit))
 
                 episode_steps += 1           
-                if (episode_steps % TRAJ == 0) or (terminate := timestep_tt.last()):
-                    
+                if (episode_steps % TRAJ == 0) or (terminate := timestep_tt.last()):                    
                     if SYNC:
                         with agent.policy.policy.no_sync():
                             network_update(agent, episode_info, shortcut, terminate)

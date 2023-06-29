@@ -18,14 +18,14 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-CHECK_LOAD = "checkpoints/MoveToBeacon-230000.chkpt"
-#CHECK_LOAD = None
+#CHECK_LOAD = "checkpoints/MoveToBeacon-230000.chkpt"
+CHECK_LOAD = None
 CHECK_INTERVAL = 10_000
 
 # Environment
 MINIGAME_NAME = "MoveToBeacon"
 TIMING_EPISODE_DELAY = 2
-TRAJ = 40
+TRAJ = 10
 DTYPE = t.float32
 
 # Distributed
