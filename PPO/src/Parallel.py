@@ -23,7 +23,7 @@ class MonteCarlo(t.nn.Module):
             # Trick to avoid having to avoid conditional
             entropy -= t.sum(out * t.log(out + 1e-8))
             
-        critic_loss += (adv ** 2) / 2
+        critic_loss += (adv ** 2)
         
     
     def forward(self, agent, episode_info, shortcut, bootstrap):
@@ -51,7 +51,6 @@ class MonteCarlo(t.nn.Module):
            
                 self.loss(actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, func_args_actions, ADV)
         
-
         return ((-actor_gain) + (VALUE_COEFF * critic_loss) - (ENTROPY * entropy)) / episode_length
 
 

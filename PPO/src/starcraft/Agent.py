@@ -86,7 +86,9 @@ class MiniStarAgent(base_agent.BaseAgent):
         actor_prob_masked_norm_cpu = actor_prob_masked_norm.to(dtype = DTYPE, device = t.device("cpu"))
         actor_choice = categorical_sample(actor_prob_masked_norm_cpu)
         function_id = self.policy2function[actor_choice]
-     
+    
+        
+        print(actor_prob_masked_norm_cpu)
 
         args, args_probs, args_flat = self.policy.sample_args(function_id, *policy_distributions[1:-1])
 
