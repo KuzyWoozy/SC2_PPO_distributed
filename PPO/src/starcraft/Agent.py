@@ -15,6 +15,7 @@ class MiniStarAgent(base_agent.BaseAgent):
         super().__init__()
 
         self.policy = policy
+        self.old_policy = policy.freeze()
 
         self.optim = t.optim.Adam(policy.parameters(), maximize = False, lr = LEARNING_RATE)
         
@@ -80,38 +81,27 @@ class MiniStarAgent(base_agent.BaseAgent):
         mask = mask.to(dtype = DTYPE, device = self.policy.device)
 
         policy_distributions = self.policy(state)
+        policy_distributions_old = self.old_policy(state)
 
         actor_prob_masked = policy_distributions[0] * mask
         actor_prob_masked_norm = (actor_prob_masked / t.sum(actor_prob_masked))
         actor_prob_masked_norm_cpu = actor_prob_masked_norm.to(dtype = DTYPE, device = t.device("cpu"))
         actor_choice = categorical_sample(actor_prob_masked_norm_cpu)
         function_id = self.policy2function[actor_choice]
-    
-        
-        print(actor_prob_masked_norm_cpu)
 
-        args, args_probs, args_flat = self.policy.sample_args(function_id, *policy_distributions[1:-1])
+        
+        actor_prob_masked_old = policy_distributions_old[0] * mask
+        actor_prob_masked_norm_old = (actor_prob_masked_old / t.sum(actor_prob_masked_old))
+
+        args, args_probs, args_probs_old, args_flat = self.policy.sample_args(function_id, *policy_distributions[1:-1], *policy_distributions_old[1:-1])
 
         args_probs.insert(0, actor_prob_masked_norm)
+        args_probs_old.insert(0, actor_prob_masked_norm_old)
         args_flat.insert(0, actor_choice)
         
-        return actions.FunctionCall(function_id, args), args_probs, args_flat, mask, policy_distributions[-1]
+        return actions.FunctionCall(function_id, args), args_probs, args_probs_old, args_flat, policy_distributions[-1]
 
     
-    def nn_outs(self, state, mask, actor_choice):
-        policy_distributions = self.policy(state)
-
-        actor_prob_masked = policy_distributions[0] * mask        
-        actor_prob_masked_norm = actor_prob_masked / t.sum(actor_prob_masked)
-        function_id = self.policy2function[actor_choice]
-        
-        args_probs = self.policy.probs_args(function_id, *policy_distributions[1:-1])
-        
-        args_probs.insert(0, actor_prob_masked_norm)
-
-        return args_probs, policy_distributions[-1]
-
-
     def save_if_rdy(self, agent_steps):
         if self.check_manager.time_to_save(agent_steps):
             self.save(agent_steps)

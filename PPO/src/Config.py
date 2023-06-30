@@ -5,12 +5,10 @@ DEBUG = False
 ATARI_NET = True
 
 # Hyperparam
-LEARNING_RATE = 1e-2
-
-EPOCH_BATCH = 2 # MUST BE GREATER THAN 1 FOR CORRECTNESS (doesn't rly make sense for it to be <= 1 given PPO)
+LEARNING_RATE = 3e-4
 
 GAMMA = 0.99
-ENTROPY = 5e-4
+ENTROPY = 1e-5
 VALUE_COEFF = 1.0
 
 NUM_ACTIONS = 7
@@ -19,14 +17,14 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-CHECK_LOAD = "checkpoints/MoveToBeacon-20000.chkpt"
+CHECK_LOAD = "checkpoints/MoveToBeacon-70000.chkpt"
 #CHECK_LOAD = None
 CHECK_INTERVAL = 10_000
 
 # Environment
 MINIGAME_NAME = "MoveToBeacon"
 TIMING_EPISODE_DELAY = 2
-TRAJ = 10
+TRAJ = 6
 DTYPE = t.float32
 
 # Distributed
@@ -37,6 +35,6 @@ PROCS_PER_NODE = 4
 
 # Params for regression test
 SEED = None
-SYNC = False
+SYNC = True
 GPU = False
 MAX_AGENT_STEPS = 10_000_000

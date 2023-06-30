@@ -40,7 +40,7 @@ class AtariNet(t.nn.Module):
                 t.softmax(self.select_army_add(hid), dim = 1),\
                 self.critic(hid)
 
-    def sample_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
+    def sample_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob, x1_prob_old, y1_prob_old, x2_prob_old, y2_prob_old, cg_act_prob_old, cg_id_prob_old, point_add_prob_old, army_add_prob_old):
 
         # Smart_screen
         if func_id == 451:
@@ -50,7 +50,7 @@ class AtariNet(t.nn.Module):
             x1_choice = categorical_sample(x1_prob_cpu)
             y1_choice = categorical_sample(y1_prob_cpu)
 
-            return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_choice, y1_choice]
+            return [[0], [x1_choice, y1_choice]], [x1_prob, y1_prob], [x1_prob_old, y1_prob_old], [x1_choice, y1_choice]
 
         # Select_rect
         elif func_id == 3:
@@ -65,7 +65,7 @@ class AtariNet(t.nn.Module):
             x2_choice = categorical_sample(x2_prob_cpu)
             y2_choice = categorical_sample(y2_prob_cpu)
 
-            return [[0], [x1_choice, y1_choice], [x2_choice, y2_choice]], [x1_prob, y1_prob, x2_prob, y2_prob], [x1_choice, y1_choice, x2_choice, y2_choice]
+            return [[0], [x1_choice, y1_choice], [x2_choice, y2_choice]], [x1_prob, y1_prob, x2_prob, y2_prob], [x1_prob_old, y1_prob_old, x2_prob_old, y2_prob_old], [x1_choice, y1_choice, x2_choice, y2_choice]
 
 
         # Select_control_group
@@ -75,12 +75,12 @@ class AtariNet(t.nn.Module):
 
             cg_act_choice = categorical_sample(cg_act_prob_cpu) 
             cg_id_choice = categorical_sample(cg_id_prob_cpu)
-            return [[cg_act_choice], [cg_id_choice]], [cg_act_prob, cg_id_prob], [cg_act_choice, cg_id_choice]
+            return [[cg_act_choice], [cg_id_choice]], [cg_act_prob, cg_id_prob], [cg_act_prob_old, cg_id_prob_old], [cg_act_choice, cg_id_choice]
 
         
         # No_op
         elif func_id == 0:
-            return [], [], []
+            return [], [], [], []
 
         # Select_point
         elif func_id == 2:
@@ -91,53 +91,19 @@ class AtariNet(t.nn.Module):
             point_add_choice = categorical_sample(point_add_prob_cpu)
             x1_choice = categorical_sample(x1_prob_cpu)
             y1_choice = categorical_sample(y1_prob_cpu)
-            return [[point_add_choice], [x1_choice, y1_choice]], [point_add_prob, x1_prob, y1_prob], [point_add_choice, x1_choice, y1_choice]
+            return [[point_add_choice], [x1_choice, y1_choice]], [point_add_prob, x1_prob, y1_prob], [point_add_prob_old, x1_prob_old, y1_prob_old], [point_add_choice, x1_choice, y1_choice]
             
 
         # HoldPosition_quick
         elif func_id == 274:
-            return [[0]], [], []
+            return [[0]], [], [], []
 
         # Select army
         elif func_id == 7:
             army_add_prob_cpu = army_add_prob.to(dtype = DTYPE, device = t.device("cpu"))
             
             army_add_choice = categorical_sample(army_add_prob_cpu)
-            return [[army_add_choice]], [army_add_prob], [army_add_choice]
-
-        else:
-            print(f"{func_id} IS NOT SUPPORTED")
-            sys.exit(1)
-
-    def probs_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
-
-        # Smart_screen
-        if func_id == 451:
-            return [x1_prob, y1_prob]
-
-        # Select_rect
-        elif func_id == 3:
-            return [x1_prob, y1_prob, x2_prob, y2_prob]
-
-        # Select_control_group
-        elif func_id == 4:
-            return [cg_act_prob, cg_id_prob]
-        
-        # No_op
-        elif func_id == 0:
-            return []
-
-        # Select_point
-        elif func_id == 2:
-            return [point_add_prob, x1_prob, y1_prob]
-            
-        # HoldPosition_quick
-        elif func_id == 274:
-            return []
-
-        # Select army
-        elif func_id == 7:
-            return [army_add_prob]
+            return [[army_add_choice]], [army_add_prob], [army_add_prob_old], [army_add_choice]
 
         else:
             print(f"{func_id} IS NOT SUPPORTED")

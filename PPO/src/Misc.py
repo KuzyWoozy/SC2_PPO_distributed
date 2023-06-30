@@ -1,7 +1,7 @@
 import torch as t
 import os
 
-from src.Config import LEARNING_RATE, EPOCH_BATCH, GAMMA, ENTROPY, NN_HIDDEN_LAYER, NUM_ACTIONS, PPO_CLIP, CHECK_INTERVAL, MAX_AGENT_STEPS, PROCS_PER_NODE
+from src.Config import LEARNING_RATE, GAMMA, ENTROPY, NN_HIDDEN_LAYER, NUM_ACTIONS, PPO_CLIP, CHECK_INTERVAL, MAX_AGENT_STEPS, PROCS_PER_NODE
 
 
 
@@ -37,7 +37,6 @@ def module_params_count(module):
 
 def verify_config():
     assert LEARNING_RATE < 0.1 and "Learning rate too high (>= 0.1)"
-    assert EPOCH_BATCH > 1 and "Must be more than one (> 1), why are you using PPO if you want less?"
     assert GAMMA >= 0.0 and GAMMA <= 1.0 and "Lambda must be in range [0.0, 1.0]"
     assert ENTROPY < 1.0 and "Entropy too high (>= 1.0)"
     assert NN_HIDDEN_LAYER > 0 and "Hidden layer must be positive (> 0)"

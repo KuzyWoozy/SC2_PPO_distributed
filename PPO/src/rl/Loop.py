@@ -4,26 +4,23 @@ import torch as t
 import torch.distributed as dist
 
 from src.Parallel import SerialSGD
-from src.Config import MAX_AGENT_STEPS, ROOT, EPOCH_BATCH, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
+from src.Config import MAX_AGENT_STEPS, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
 
 
-def network_update(agent, episode_info, shortcut, terminate):
-    
+def network_update(agent, episode_info, terminate):
+     
     agent.optim.zero_grad()
-    
+
     if terminate:
         bootstrap = t.tensor([0.0], dtype = DTYPE, device = agent.policy.device)
-        agent.policy.mc_loss(agent, episode_info, shortcut, bootstrap).backward()
+        agent.policy.mc_loss(agent, episode_info, bootstrap).backward()
     else:
-        _, state, mask, _, func_args_actions = episode_info[-1]
-        if shortcut:
-            _, (bootstrap,) = shortcut[-1]
-            agent.policy.mc_loss(agent, episode_info[:-1], shortcut[:-1], bootstrap).backward()
-        else:
-            _, (bootstrap,) = agent.nn_outs(state, mask, func_args_actions[0])
-            agent.policy.mc_loss(agent, episode_info[:-1], shortcut, bootstrap).backward()
-
+        _, _, _, _, (bootstrap,) = episode_info[-1]
+        agent.policy.mc_loss(agent, episode_info[:-1], bootstrap).backward()
+        
+    agent.old_policy = agent.policy.freeze()
     agent.optim.step()
+    
 
 
 def evaluate_loop(agent, env, epi = 25):
@@ -50,8 +47,8 @@ def evaluate_loop(agent, env, epi = 25):
                 # Sample a trajectory
                 while True:
                    
-                    action, func_args_dists, func_args_actions, mask, crit = agent.step(timestep_t)
-
+                    action, func_args_dists, func_args_dists_old, func_args_actions, crit = agent.step(timestep_t)
+                    
                     timestep_tt, = env.step([action])
                     
                     reward += timestep_tt.reward
@@ -104,12 +101,11 @@ def train_loop(agent, env):
             agent.reset()
 
             episode_info = []
-            shortcut = []
            
             # Sample a trajectory
             while True:
                
-                action, func_args_dists, func_args_actions, mask, crit = agent.step(timestep_t)
+                action, func_args_dists, func_args_dists_old, func_args_actions, crit = agent.step(timestep_t)
 
                 timestep_tt, = env.step([action])
                 
@@ -119,26 +115,15 @@ def train_loop(agent, env):
                 else:
                     agent.save_if_rdy(steps)
 
-                episode_info.append((t.tensor([timestep_tt.reward], dtype = DTYPE, device = agent.policy.device), agent.obs_to_state(timestep_t), mask, [i.detach() for i in func_args_dists], func_args_actions))
-                shortcut.append((func_args_dists, crit))
+                episode_info.append((t.tensor([timestep_tt.reward], dtype = DTYPE, device = agent.policy.device), func_args_dists, func_args_dists_old, func_args_actions, crit))
 
                 episode_steps += 1           
                 if (episode_steps % TRAJ == 0) or (terminate := timestep_tt.last()):                    
-                    if SYNC:
-                        with agent.policy.policy.no_sync():
-                            network_update(agent, episode_info, shortcut, terminate)
-                            for _ in range(max(EPOCH_BATCH - 2, 0)):
-                                network_update(agent, episode_info, None, terminate)
-                        network_update(agent, episode_info, None, terminate)
-                    else:
-                        network_update(agent, episode_info, shortcut, terminate)
-                        for _ in range(max(EPOCH_BATCH - 1, 0)):
-                            network_update(agent, episode_info, None, terminate) 
+
+                    network_update(agent, episode_info, terminate) 
 
                     episode_info = []
-                    shortcut = []
                    
-
                     if PROFILE and SYNC:
                         non_reduced_steps = steps
                         steps_tensor = t.tensor([steps], dtype = t.int32)
