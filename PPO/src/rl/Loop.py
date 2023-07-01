@@ -119,7 +119,7 @@ def train_loop(agent, env):
                 reward = timestep_tt.reward
 
                 if reward == -1:
-                    reward = -10
+                    reward = -5
 
 
                 episode_info.append((t.tensor([reward], dtype = DTYPE, device = agent.policy.device), func_args_dists, func_args_dists_old, func_args_actions, crit))
