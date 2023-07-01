@@ -18,7 +18,7 @@ def network_update(agent, episode_info, terminate):
         _, _, _, _, (bootstrap,) = episode_info[-1]
         agent.policy.mc_loss(agent, episode_info[:-1], bootstrap).backward()
         
-    agent.old_policy = agent.policy.freeze()
+    agent.old_policy.load_state_dict(agent.policy.state_dict())
     agent.optim.step()
     
 
@@ -149,7 +149,8 @@ def train_loop(agent, env):
                 steps += 1
             
             episodes += 1 # Completed
-            
+            agent.lr_scheduler.step()
+
     except KeyboardInterrupt:
         pass
     finally:

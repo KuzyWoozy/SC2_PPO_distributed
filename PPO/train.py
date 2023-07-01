@@ -14,31 +14,38 @@ from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, CHECK_LOAD, DEBUG, SEED
 from src.Misc import module_params_count, verify_config
 
 
-if SEED is not None: 
-    random.seed(SEED)
-    t.manual_seed(SEED)
-    np.random.seed(SEED)
 
 
-if GPU:
-    t.backends.cuda.matmul.allow_tf32 = True
-    t.backends.cudnn.allow_tf32 = True
-    t.backends.cudnn.benchmark = False if SEED else True
+def init():
+    if SEED is not None: 
+        random.seed(SEED)
+        t.manual_seed(SEED)
+        np.random.seed(SEED)
 
-if DEBUG:
-    t.autograd.set_detect_anomaly(True, check_nan=True)
     if GPU:
-        t.cuda.set_sync_debug_mode(1) # Objectively best flag to ever be implemented in a library
+        t.backends.cuda.matmul.allow_tf32 = True
+        t.backends.cudnn.allow_tf32 = True
+        t.backends.cudnn.benchmark = False if SEED else True
 
-t.set_default_dtype(DTYPE)
+    if DEBUG:
+        t.autograd.set_detect_anomaly(True, check_nan=True)
+        if GPU:
+            t.cuda.set_sync_debug_mode(1) # Objectively best flag to ever be implemented in a library
+
+    t.set_default_dtype(DTYPE)
+
 
 
 def main(argv):
-    
-    verify_config()
 
+    verify_config()
+    
+    init()
     
     # Initialize distributed module if necessary
+    
+    device = None
+
     if SYNC:
         if GPU:
             dist.init_process_group(backend="nccl")
@@ -53,6 +60,8 @@ def main(argv):
             device = t.device("cpu")
     
 
+    policy = None
+
     # Choose policy
     if ATARI_NET:
         policy = AtariNet()
@@ -63,7 +72,6 @@ def main(argv):
         policy.load_state_dict(t.load(CHECK_LOAD)["policy"])
 
     
-
     # Apply a parallel enabling wrapper to policy
     if SYNC:
         policy = DistSyncSGD(policy, device)
@@ -71,10 +79,7 @@ def main(argv):
         policy = SerialSGD(policy, device)
    
 
-    print("Model parameter count:", module_params_count(policy))
-
-    if SYNC:
-            
+    if SYNC:        
         # An attempt to improve 'bootup' performance, fails to work consistently in practise for larger values
 
         buff = min(PROCS_PER_NODE, 2)

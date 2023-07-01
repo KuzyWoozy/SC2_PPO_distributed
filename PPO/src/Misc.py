@@ -29,7 +29,7 @@ class CheckpointManager:
     
 
 def categorical_sample(probs):
-    return t.distributions.Categorical(probs = probs).sample((1,)).item()
+    return t.distributions.Categorical(logits = probs).sample((1,)).item()
 
 
 def module_params_count(module):

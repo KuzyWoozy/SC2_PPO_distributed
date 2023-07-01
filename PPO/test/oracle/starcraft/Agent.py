@@ -6,7 +6,7 @@ from pysc2.agents import base_agent
 from pysc2.lib import actions
 
 from test.oracle.Misc import CheckpointManager, categorical_sample
-from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, NUM_ACTIONS
+from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, NUM_ACTIONS, GAMMA_DECAY
 
 
 class MiniStarAgent(base_agent.BaseAgent):
@@ -15,9 +15,12 @@ class MiniStarAgent(base_agent.BaseAgent):
         super().__init__()
 
         self.policy = policy
+        self.old_policy = policy.freeze()
 
         self.optim = t.optim.Adam(policy.parameters(), maximize = False, lr = LEARNING_RATE)
         
+        self.lr_scheduler = t.optim.lr_scheduler.ExponentialLR(self.optim, GAMMA_DECAY)
+
         # Function.ability(451, "Smart_screen", cmd_screen, 1)
         # Function.ui_func(3, "select_rect", select_rect)
         # Function.ui_func(4, "select_control_group", control_group)
@@ -42,7 +45,8 @@ class MiniStarAgent(base_agent.BaseAgent):
         
         if CHECK_LOAD:
             self.optim.load_state_dict(t.load(CHECK_LOAD)["optim"])
-        
+            self.lr_scheduler.load_state_dict(t.load(CHECK_LOAD)["lr_scheduler"])
+
     def obs_to_state(self, obs):
         MAX_UNIT_HEURISTIC = 100
 
@@ -80,41 +84,36 @@ class MiniStarAgent(base_agent.BaseAgent):
         mask = mask.to(dtype = DTYPE, device = self.policy.device)
 
         policy_distributions = self.policy(state)
+        policy_distributions_old = self.old_policy(state)
 
         actor_prob_masked = policy_distributions[0] * mask
-        actor_prob_masked_norm = (actor_prob_masked / t.sum(actor_prob_masked))
+        
+        actor_prob_masked_norm = actor_prob_masked - actor_prob_masked.logsumexp(dim=-1, keepdim=True)
+
         actor_prob_masked_norm_cpu = actor_prob_masked_norm.to(dtype = DTYPE, device = t.device("cpu"))
         actor_choice = categorical_sample(actor_prob_masked_norm_cpu)
         function_id = self.policy2function[actor_choice]
-      
-        args, args_probs, args_flat = self.policy.sample_args(function_id, *policy_distributions[1:-1])
+
+        
+        actor_prob_masked_old = policy_distributions_old[0] * mask
+
+        actor_prob_masked_norm_old = actor_prob_masked_old - actor_prob_masked_old.logsumexp(dim=-1, keepdim=True)
+
+        args, args_probs, args_probs_old, args_flat = self.policy.sample_args(function_id, *policy_distributions[1:-1], *policy_distributions_old[1:-1])
 
         args_probs.insert(0, actor_prob_masked_norm)
+        args_probs_old.insert(0, actor_prob_masked_norm_old)
         args_flat.insert(0, actor_choice)
         
-        return actions.FunctionCall(function_id, args), args_probs, args_flat, mask, policy_distributions[-1]
+        return actions.FunctionCall(function_id, args), args_probs, args_probs_old, args_flat, policy_distributions[-1]
 
     
-    def nn_outs(self, state, mask, actor_choice):
-        policy_distributions = self.policy(state)
-
-        actor_prob_masked = policy_distributions[0] * mask        
-        actor_prob_masked_norm = actor_prob_masked / t.sum(actor_prob_masked)
-        function_id = self.policy2function[actor_choice]
-        
-        args_probs = self.policy.probs_args(function_id, *policy_distributions[1:-1])
-        
-        args_probs.insert(0, actor_prob_masked_norm)
-
-        return args_probs, policy_distributions[-1]
-
-
     def save_if_rdy(self, agent_steps):
         if self.check_manager.time_to_save(agent_steps):
             self.save(agent_steps)
 
     def save(self, agent_steps):
-        self.check_manager.save(agent_steps, {"policy" : self.policy.get_state_dict(), "optim" : self.optim.state_dict()})
+        self.check_manager.save(agent_steps, {"policy" : self.policy.get_state_dict(), "optim" : self.optim.state_dict(), "lr_scheduler" : self.optim.state_dict()})
 
 
 

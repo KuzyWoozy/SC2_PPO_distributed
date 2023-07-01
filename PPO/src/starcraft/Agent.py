@@ -1,4 +1,4 @@
-import sys
+import sys, copy
 import numpy as np
 import torch as t
 
@@ -6,7 +6,7 @@ from pysc2.agents import base_agent
 from pysc2.lib import actions
 
 from src.Misc import CheckpointManager, categorical_sample
-from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, NUM_ACTIONS
+from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, NUM_ACTIONS, GAMMA_DECAY
 
 
 class MiniStarAgent(base_agent.BaseAgent):
@@ -15,10 +15,11 @@ class MiniStarAgent(base_agent.BaseAgent):
         super().__init__()
 
         self.policy = policy
-        self.old_policy = policy.freeze()
+        self.old_policy = copy.deepcopy(policy).requires_grad_(False)
 
-        self.optim = t.optim.Adam(policy.parameters(), maximize = False, lr = LEARNING_RATE)
-        
+        self.optim = t.optim.Adam(policy.parameters(), maximize = False, lr = LEARNING_RATE) 
+        self.lr_scheduler = t.optim.lr_scheduler.ExponentialLR(self.optim, GAMMA_DECAY)
+
         # Function.ability(451, "Smart_screen", cmd_screen, 1)
         # Function.ui_func(3, "select_rect", select_rect)
         # Function.ui_func(4, "select_control_group", control_group)
@@ -43,10 +44,10 @@ class MiniStarAgent(base_agent.BaseAgent):
         
         if CHECK_LOAD:
             self.optim.load_state_dict(t.load(CHECK_LOAD)["optim"])
-        
-    def obs_to_state(self, obs):
-        MAX_UNIT_HEURISTIC = 100
+            self.lr_scheduler.load_state_dict(t.load(CHECK_LOAD)["lr_scheduler"])
 
+    def obs_to_state(self, obs):
+        
         state = t.from_numpy(np.expand_dims(np.stack((
                 #obs.observation.feature_screen.visibility_map / 3,
                 obs.observation.feature_screen.player_relative / 4,
@@ -74,7 +75,6 @@ class MiniStarAgent(base_agent.BaseAgent):
         
         state = self.obs_to_state(obs)
         
-
         mask = t.zeros((1, NUM_ACTIONS), dtype = DTYPE, device = t.device("cpu"))
         mask[:, [self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy]] = 1.0
 
@@ -84,14 +84,17 @@ class MiniStarAgent(base_agent.BaseAgent):
         policy_distributions_old = self.old_policy(state)
 
         actor_prob_masked = policy_distributions[0] * mask
-        actor_prob_masked_norm = (actor_prob_masked / t.sum(actor_prob_masked))
+        
+        actor_prob_masked_norm = actor_prob_masked - actor_prob_masked.logsumexp(dim=-1, keepdim=True)
+
         actor_prob_masked_norm_cpu = actor_prob_masked_norm.to(dtype = DTYPE, device = t.device("cpu"))
         actor_choice = categorical_sample(actor_prob_masked_norm_cpu)
         function_id = self.policy2function[actor_choice]
 
         
         actor_prob_masked_old = policy_distributions_old[0] * mask
-        actor_prob_masked_norm_old = (actor_prob_masked_old / t.sum(actor_prob_masked_old))
+
+        actor_prob_masked_norm_old = actor_prob_masked_old - actor_prob_masked_old.logsumexp(dim=-1, keepdim=True)
 
         args, args_probs, args_probs_old, args_flat = self.policy.sample_args(function_id, *policy_distributions[1:-1], *policy_distributions_old[1:-1])
 
@@ -107,7 +110,7 @@ class MiniStarAgent(base_agent.BaseAgent):
             self.save(agent_steps)
 
     def save(self, agent_steps):
-        self.check_manager.save(agent_steps, {"policy" : self.policy.get_state_dict(), "optim" : self.optim.state_dict()})
+        self.check_manager.save(agent_steps, {"policy" : self.policy.get_state_dict(), "optim" : self.optim.state_dict(), "lr_scheduler" : self.optim.state_dict()})
 
 
 

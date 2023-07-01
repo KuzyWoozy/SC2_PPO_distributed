@@ -29,15 +29,15 @@ class AtariNet(t.nn.Module):
 
         hid = t.relu(self.actor_dense1(t.flatten(t.relu(self.convolve2(t.relu(self.convolve1(inp)))), start_dim = 1)))
 
-        return t.softmax(self.function_id(hid), dim = 1),\
-                t.softmax(self.x1(hid), dim = 1),\
-                t.softmax(self.y1(hid), dim = 1),\
-                t.softmax(self.x2(hid), dim = 1),\
-                t.softmax(self.y2(hid), dim = 1),\
-                t.softmax(self.select_control_group_act(hid), dim = 1),\
-                t.softmax(self.select_control_group_id(hid), dim = 1),\
-                t.softmax(self.select_point_add(hid), dim = 1),\
-                t.softmax(self.select_army_add(hid), dim = 1),\
+        return t.nn.functional.log_softmax(self.function_id(hid), dim = 1),\
+                t.nn.functional.log_softmax(self.x1(hid), dim = 1),\
+                t.nn.functional.log_softmax(self.y1(hid), dim = 1),\
+                t.nn.functional.log_softmax(self.x2(hid), dim = 1),\
+                t.nn.functional.log_softmax(self.y2(hid), dim = 1),\
+                t.nn.functional.log_softmax(self.select_control_group_act(hid), dim = 1),\
+                t.nn.functional.log_softmax(self.select_control_group_id(hid), dim = 1),\
+                t.nn.functional.log_softmax(self.select_point_add(hid), dim = 1),\
+                t.nn.functional.log_softmax(self.select_army_add(hid), dim = 1),\
                 self.critic(hid)
 
     def sample_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob, x1_prob_old, y1_prob_old, x2_prob_old, y2_prob_old, cg_act_prob_old, cg_id_prob_old, point_add_prob_old, army_add_prob_old):

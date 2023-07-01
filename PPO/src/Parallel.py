@@ -21,11 +21,9 @@ class MonteCarlo(t.nn.Module):
         adv_detached = adv.detach()
 
         for out, out_old, action in zip(func_args_dists, func_args_dists_old, actions):
-            print((out[:, action] / out_old[:, action]))
-            print("\n\n\n")
-            actor_gain += t.min((out[:, action] / out_old[:, action]) * adv_detached, t.clip(out[:, action] / out_old[:, action], min = 1 - PPO_CLIP, max = 1 + PPO_CLIP) * adv_detached)          
-            # Trick to avoid having to avoid conditional
-            entropy -= t.sum(out * t.log(out + 1e-8))
+            ratio = t.exp(out[:, action] - out_old[:, action])
+            actor_gain += t.min(ratio * adv_detached, t.clip(ratio, min = 1 - PPO_CLIP, max = 1 + PPO_CLIP) * adv_detached)          
+            entropy -= t.sum(t.exp(out) * out)
             
         critic_loss += (adv ** 2)
         
@@ -55,8 +53,8 @@ class SerialSGD(t.nn.Module):
         
         policy_ser = policy_ser.to(dtype = DTYPE, device = device)
 
-        #if GPU:
-        #    policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 5, 64, 64), dtype = DTYPE, device = device),))
+        if GPU:
+            policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 5, 64, 64), dtype = DTYPE, device = device),))
 
         self.policy = MonteCarlo(policy_ser, device)
         self.device = device
@@ -76,9 +74,6 @@ class SerialSGD(t.nn.Module):
     def probs_args(self, *args, **kwargs):
         return self.policy.policy_ser.probs_args(*args, **kwargs)
     
-    def freeze(self):
-        return copy.deepcopy(self.policy.policy_ser).requires_grad_(False).to(self.device)
-
 
 class DistSyncSGD(t.nn.Module):
 
@@ -109,6 +104,3 @@ class DistSyncSGD(t.nn.Module):
     
     def probs_args(self, *args, **kwargs):
         return self.policy.module.policy_ser.probs_args(*args, **kwargs)
-
-    def freeze(self):
-        return copy.deepcopy(self.policy.module.policy_ser).requires_grad_(False).to(self.device)
