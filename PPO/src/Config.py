@@ -36,7 +36,7 @@ PROCS_PER_NODE = 128
 
 
 # Params for regression test
-SEED = 0
-SYNC = False
+SEED = None
+SYNC = True
 GPU = False
-MAX_AGENT_STEPS = 1_500
+MAX_AGENT_STEPS = 10_000_000

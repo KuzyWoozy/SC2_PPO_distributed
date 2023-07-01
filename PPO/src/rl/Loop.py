@@ -115,7 +115,14 @@ def train_loop(agent, env):
                 else:
                     agent.save_if_rdy(steps)
 
-                episode_info.append((t.tensor([timestep_tt.reward], dtype = DTYPE, device = agent.policy.device), func_args_dists, func_args_dists_old, func_args_actions, crit))
+
+                reward = timestep_tt.reward
+
+                if reward == -1:
+                    reward = -10
+
+
+                episode_info.append((t.tensor([reward], dtype = DTYPE, device = agent.policy.device), func_args_dists, func_args_dists_old, func_args_actions, crit))
 
                 episode_steps += 1           
                 if (episode_steps % TRAJ == 0) or (terminate := timestep_tt.last()):                    
