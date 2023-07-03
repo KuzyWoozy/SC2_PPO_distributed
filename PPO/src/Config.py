@@ -5,8 +5,8 @@ DEBUG = False
 ATARI_NET = True
 
 # Hyperparam
-LEARNING_RATE = 1e-4
-GAMMA_DECAY = 0.99995
+LEARNING_RATE = 3e-5
+GAMMA_DECAY = 0.9999
 
 
 GAMMA = 0.99
@@ -19,7 +19,7 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-160000.chkpt"
+CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-200000.chkpt"
 #CHECK_LOAD = None
 CHECK_INTERVAL = 10_000
 
@@ -36,7 +36,7 @@ PROCS_PER_NODE = 128
 
 
 # Params for regression test
-SEED = None
+SEED = 0
 SYNC = True
 GPU = False
 MAX_AGENT_STEPS = 10_000_000

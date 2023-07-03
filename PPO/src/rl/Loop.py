@@ -118,17 +118,13 @@ def train_loop(agent, env):
 
                 reward = timestep_tt.reward
 
-                if reward == -1:
-                    reward = -5
-
-
                 episode_info.append((t.tensor([reward], dtype = DTYPE, device = agent.policy.device), func_args_dists, func_args_dists_old, func_args_actions, crit))
 
                 episode_steps += 1           
                 if (episode_steps % TRAJ == 0) or (terminate := timestep_tt.last()):                    
 
                     network_update(agent, episode_info, terminate) 
-
+                    
                     episode_info = []
                    
                     if PROFILE and SYNC:

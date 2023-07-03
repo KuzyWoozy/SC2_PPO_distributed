@@ -18,10 +18,15 @@ from src.Misc import module_params_count, verify_config
 
 def init():
     if SEED is not None: 
-        random.seed(SEED)
-        t.manual_seed(SEED)
-        np.random.seed(SEED)
-
+        if SYNC:
+            local_seed = SEED + 100 * dist.get_rank()
+            random.seed(local_seed)
+            t.manual_seed(local_seed)
+            np.random.seed(local_seed)
+        else:
+            random.seed(SEED)
+            t.manual_seed(SEED)
+            np.random.seed(SEED)
     if GPU:
         t.backends.cuda.matmul.allow_tf32 = True
         t.backends.cudnn.allow_tf32 = True
@@ -39,9 +44,7 @@ def init():
 def main(argv):
 
     verify_config()
-    
-    init()
-    
+     
     # Initialize distributed module if necessary
     
     device = None
@@ -59,6 +62,7 @@ def main(argv):
         else:
             device = t.device("cpu")
     
+    init()
 
     policy = None
 
