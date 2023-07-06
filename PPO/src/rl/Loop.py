@@ -4,7 +4,7 @@ import torch as t
 import torch.distributed as dist
 
 from src.Parallel import SerialSGD
-from src.Config import MAX_AGENT_STEPS, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
+from src.Config import MAX_AGENT_STEPS, MAX_NETWORK_UPDATES, MAX_TIME, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
 
 
 def network_update(agent, episode_info, terminate):
@@ -82,6 +82,7 @@ def train_loop(agent, env):
     
     steps = 0
     episodes = 0
+    net_updates = 0
     
     obs_spec, = env.observation_spec()
     act_spec, = env.action_spec()
@@ -93,6 +94,8 @@ def train_loop(agent, env):
         while True:
 
             if episodes == TIMING_EPISODE_DELAY:
+                steps = 0
+                net_updates = 0
                 start_timer = time.time()
             
             timestep_t, = env.reset()
@@ -124,7 +127,29 @@ def train_loop(agent, env):
                 if (episode_steps % TRAJ == 0) or (terminate := timestep_tt.last()):                    
 
                     network_update(agent, episode_info, terminate) 
+                    net_updates += 1
+
+                    if MAX_NETWORK_UPDATES is not None and dist.get_rank() == ROOT and net_updates >= MAX_NETWORK_UPDATES:
+                        if SYNC:
+                            if dist.get_rank() == ROOT:
+                                agent.save(steps)
+                        else:
+                            agent.save(steps)
+                        dist.destroy_process_group()
+                        return
+
                     
+                    if MAX_TIME is not None and dist.get_rank() == ROOT and (time.time() - start_timer) >= MAX_TIME:
+                        if SYNC:
+                            if dist.get_rank() == ROOT:
+                                agent.save(steps)
+                        else:
+                            agent.save(steps)
+                        
+                        dist.destroy_process_group()
+                        return
+                    
+
                     episode_info = []
                    
                     if PROFILE and SYNC:
@@ -133,12 +158,14 @@ def train_loop(agent, env):
                         dist.all_reduce(steps_tensor)
                         steps = steps_tensor.item() 
 
-                    if steps >= MAX_AGENT_STEPS:
+                    if MAX_AGENT_STEPS is not None and dist.get_rank() == ROOT and steps >= MAX_AGENT_STEPS:
                         if SYNC:
                             if dist.get_rank() == ROOT:
                                 agent.save(steps)
                         else:
                             agent.save(steps)
+
+                        dist.destroy_process_group()
                         return
                     
                     if PROFILE and SYNC:
@@ -159,14 +186,6 @@ def train_loop(agent, env):
     finally:
         elapsed_time = time.time() - start_timer
         
-        if SYNC:
-            if PROFILE:
-                if dist.get_rank() == ROOT:
-                    with open("output.txt", "a+") as f:
-                        agent.policy = SerialSGD(agent.policy.policy.module.policy_ser, t.device("cpu"))
-                        f.write(f"{dist.get_world_size()}, {elapsed_time}, {evaluate_loop(agent, env)}\n")  
-        
-
         print("Took %.3f seconds for %s steps" % (
             elapsed_time, steps))
 

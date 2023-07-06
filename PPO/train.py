@@ -10,7 +10,7 @@ from src.rl.Approximator import AtariNet, FullyConv
 from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
 from src.Parallel import DistSyncSGD, SerialSGD
-from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, CHECK_LOAD, DEBUG, SEED, ATARI_NET
+from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, NODES, CHECK_LOAD, DEBUG, SEED, ATARI_NET
 from src.Misc import module_params_count, verify_config
 
 
@@ -88,7 +88,7 @@ def main(argv):
 
         buff = min(PROCS_PER_NODE, 2)
 
-        for i in range(0, PROCS_PER_NODE, buff):
+        for i in range(0, PROCS_PER_NODE * NODES, buff):
             for j in range(buff):
                 if dist.get_rank() == i + j:
                     # Choose agent
@@ -97,7 +97,7 @@ def main(argv):
                     environment = StarcraftMinigame(agent)
             dist.barrier()
 
-        for j in range(PROCS_PER_NODE % buff):
+        for j in range((PROCS_PER_NODE * NODES) % buff):
             if dist.get_rank() == i + j:
                 # Choose agent
                 agent = MiniStarAgent(policy)
