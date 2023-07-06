@@ -53,8 +53,8 @@ class SerialSGD(t.nn.Module):
         
         policy_ser = policy_ser.to(dtype = DTYPE, device = device)
 
-        if GPU:
-            policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 5, 64, 64), dtype = DTYPE, device = device),))
+        #if GPU:
+        #    policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 5, 64, 64), dtype = DTYPE, device = device),))
 
         self.policy = MonteCarlo(policy_ser, device)
         self.device = device

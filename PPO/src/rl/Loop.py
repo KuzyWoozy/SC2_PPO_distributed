@@ -129,24 +129,24 @@ def train_loop(agent, env):
                     network_update(agent, episode_info, terminate) 
                     net_updates += 1
 
-                    if MAX_NETWORK_UPDATES is not None and dist.get_rank() == ROOT and net_updates >= MAX_NETWORK_UPDATES:
+                    if MAX_NETWORK_UPDATES is not None and net_updates >= MAX_NETWORK_UPDATES:
                         if SYNC:
                             if dist.get_rank() == ROOT:
                                 agent.save(steps)
+                                dist.destroy_process_group()
                         else:
                             agent.save(steps)
-                        dist.destroy_process_group()
                         return
 
                     
-                    if MAX_TIME is not None and dist.get_rank() == ROOT and (time.time() - start_timer) >= MAX_TIME:
+                    if MAX_TIME is not None and (time.time() - start_timer) >= MAX_TIME:
                         if SYNC:
                             if dist.get_rank() == ROOT:
                                 agent.save(steps)
+                                dist.destroy_process_group()
                         else:
                             agent.save(steps)
                         
-                        dist.destroy_process_group()
                         return
                     
 
@@ -154,18 +154,18 @@ def train_loop(agent, env):
                    
                     if PROFILE and SYNC:
                         non_reduced_steps = steps
-                        steps_tensor = t.tensor([steps], dtype = t.int32)
+                        steps_tensor = t.tensor([steps], dtype = t.int32, device = agent.policy.device)
                         dist.all_reduce(steps_tensor)
                         steps = steps_tensor.item() 
 
-                    if MAX_AGENT_STEPS is not None and dist.get_rank() == ROOT and steps >= MAX_AGENT_STEPS:
+                    if MAX_AGENT_STEPS is not None and steps >= MAX_AGENT_STEPS:
                         if SYNC:
                             if dist.get_rank() == ROOT:
                                 agent.save(steps)
+                                dist.destroy_process_group()
                         else:
                             agent.save(steps)
 
-                        dist.destroy_process_group()
                         return
                     
                     if PROFILE and SYNC:

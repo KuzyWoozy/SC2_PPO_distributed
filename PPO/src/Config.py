@@ -2,7 +2,7 @@ import torch as t
 
 DEBUG = False
 
-ATARI_NET = True
+ATARI_NET = False
 
 # Hyperparam
 LEARNING_RATE = 1e-4
@@ -39,11 +39,12 @@ NODES = 1
 MAX_NETWORK_UPDATES = None
 MAX_TIME = 2
 
-MAX_TIME *= 60
+if MAX_TIME is not None:
+    MAX_TIME *= 60
 
 
 # Params for regression test
 SEED = None
 SYNC = True
-GPU = False
+GPU = True
 MAX_AGENT_STEPS = 10_000_000
