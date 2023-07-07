@@ -6,7 +6,7 @@ from pysc2.agents import base_agent
 from pysc2.lib import actions
 
 from test.oracle.Misc import CheckpointManager, categorical_sample
-from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, NUM_ACTIONS, GAMMA_DECAY
+from test.oracle.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, NUM_ACTIONS, GAMMA_DECAY
 
 
 class MiniStarAgent(base_agent.BaseAgent):

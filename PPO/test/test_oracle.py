@@ -17,9 +17,6 @@ from test.oracle.rl.Approximator import AtariNet as AtariNet_oracle
 from test.oracle.rl.Loop import train_loop as train_loop_oracle
 
 
-SEED = 0
-
-
 def reset_seed():
     random.seed(SEED)
     t.manual_seed(SEED)

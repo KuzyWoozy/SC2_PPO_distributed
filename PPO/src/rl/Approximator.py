@@ -11,7 +11,7 @@ class AtariNet(t.nn.Module):
         self.convolve1 = t.nn.Conv2d(5, 16, 8, stride = 4)
         self.convolve2 = t.nn.Conv2d(16, 32, 4, stride = 2)
 
-        self.dense = t.nn.Linear(1152, NN_HIDDEN_LAYER)
+        self.actor_dense1 = t.nn.Linear(1152, NN_HIDDEN_LAYER)
 
         self.function_id = t.nn.Linear(NN_HIDDEN_LAYER, NUM_ACTIONS)
         self.x1 = t.nn.Linear(NN_HIDDEN_LAYER, 64)
@@ -27,7 +27,7 @@ class AtariNet(t.nn.Module):
     
     def forward(self, inp):
 
-        hid = t.relu(self.dense(t.flatten(t.relu(self.convolve2(t.relu(self.convolve1(inp)))), start_dim = 1)))
+        hid = t.relu(self.actor_dense1(t.flatten(t.relu(self.convolve2(t.relu(self.convolve1(inp)))), start_dim = 1)))
 
         return t.nn.functional.log_softmax(self.function_id(hid), dim = 1),\
                 t.nn.functional.log_softmax(self.x1(hid), dim = 1),\

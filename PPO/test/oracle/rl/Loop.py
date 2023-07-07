@@ -4,7 +4,7 @@ import torch as t
 import torch.distributed as dist
 
 from test.oracle.Parallel import SerialSGD
-from src.Config import MAX_AGENT_STEPS, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
+from test.oracle.Config import MAX_AGENT_STEPS, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
 
 
 def network_update(agent, episode_info, terminate):

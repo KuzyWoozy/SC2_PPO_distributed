@@ -4,7 +4,7 @@ import copy
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from src.Config import GAMMA, PPO_CLIP, DTYPE, GPU, ENTROPY, VALUE_COEFF
+from test.oracle.Config import GAMMA, PPO_CLIP, DTYPE, GPU, ENTROPY, VALUE_COEFF
 
 
 

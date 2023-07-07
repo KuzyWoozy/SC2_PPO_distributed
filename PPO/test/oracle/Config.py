@@ -19,8 +19,8 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-2390000.chkpt"
-#CHECK_LOAD = None
+#CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-2390000.chkpt"
+CHECK_LOAD = None
 CHECK_INTERVAL = 10_000
 
 # Environment
@@ -30,21 +30,20 @@ TRAJ = 10
 DTYPE = t.float32
 
 # Distributed
-PROFILE = True
+PROFILE = False
 ROOT = 0
 PROCS_PER_NODE = 128
 NODES = 1
 
 
 MAX_NETWORK_UPDATES = None
-MAX_TIME = 2
+MAX_TIME = None
 
 if MAX_TIME is not None:
     MAX_TIME *= 60
 
-
 # Params for regression test
-SEED = None
-SYNC = True
-GPU = True
-MAX_AGENT_STEPS = 10_000_000
+SEED = 0
+SYNC = False
+GPU = False
+MAX_AGENT_STEPS = 1_500

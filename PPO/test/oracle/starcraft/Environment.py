@@ -1,6 +1,6 @@
 from pysc2.env import sc2_env
 
-from src.Config import MINIGAME_NAME, SEED
+from test.oracle.Config import MINIGAME_NAME, SEED
 
 
 class StarcraftMinigame(sc2_env.SC2Env):
