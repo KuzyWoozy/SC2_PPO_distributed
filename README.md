@@ -3,12 +3,10 @@ The primary directory of this project is 'PPO' which contains all the work carri
 
 ## Directory structure:
 
-- PPO/
+- `PPO/`
 	* Work conducted during the dissertation stage of the HPC Msc involving on-policy Proximal Policy Optimization trained on the DeepMind's StarCraft II Learning Environments.
-
-- TD3/
+- `TD3/`
 	* Work carried out during feasability study that investigated off-policy Twin Delayed DDPG on the OpenAI Gym Environments.
-
-- Minutes/
+- `Minutes/`
 	* Formal write-ups of meetings, containing points of discussion, updates and actions to be completed.
 
