@@ -1,4 +1,6 @@
 import torch as t
+import os
+
 
 DEBUG = False
 
@@ -30,21 +32,28 @@ TRAJ = 10
 DTYPE = t.float32
 
 # Distributed
-PROFILE = True
+PROFILE = False
 ROOT = 0
-PROCS_PER_NODE = 128
-NODES = 1
 
 
 MAX_NETWORK_UPDATES = None
-MAX_TIME = 2
+MAX_TIME = None
 
 if MAX_TIME is not None:
     MAX_TIME *= 60
 
 
 # Params for regression test
-SEED = None
-SYNC = True
-GPU = True
-MAX_AGENT_STEPS = 10_000_000
+SEED = 0
+SYNC = False
+GPU = False
+MAX_AGENT_STEPS = 1_500
+
+
+
+if SYNC:
+    PROCS_PER_NODE = int(os.environ["LOCAL_WORLD_SIZE"])
+    PROCS = int(os.environ["WORLD_SIZE"])
+else:
+    PROCS_PER_NODE = 1
+    PROCS = 1

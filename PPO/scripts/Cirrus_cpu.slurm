@@ -4,13 +4,13 @@
 #SBATCH --time=00:10:00
 #SBATCH --nodes=1
 #SBATCH --tasks-per-node=1
-#SBATCH --cpus-per-task=128
+#SBATCH --cpus-per-task=10
 
 #SBATCH --account=m22oc-s2402307
 #SBATCH --partition=standard
 #SBATCH --qos=short
 
-source ../sc_virt/bin/activate
+source ./sc_virt/bin/activate
 
 # Change to the submission directory
 cd $SLURM_SUBMIT_DIR

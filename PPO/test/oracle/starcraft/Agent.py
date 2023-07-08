@@ -1,4 +1,4 @@
-import sys
+import sys, copy
 import numpy as np
 import torch as t
 
@@ -6,7 +6,7 @@ from pysc2.agents import base_agent
 from pysc2.lib import actions
 
 from test.oracle.Misc import CheckpointManager, categorical_sample
-from test.oracle.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, NUM_ACTIONS, GAMMA_DECAY
+from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, NUM_ACTIONS, GAMMA_DECAY
 
 
 class MiniStarAgent(base_agent.BaseAgent):
@@ -15,10 +15,9 @@ class MiniStarAgent(base_agent.BaseAgent):
         super().__init__()
 
         self.policy = policy
-        self.old_policy = policy.freeze()
+        self.old_policy = copy.deepcopy(policy).requires_grad_(False)
 
-        self.optim = t.optim.Adam(policy.parameters(), maximize = False, lr = LEARNING_RATE)
-        
+        self.optim = t.optim.Adam(policy.parameters(), maximize = False, lr = LEARNING_RATE) 
         self.lr_scheduler = t.optim.lr_scheduler.ExponentialLR(self.optim, GAMMA_DECAY)
 
         # Function.ability(451, "Smart_screen", cmd_screen, 1)
@@ -48,8 +47,7 @@ class MiniStarAgent(base_agent.BaseAgent):
             self.lr_scheduler.load_state_dict(t.load(CHECK_LOAD)["lr_scheduler"])
 
     def obs_to_state(self, obs):
-        MAX_UNIT_HEURISTIC = 100
-
+        
         state = t.from_numpy(np.expand_dims(np.stack((
                 #obs.observation.feature_screen.visibility_map / 3,
                 obs.observation.feature_screen.player_relative / 4,
@@ -77,7 +75,6 @@ class MiniStarAgent(base_agent.BaseAgent):
         
         state = self.obs_to_state(obs)
         
-
         mask = t.zeros((1, NUM_ACTIONS), dtype = DTYPE, device = t.device("cpu"))
         mask[:, [self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy]] = 1.0
 

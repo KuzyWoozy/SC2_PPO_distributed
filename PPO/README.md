@@ -1,18 +1,18 @@
 ﻿# PPO on StarCraft II LE
-Implementation of the Proximal Policy Optimization Reinforcement Learning algorithm, uses DeepMind's StarCraft II for its learning environment for the variety of mini-games that it provides.
+Implementation of the Proximal Policy Optimization Reinforcement Learning algorithm, uses DeepMind's StarCraft II Learning Environment for the variety of mini-games that it provides.
   
 ## Linux installation:
 1. Install/Load Python 3.9 
 	* module load python/3.9.13 on Cirrus
 	* module load cray-python/3.9.13.1 on ARCHER2
-	* 
+	
 2. Create a Python virtual environment via 'venv' and activate it
 	* On ARCHER2/Cirrus unload the Python module before proceeding with installation of packages
 
 3. Make sure all bash scripts in 'scripts/' have sufficient permissions to execute.
 
 4. make install
-	* By typing in the password ‘iagreetotheeula’ you agree to be bound by the terms of the Blizzard's [AI and Machine Learning License](http://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html)
+	* By typing in the password ‘iagreetotheeula’ you agree to be bound by the terms of [BLIZZARD STARCRAFT II AI AND MACHINE LEARNING LICENSE](http://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html)
 	* Note that 'pip' may throw a recommendation to update warning, however this should be ignored as the installation script downgrades pip to satisfy specific dependencies. Note that by running this command, 
 
 # Evaluating a model locally

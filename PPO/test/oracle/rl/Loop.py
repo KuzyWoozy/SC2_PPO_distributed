@@ -4,7 +4,7 @@ import torch as t
 import torch.distributed as dist
 
 from test.oracle.Parallel import SerialSGD
-from test.oracle.Config import MAX_AGENT_STEPS, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
+from src.Config import MAX_AGENT_STEPS, MAX_NETWORK_UPDATES, MAX_TIME, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
 
 
 def network_update(agent, episode_info, terminate):
@@ -18,7 +18,7 @@ def network_update(agent, episode_info, terminate):
         _, _, _, _, (bootstrap,) = episode_info[-1]
         agent.policy.mc_loss(agent, episode_info[:-1], bootstrap).backward()
         
-    agent.old_policy = agent.policy.freeze()
+    agent.old_policy.load_state_dict(agent.policy.state_dict())
     agent.optim.step()
     
 
@@ -82,6 +82,7 @@ def train_loop(agent, env):
     
     steps = 0
     episodes = 0
+    net_updates = 0
     
     obs_spec, = env.observation_spec()
     act_spec, = env.action_spec()
@@ -93,6 +94,8 @@ def train_loop(agent, env):
         while True:
 
             if episodes == TIMING_EPISODE_DELAY:
+                steps = 0
+                net_updates = 0
                 start_timer = time.time()
             
             timestep_t, = env.reset()
@@ -115,27 +118,54 @@ def train_loop(agent, env):
                 else:
                     agent.save_if_rdy(steps)
 
-                episode_info.append((t.tensor([timestep_tt.reward], dtype = DTYPE, device = agent.policy.device), func_args_dists, func_args_dists_old, func_args_actions, crit))
+
+                reward = timestep_tt.reward
+
+                episode_info.append((t.tensor([reward], dtype = DTYPE, device = agent.policy.device), func_args_dists, func_args_dists_old, func_args_actions, crit))
 
                 episode_steps += 1           
                 if (episode_steps % TRAJ == 0) or (terminate := timestep_tt.last()):                    
 
                     network_update(agent, episode_info, terminate) 
+                    net_updates += 1
+
+                    if MAX_NETWORK_UPDATES is not None and net_updates >= MAX_NETWORK_UPDATES:
+                        if SYNC:
+                            if dist.get_rank() == ROOT:
+                                agent.save(steps)
+                                dist.destroy_process_group()
+                        else:
+                            agent.save(steps)
+                        return
+
+                    
+                    if MAX_TIME is not None and (time.time() - start_timer) >= MAX_TIME:
+                        if SYNC:
+                            if dist.get_rank() == ROOT:
+                                agent.save(steps)
+                                dist.destroy_process_group()
+                        else:
+                            agent.save(steps)
+                        
+                        return
+                    
 
                     episode_info = []
                    
                     if PROFILE and SYNC:
                         non_reduced_steps = steps
-                        steps_tensor = t.tensor([steps], dtype = t.int32)
+                        steps_tensor = t.tensor([steps], dtype = t.int32, device = agent.policy.device)
                         dist.all_reduce(steps_tensor)
                         steps = steps_tensor.item() 
 
-                    if steps >= MAX_AGENT_STEPS:
+                    if MAX_AGENT_STEPS is not None and steps >= MAX_AGENT_STEPS:
                         if SYNC:
                             if dist.get_rank() == ROOT:
                                 agent.save(steps)
+                                dist.destroy_process_group()
                         else:
                             agent.save(steps)
+
                         return
                     
                     if PROFILE and SYNC:
@@ -150,20 +180,12 @@ def train_loop(agent, env):
             
             episodes += 1 # Completed
             agent.lr_scheduler.step()
-            
+
     except KeyboardInterrupt:
         pass
     finally:
         elapsed_time = time.time() - start_timer
         
-        if SYNC:
-            if PROFILE:
-                if dist.get_rank() == ROOT:
-                    with open("output.txt", "a+") as f:
-                        agent.policy = SerialSGD(agent.policy.policy.module.policy_ser, t.device("cpu"))
-                        f.write(f"{dist.get_world_size()}, {elapsed_time}, {evaluate_loop(agent, env)}\n")  
-        
-
         print("Took %.3f seconds for %s steps" % (
             elapsed_time, steps))
 

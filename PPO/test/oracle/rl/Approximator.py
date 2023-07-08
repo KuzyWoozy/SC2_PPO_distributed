@@ -1,6 +1,6 @@
 import torch as t
 
-from test.oracle.Config import NN_HIDDEN_LAYER, NUM_ACTIONS, DTYPE
+from src.Config import NN_HIDDEN_LAYER, NUM_ACTIONS, DTYPE
 from test.oracle.Misc import categorical_sample
 
 class AtariNet(t.nn.Module):
@@ -118,7 +118,7 @@ class FullyConv(t.nn.Module):
         self.convolve1 = t.nn.Conv2d(5, 16, 5, stride = 1, padding = "same")
         self.convolve2 = t.nn.Conv2d(16, 32, 3, stride = 1, padding = "same")
 
-        self.hidden = t.nn.Linear(131072, NN_HIDDEN_LAYER)
+        self.dense = t.nn.Linear(131072, NN_HIDDEN_LAYER)
 
         self.function_id = t.nn.Linear(NN_HIDDEN_LAYER, NUM_ACTIONS)
 
@@ -136,7 +136,7 @@ class FullyConv(t.nn.Module):
 
         convolution = t.relu(self.convolve2(t.relu(self.convolve1(inp))))
 
-        hid = t.relu(self.hidden(t.flatten(convolution, start_dim = 1)))
+        hid = t.relu(self.dense(t.flatten(convolution, start_dim = 1)))
 
         return t.softmax(self.function_id(hid), dim = 1),\
                 t.softmax(t.flatten(self.coords1(convolution), start_dim = 1), dim = 1),\
@@ -147,7 +147,7 @@ class FullyConv(t.nn.Module):
                 t.softmax(self.select_army_add(hid), dim = 1),\
                 self.critic(hid)
 
-    def sample_args(self, func_id, coords1_prob, coords2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
+    def sample_args(self, func_id, coords1_prob, coords2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob, coords1_prob_old, coords2_prob_old, cg_act_prob_old, cg_id_prob_old, point_add_prob_old, army_add_prob_old):
 
         # Smart_screen
         if func_id == 451:
@@ -158,8 +158,7 @@ class FullyConv(t.nn.Module):
             x1_choice = coords1_choice % 64
             y1_choice = coords1_choice // 64
             
-            return [[0], [x1_choice, y1_choice]], [coords1_prob], [coords1_choice]
-
+            return [[0], [x1_choice, y1_choice]], [coords1_prob], [coords1_prob_old], [x1_choice, y1_choice]
 
         # Select_rect
         elif func_id == 3:
@@ -175,8 +174,8 @@ class FullyConv(t.nn.Module):
             x2_choice = coords2_choice % 64
             y2_choice = coords2_choice // 64
 
+            return [[0], [x1_choice, y1_choice], [x2_choice, y2_choice]], [coords1_prob, coords2_prob], [coords1_prob_old, coords2_prob_old], [x1_choice, y1_choice, x2_choice, y2_choice]
             
-            return [[0], [x1_choice, y1_choice], [x2_choice, y2_choice]], [coords1_prob, coords2_prob], [coords1_choice, coords2_choice]
 
 
         # Select_control_group
@@ -186,12 +185,12 @@ class FullyConv(t.nn.Module):
 
             cg_act_choice = categorical_sample(cg_act_prob_cpu) 
             cg_id_choice = categorical_sample(cg_id_prob_cpu)
-            return [[cg_act_choice], [cg_id_choice]], [cg_act_prob, cg_id_prob], [cg_act_choice, cg_id_choice]
 
+            return [[cg_act_choice], [cg_id_choice]], [cg_act_prob, cg_id_prob], [cg_act_prob_old, cg_id_prob_old], [cg_act_choice, cg_id_choice]
         
         # No_op
         elif func_id == 0:
-            return [], [], []
+            return [], [], [], []
 
         # Select_point
         elif func_id == 2:
@@ -204,57 +203,20 @@ class FullyConv(t.nn.Module):
             x1_choice = coords1_choice % 64
             y1_choice = coords1_choice // 64
             
-            return [[point_add_choice], [x1_choice, y1_choice]], [point_add_prob, coords1_prob], [point_add_choice, coords1_choice]
-            
+            return [[point_add_choice], [x1_choice, y1_choice]], [point_add_prob, coords1_prob], [point_add_prob_old, coords1_prob_old], [point_add_choice, x1_choice, y1_choice]
 
         # HoldPosition_quick
         elif func_id == 274:
-            return [[0]], [], []
+            return [[0]], [], [], []
 
         # Select army
         elif func_id == 7:
             army_add_prob_cpu = army_add_prob.to(dtype = DTYPE, device = t.device("cpu"))
             
             army_add_choice = categorical_sample(army_add_prob_cpu)
-            return [[army_add_choice]], [army_add_prob], [army_add_choice]
+
+            return [[army_add_choice]], [army_add_prob], [army_add_prob_old], [army_add_choice]
 
         else:
             print(f"{func_id} IS NOT SUPPORTED")
             sys.exit(1)
-
-
-    def probs_args(self, func_id, coord1_prob, coord2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob):
-
-        # Smart_screen
-        if func_id == 451:
-            return [coord1_prob]
-
-        # Select_rect
-        elif func_id == 3:
-            return [coord1_prob, coord2_prob]
-
-        # Select_control_group
-        elif func_id == 4:
-            return [cg_act_prob, cg_id_prob]
-        
-        # No_op
-        elif func_id == 0:
-            return []
-
-        # Select_point
-        elif func_id == 2:
-            return [point_add_prob, coord1_prob]
-            
-        # HoldPosition_quick
-        elif func_id == 274:
-            return []
-
-        # Select army
-        elif func_id == 7:
-            return [army_add_prob]
-
-        else:
-            print(f"{func_id} IS NOT SUPPORTED")
-            sys.exit(1)
-
-

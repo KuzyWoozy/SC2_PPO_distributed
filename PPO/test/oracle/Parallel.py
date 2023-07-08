@@ -4,7 +4,7 @@ import copy
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from test.oracle.Config import GAMMA, PPO_CLIP, DTYPE, GPU, ENTROPY, VALUE_COEFF
+from src.Config import GAMMA, PPO_CLIP, DTYPE, GPU, ENTROPY, VALUE_COEFF
 
 
 
@@ -74,9 +74,6 @@ class SerialSGD(t.nn.Module):
     def probs_args(self, *args, **kwargs):
         return self.policy.policy_ser.probs_args(*args, **kwargs)
     
-    def freeze(self):
-        return copy.deepcopy(self.policy.policy_ser).requires_grad_(False).to(self.device)
-
 
 class DistSyncSGD(t.nn.Module):
 
@@ -107,6 +104,3 @@ class DistSyncSGD(t.nn.Module):
     
     def probs_args(self, *args, **kwargs):
         return self.policy.module.policy_ser.probs_args(*args, **kwargs)
-
-    def freeze(self):
-        return copy.deepcopy(self.policy.module.policy_ser).requires_grad_(False).to(self.device)

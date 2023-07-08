@@ -4,6 +4,8 @@ import numpy as np
 
 from absl import app
 
+from src.Config import SEED
+
 from src.Parallel import SerialSGD
 from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
@@ -17,6 +19,7 @@ from test.oracle.rl.Approximator import AtariNet as AtariNet_oracle
 from test.oracle.rl.Loop import train_loop as train_loop_oracle
 
 
+
 def reset_seed():
     random.seed(SEED)
     t.manual_seed(SEED)
@@ -25,8 +28,6 @@ def reset_seed():
 def assert_models(model1, model2):
     for param1, param2 in zip(model1.parameters(), model2.parameters()):
         assert t.equal(param1, param2)
-
-
 
 def test_oracle():
    

@@ -1,7 +1,7 @@
 import torch as t
 import os
 
-from test.oracle.Config import LEARNING_RATE, GAMMA, ENTROPY, NN_HIDDEN_LAYER, NUM_ACTIONS, PPO_CLIP, CHECK_INTERVAL, MAX_AGENT_STEPS, PROCS_PER_NODE
+from src.Config import LEARNING_RATE, GAMMA, ENTROPY, NN_HIDDEN_LAYER, NUM_ACTIONS, PPO_CLIP, CHECK_INTERVAL, MAX_AGENT_STEPS, PROCS_PER_NODE
 
 
 
@@ -43,6 +43,5 @@ def verify_config():
     assert NUM_ACTIONS > 0 and "Number of actions must be positive (> 0)"
     assert PPO_CLIP > 0.0 and "Clip must be positive (> 0)"
     assert CHECK_INTERVAL > 0 and "Checkpoint interval must be positive (> 0)"
-    assert MAX_AGENT_STEPS > 0 and "Max steps must be positive (> 0)"
     assert PROCS_PER_NODE > 0 and "Processors per node must be positive (> 0)"
 
