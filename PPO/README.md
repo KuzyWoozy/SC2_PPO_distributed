@@ -1,34 +1,37 @@
 ﻿# PPO on StarCraft II LE
 Implementation of the Proximal Policy Optimization Reinforcement Learning algorithm, uses DeepMind's StarCraft II Learning Environment for the variety of mini-games that it provides.
-  
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uk2abOIxBak" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 ## Linux installation:
-1. Install/Load Python 3.9 
-	* module load python/3.9.13 on Cirrus
-	* module load cray-python/3.9.13.1 on ARCHER2
-	
-2. Create a Python virtual environment via 'venv' and activate it
-	* On ARCHER2/Cirrus unload the Python module before proceeding with installation of packages
+The installation requires agreement to the terms of [BLIZZARD STARCRAFT II AI AND MACHINE LEARNING LICENSE](http://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html), by typing in the password ‘iagreetotheeula’ during the installation process you agree to be bound by these terms.
 
-3. Make sure all bash scripts in 'scripts/' have sufficient permissions to execute.
+### ARCHER2
+* make install_archer2
+### Cirrus
+* make install_cirrus
 
-4. make install
-	* By typing in the password ‘iagreetotheeula’ you agree to be bound by the terms of [BLIZZARD STARCRAFT II AI AND MACHINE LEARNING LICENSE](http://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html)
-	* Note that 'pip' may throw a recommendation to update warning, however this should be ignored as the installation script downgrades pip to satisfy specific dependencies. Note that by running this command, 
+Note that 'pip' may throw a recommendation to update warning, however this should be ignored as the installation script downgrades pip to satisfy specific dependencies.
 
-# Evaluating a model locally
+## Evaluating a model locally
 1. (Optional) Select model in src/Config.py using the `CHECK_LOAD` parameter.
 2. make eval
 
-# Training on ARCHER2
-1. (Optional) Modify 'src/Config.py' to adjust the number of nodes, parallel agents, hyperpameters etc.
-2. Modify 'scripts/ARCHER2.slurm' to update its `source` command with your virtual environment 'your_virtual_env/bin/activate'.
-3. make train_ARCHER2
-4. Saved models will be periodically saved in 'checkpoints/'
+## Training on ARCHER2
+[IMAGE] ARCHER2 logo?
+1. (Optional) Modify 'src/Config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc.
+2. make train_archer2
+3. Saved models will be periodically saved in 'checkpoints/'
 
-# Training on Cirrus GPU partition
-1. (Optional) Modify 'src/Config.py' to adjust the number of nodes, parallel agents, hyperpameters etc.
-2.  Modify 'scripts/Cirrus_gpu.slurm' to update its `source` command with your virtual environment 'your_virtual_env/bin/activate'.
-3. make train_Cirrus_gpu
+## Training on Cirrus
+[IMAGE] Cirrus logo?
+1. (Optional) Modify 'src/Config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc.
+2. 
+### CPU:
+make train_cirrus_cpu
+### GPU:
+make train_cirrus_gpu
+
 4. Saved models will be periodically saved in 'checkpoints/'
 
 ## Running regression tests:
