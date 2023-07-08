@@ -1,6 +1,8 @@
 from absl import app
 import torch as t
 
+import random
+import numpy as np
 
 from src.rl.Loop import evaluate_loop
 from src.rl.Approximator import AtariNet, FullyConv
@@ -8,12 +10,17 @@ from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
 from src.Parallel import SerialSGD
 
-from src.Config import CHECK_LOAD, ATARI_NET
+from src.Config import CHECK_LOAD, ATARI_NET, SEED
 
+
+def reset_seed():
+    random.seed(SEED)
+    t.manual_seed(SEED)
+    np.random.seed(SEED)
 
 
 def main(argv):
-    
+
     if ATARI_NET:
         policy = AtariNet()
     else:
@@ -27,12 +34,13 @@ def main(argv):
 
     # Choose agent
     agent = MiniStarAgent(policy)
+    
 
     # Choose environment
     environment = StarcraftMinigame(agent, viz = False)
     
     # Begin the training process
-    print("Evaluation score:", evaluate_loop(agent, environment, 100))
+    print("Evaluation score:", evaluate_loop(agent, environment, 300))
    
 
 if __name__ == "__main__":
