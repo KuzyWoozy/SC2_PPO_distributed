@@ -1,11 +1,7 @@
 # PPO on StarCraft II LE
 Implementation of the *Proximal Policy Optimization* Reinforcement Learning algorithm, uses DeepMind's StarCraft II Learning Environment for the variety of mini-games that it provides.
 
-
-<figure class="video_container">
-  <iframe src="https://www.youtube.com/embed/uk2abOIxBak" frameborder="0" allowfullscreen="true"> </iframe>
-</figure>
-
+[![](data/images/thumbnail.png)](https://www.youtube.com/embed/uk2abOIxBak)
 
 ## Linux installation:
 The installation requires agreement to the terms of [BLIZZARD STARCRAFT II AI AND MACHINE LEARNING LICENSE](http://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html), by typing in the password '**iagreetotheeula**' during the installation process you agree to be bound by these terms.
@@ -32,7 +28,7 @@ Note that **pip** may throw a recommendation to update warning, however this sho
 3. `Saved models will be periodically saved in 'checkpoints/'`
 
 ## Training on Cirrus:
-<img src="data/images/cirrus_logo.png" alt="drawing" width="200"/>
+<img src="data/images/cirrus_logo.png" alt="drawing" width="180"/>
 
 1. `(Optional) Modify 'src/Config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc.`
 2. <ins>**CPU:**</ins> `make train_cirrus_cpu`
