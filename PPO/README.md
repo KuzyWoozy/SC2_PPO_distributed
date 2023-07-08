@@ -1,38 +1,43 @@
-﻿# PPO on StarCraft II LE
-Implementation of the Proximal Policy Optimization Reinforcement Learning algorithm, uses DeepMind's StarCraft II Learning Environment for the variety of mini-games that it provides.
+# PPO on StarCraft II LE
+Implementation of the *Proximal Policy Optimization* Reinforcement Learning algorithm, uses DeepMind's StarCraft II Learning Environment for the variety of mini-games that it provides.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/uk2abOIxBak" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+<figure class="video_container">
+  <iframe src="https://www.youtube.com/embed/uk2abOIxBak" frameborder="0" allowfullscreen="true"> </iframe>
+</figure>
+
 
 ## Linux installation:
-The installation requires agreement to the terms of [BLIZZARD STARCRAFT II AI AND MACHINE LEARNING LICENSE](http://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html), by typing in the password ‘iagreetotheeula’ during the installation process you agree to be bound by these terms.
+The installation requires agreement to the terms of [BLIZZARD STARCRAFT II AI AND MACHINE LEARNING LICENSE](http://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html), by typing in the password '**iagreetotheeula**' during the installation process you agree to be bound by these terms.
 
-### ARCHER2
-* make install_archer2
-### Cirrus
-* make install_cirrus
+<ins>**ARCHER2:**</ins>
 
-Note that 'pip' may throw a recommendation to update warning, however this should be ignored as the installation script downgrades pip to satisfy specific dependencies.
+* `make install_archer2`
 
-## Evaluating a model locally
-1. (Optional) Select model in src/Config.py using the `CHECK_LOAD` parameter.
-2. make eval
+<ins>**Cirrus:**</ins>
 
-## Training on ARCHER2
-[IMAGE] ARCHER2 logo?
-1. (Optional) Modify 'src/Config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc.
-2. make train_archer2
-3. Saved models will be periodically saved in 'checkpoints/'
+* `make install_cirrus`
 
-## Training on Cirrus
-[IMAGE] Cirrus logo?
-1. (Optional) Modify 'src/Config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc.
-2. 
-### CPU:
-make train_cirrus_cpu
-### GPU:
-make train_cirrus_gpu
+Note that **pip** may throw a recommendation to update warning, however this should be <ins>ignored</ins> as the installation script downgrades pip to satisfy specific dependencies.
 
-4. Saved models will be periodically saved in 'checkpoints/'
+## Evaluating a model locally:
+1. `(Optional) Select model in src/Config.py using the 'CHECK_LOAD' parameter.`
+2. `make eval`
+
+## Training on ARCHER2:
+<img src="data/images/archer2_logo.png" alt="drawing" width="200"/>
+
+1. `(Optional) Modify 'src/Config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc.`
+2. `make train_archer2`
+3. `Saved models will be periodically saved in 'checkpoints/'`
+
+## Training on Cirrus:
+<img src="data/images/cirrus_logo.png" alt="drawing" width="200"/>
+
+1. `(Optional) Modify 'src/Config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc.`
+2. <ins>**CPU:**</ins> `make train_cirrus_cpu`
+
+3. `Saved models will be periodically saved in 'checkpoints/'`
 
 ## Running regression tests:
 * `make test`
@@ -49,11 +54,11 @@ make train_cirrus_gpu
 - `data/`
 	* Data from experiment/SLURM runs.
 - `src/`
-	* Config.py
+	* `Config.py`
 		- Central file for project configuration, should allow to modify any desired settings.
-	* Misc.py
+	* `Misc.py`
 		- Miscellaneous and helpers functions.
-	* Parallel.py
+	* `Parallel.py`
 		- Responsible for providing parallel functionality wrappers to the agent policy and hence to be trained on multi-core/gpu systems.
 	* `rl/`
 		- `Approximator.py`
