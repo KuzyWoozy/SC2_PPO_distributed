@@ -21,12 +21,12 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-2390000.chkpt"
+CHECK_LOAD = "checkpoints/MoveToBeacon-55409.chkpt"
 #CHECK_LOAD = None
 CHECK_INTERVAL = 10_000
 
 # Environment
-MINIGAME_NAME = "DefeatZerglingsAndBanelings"
+MINIGAME_NAME = "MoveToBeacon"
 TIMING_EPISODE_DELAY = 2
 TRAJ = 10
 DTYPE = t.float32
@@ -37,17 +37,19 @@ ROOT = 0
 
 
 MAX_NETWORK_UPDATES = None
-MAX_TIME = None
+MAX_TIME = 5
+TIMER_INTERVAL = 1
 
 if MAX_TIME is not None:
     MAX_TIME *= 60
+    TIMER_INTERVAL *= 60
 
 
 # Params for regression test
 SEED = 0
-SYNC = False
+SYNC = True
 GPU = False
-MAX_AGENT_STEPS = 1_500
+MAX_AGENT_STEPS = None
 
 
 

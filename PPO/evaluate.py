@@ -40,7 +40,7 @@ def main(argv):
     environment = StarcraftMinigame(agent, viz = False)
     
     # Begin the training process
-    print("Evaluation score:", evaluate_loop(agent, environment, 300))
+    print("Evaluation score:", evaluate_loop(agent, environment, 100))
    
 
 if __name__ == "__main__":

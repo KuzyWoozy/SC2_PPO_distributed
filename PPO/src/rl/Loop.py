@@ -4,7 +4,7 @@ import torch as t
 import torch.distributed as dist
 
 from src.Parallel import SerialSGD
-from src.Config import MAX_AGENT_STEPS, MAX_NETWORK_UPDATES, MAX_TIME, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
+from src.Config import MAX_AGENT_STEPS, MAX_NETWORK_UPDATES, MAX_TIME, TIMER_INTERVAL, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
 
 
 def network_update(agent, episode_info, terminate):
@@ -83,6 +83,8 @@ def train_loop(agent, env):
     steps = 0
     episodes = 0
     net_updates = 0
+
+    timer_interval = 0
     
     obs_spec, = env.observation_spec()
     act_spec, = env.action_spec()
@@ -133,17 +135,26 @@ def train_loop(agent, env):
                         if SYNC:
                             if dist.get_rank() == ROOT:
                                 agent.save(steps)
-                                dist.destroy_process_group()
                         else:
                             agent.save(steps)
                         return
 
+                    elapsed = (time.time() - start_timer)
                     
-                    if MAX_TIME is not None and (time.time() - start_timer) >= MAX_TIME:
+                        
+                    if MAX_TIME is not None and elapsed >= timer_interval:
+                        timer_interval += TIMER_INTERVAL
+                        
+                        if SYNC:
+                            if dist.get_rank() == ROOT:
+                                with open("output.txt", "a+") as f:
+                                    f.write(f"{elapsed},{evaluate_loop(agent, env)}\n")
+
+                    if MAX_TIME is not None and elapsed >= MAX_TIME:
+                        
                         if SYNC:
                             if dist.get_rank() == ROOT:
                                 agent.save(steps)
-                                dist.destroy_process_group()
                         else:
                             agent.save(steps)
                         
@@ -162,7 +173,6 @@ def train_loop(agent, env):
                         if SYNC:
                             if dist.get_rank() == ROOT:
                                 agent.save(steps)
-                                dist.destroy_process_group()
                         else:
                             agent.save(steps)
 
@@ -185,9 +195,12 @@ def train_loop(agent, env):
         pass
     finally:
         elapsed_time = time.time() - start_timer
-        
-        print("Took %.3f seconds for %s steps" % (
-            elapsed_time, steps))
+
+        if SYNC:
+            if dist.get_rank() == ROOT:
+                print("Took %.3f seconds for %s steps" % (elapsed_time, steps))
+
+                dist.destroy_process_group()
 
 
 

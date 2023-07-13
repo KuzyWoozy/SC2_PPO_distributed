@@ -15,7 +15,6 @@ from src.Misc import module_params_count, verify_config
 
 
 
-
 def init():
     if SEED is not None: 
         if SYNC:
