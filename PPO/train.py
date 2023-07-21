@@ -10,7 +10,7 @@ from src.rl.Approximator import AtariNet, FullyConv
 from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
 from src.Parallel import DistSyncSGD, SerialSGD
-from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, PROCS, CHECK_LOAD, DEBUG, SEED, ATARI_NET
+from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, PROCS, CHECK_LOAD, DEBUG, SEED, ATARI_NET, COMPILE
 from src.Misc import module_params_count, verify_config
 
 
@@ -80,24 +80,13 @@ def main(argv):
         policy = DistSyncSGD(policy, device)
     else:
         policy = SerialSGD(policy, device)
-   
+    
+    if COMPILE:
+        policy = t.compile(policy)
 
     if SYNC:        
-        # An attempt to improve 'bootup' performance, fails to work consistently in practise for larger values
-
-        buff = min(PROCS_PER_NODE, 2)
-
-        for i in range(0, PROCS, buff):
-            for j in range(buff):
-                if dist.get_rank() == i + j:
-                    # Choose agent
-                    agent = MiniStarAgent(policy)
-                    # Choose environment
-                    environment = StarcraftMinigame(agent)
-            dist.barrier()
-
-        for j in range(PROCS % buff):
-            if dist.get_rank() == i + j:
+        for i in range(0, PROCS):
+            if dist.get_rank() == i:
                 # Choose agent
                 agent = MiniStarAgent(policy)
                 # Choose environment

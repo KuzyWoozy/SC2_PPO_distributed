@@ -4,7 +4,7 @@ import torch as t
 import torch.distributed as dist
 
 from src.Parallel import SerialSGD
-from src.Config import MAX_AGENT_STEPS, MAX_NETWORK_UPDATES, MAX_TIME, TIMER_INTERVAL, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE
+from src.Config import MAX_AGENT_STEPS, MAX_NETWORK_UPDATES, MAX_TIME, TIMER_INTERVAL, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE, REWARD_DEATH_SCALE, GPU, AMP
 
 
 def network_update(agent, episode_info, terminate):
@@ -13,14 +13,19 @@ def network_update(agent, episode_info, terminate):
 
     if terminate:
         bootstrap = t.tensor([0.0], dtype = DTYPE, device = agent.policy.device)
-        agent.policy.mc_loss(agent, episode_info, bootstrap).backward()
+        loss = agent.policy.mc_loss(agent, episode_info, bootstrap)
+
+        agent.scaler.scale(loss).backward()
     else:
         _, _, _, _, (bootstrap,) = episode_info[-1]
-        agent.policy.mc_loss(agent, episode_info[:-1], bootstrap).backward()
+        loss = agent.policy.mc_loss(agent, episode_info[:-1], bootstrap)
+
+        agent.scaler.scale(loss).backward()
         
     agent.old_policy.load_state_dict(agent.policy.state_dict())
-    agent.optim.step()
     
+    agent.scaler.step(agent.optim)
+    agent.scaler.update()
 
 
 def evaluate_loop(agent, env, epi = 25):
@@ -34,48 +39,37 @@ def evaluate_loop(agent, env, epi = 25):
 
     start_timer = time.time()
 
-    try:
-        with t.no_grad():
-            for _ in range(epi):
-                timestep_t, = env.reset()
-                episode_steps = 0
-                
-                agent.reset()
-
-                reward = 0
-
-                # Sample a trajectory
-                while True:
-                   
-                    action, func_args_dists, func_args_dists_old, func_args_actions, crit = agent.step(timestep_t)
-                    
-                    timestep_tt, = env.step([action])
-                    
-                    reward += timestep_tt.reward
-
-                    episode_steps += 1           
-                    
-                    if timestep_tt.last():
-                        score += reward
-                        break
-
-                    timestep_t = timestep_tt
-                    
-                    steps += 1
-                
-                episodes += 1 # Completed
+    with t.no_grad():
+        for _ in range(epi):
+            timestep_t, = env.reset()
+            episode_steps = 0
             
-            return score / episodes
+            agent.reset()
 
-    except KeyboardInterrupt:
-        pass
-    finally:
-        elapsed_time = time.time() - start_timer
+            reward = 0
+
+            # Sample a trajectory
+            while True:
+               
+                action, func_args_dists, func_args_dists_old, func_args_actions, crit = agent.step(timestep_t)
+                
+                timestep_tt, = env.step([action])
+                
+                reward += timestep_tt.reward
+
+                episode_steps += 1           
+                
+                if timestep_tt.last():
+                    score += reward
+                    break
+
+                timestep_t = timestep_tt
+                
+                steps += 1
+            
+            episodes += 1 # Completed
         
-        print("Took %.3f seconds for %s steps" % (
-            elapsed_time, steps))
-
-
+        return score / episodes
 
 
 def train_loop(agent, env):
@@ -89,6 +83,7 @@ def train_loop(agent, env):
     obs_spec, = env.observation_spec()
     act_spec, = env.action_spec()
     agent.setup(obs_spec, act_spec)
+    
 
     start_timer = time.time()
 
@@ -109,8 +104,8 @@ def train_loop(agent, env):
            
             # Sample a trajectory
             while True:
-               
-                action, func_args_dists, func_args_dists_old, func_args_actions, crit = agent.step(timestep_t)
+                with t.autocast(device_type = 'cuda' if GPU else 'cpu', dtype = t.float16, enabled = GPU and AMP):
+                    action, func_args_dists, func_args_dists_old, func_args_actions, crit = agent.step(timestep_t)
 
                 timestep_tt, = env.step([action])
                 
@@ -122,6 +117,9 @@ def train_loop(agent, env):
 
 
                 reward = timestep_tt.reward
+
+                if (reward == -1):
+                    reward *= REWARD_DEATH_SCALE
 
                 episode_info.append((t.tensor([reward], dtype = DTYPE, device = agent.policy.device), func_args_dists, func_args_dists_old, func_args_actions, crit))
 
@@ -201,6 +199,7 @@ def train_loop(agent, env):
                 print("Took %.3f seconds for %s steps" % (elapsed_time, steps))
 
                 dist.destroy_process_group()
-
+        else:
+            print("Took %.3f seconds for %s steps" % (elapsed_time, steps))
 
 

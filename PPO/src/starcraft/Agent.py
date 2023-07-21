@@ -6,7 +6,7 @@ from pysc2.agents import base_agent
 from pysc2.lib import actions
 
 from src.Misc import CheckpointManager, categorical_sample
-from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, NUM_ACTIONS, GAMMA_DECAY
+from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, AMP, NUM_ACTIONS, GAMMA_DECAY
 
 
 class MiniStarAgent(base_agent.BaseAgent):
@@ -19,6 +19,8 @@ class MiniStarAgent(base_agent.BaseAgent):
 
         self.optim = t.optim.Adam(policy.parameters(), maximize = False, lr = LEARNING_RATE) 
         self.lr_scheduler = t.optim.lr_scheduler.ExponentialLR(self.optim, GAMMA_DECAY)
+
+        self.scaler = t.cuda.amp.GradScaler(enabled = GPU and AMP)
 
         # Function.ability(451, "Smart_screen", cmd_screen, 1)
         # Function.ui_func(3, "select_rect", select_rect)
