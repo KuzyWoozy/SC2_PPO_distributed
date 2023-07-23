@@ -1,28 +1,25 @@
 #!/bin/bash
 
 #SBATCH --job-name=PPO-sc2-agent
-#SBATCH --time=00:20:00
-#SBATCH --nodes=1
-#SBATCH --tasks-per-node=1
-#SBATCH --cpus-per-task=10
+#SBATCH --time=02:00:00
+#SBATCH --nodes=4
 
 #SBATCH --account=m22oc-s2402307
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:1
-#SBATCH --qos=short
-
+#SBATCH --gres=gpu:4
+#SBATCH --qos=gpu
+#SBATCH --exclusive
 
 module load nvidia/nvhpc/22.11
 
-source ./sc_virt/bin/activate
+source ../sc_virt/bin/activate
 
 # Change to the submission directory
 cd $SLURM_SUBMIT_DIR
-export SC2PATH="${SLURM_SUBMIT_DIR}/SC2.4.9.3/StarCraftII"
-
+export SC2PATH="/work/m22oc/m22oc/s2402307/SC2.4.9.3/StarCraftII"
 # Enforce threading to 1 in case underlying libraries are threaded
 export OMP_NUM_THREADS=1
 
 export MASTER_ADDR=$(scontrol show hostname ${SLURM_NODELIST} | head -n 1)
 
-srun torchrun --nnodes=1 --nproc_per_node=$SLURM_CPUS_PER_TASK --rdzv_id=100 --rdzv_backend=c10d --rdzv_endpoint=$MASTER_ADDR:29400 train.py
+srun --ntasks=$SLURM_JOB_NUM_NODES --tasks-per-node=1 torchrun --nnodes=$SLURM_JOB_NUM_NODES --nproc_per_node=4 --rdzv_id=100 --rdzv_backend=c10d --rdzv_endpoint=$MASTER_ADDR:29400 train.py

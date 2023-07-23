@@ -4,7 +4,7 @@ import os
 
 DEBUG = False
 
-ATARI_NET = True
+ATARI_NET = False
 
 # Hyperparam
 LEARNING_RATE = 1e-4
@@ -21,8 +21,8 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-1350000.chkpt"
-#CHECK_LOAD = None
+#CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-1350000.chkpt"
+CHECK_LOAD = None
 CHECK_INTERVAL = 10_000
 
 # Environment
@@ -50,8 +50,9 @@ if MAX_TIME is not None:
 SEED = 0
 SYNC = True
 GPU = True
-AMP = True
-COMPILE = True
+CUDA_GRAPHS = False
+AMP = False
+COMPILE = False
 MAX_AGENT_STEPS = None
 
 
@@ -62,3 +63,5 @@ if SYNC:
 else:
     PROCS_PER_NODE = 1
     PROCS = 1
+
+CUDA_GRAPHS = GPU and CUDA_GRAPHS

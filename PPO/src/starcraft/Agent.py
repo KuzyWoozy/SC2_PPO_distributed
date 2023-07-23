@@ -99,11 +99,11 @@ class MiniStarAgent(base_agent.BaseAgent):
         actor_prob_masked_norm_old = actor_prob_masked_old - actor_prob_masked_old.logsumexp(dim=-1, keepdim=True)
 
         args, args_probs, args_probs_old, args_flat = self.policy.sample_args(function_id, *policy_distributions[1:-1], *policy_distributions_old[1:-1])
-
+        
         args_probs.insert(0, actor_prob_masked_norm)
         args_probs_old.insert(0, actor_prob_masked_norm_old)
         args_flat.insert(0, actor_choice)
-        
+
         return actions.FunctionCall(function_id, args), args_probs, args_probs_old, args_flat, policy_distributions[-1]
 
     

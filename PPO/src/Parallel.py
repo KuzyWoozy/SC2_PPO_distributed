@@ -4,7 +4,7 @@ import copy
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from src.Config import GAMMA, PPO_CLIP, DTYPE, GPU, ENTROPY, VALUE_COEFF
+from src.Config import GAMMA, PPO_CLIP, DTYPE, GPU, CUDA_GRAPHS, ENTROPY, VALUE_COEFF
 
 
 
@@ -53,7 +53,7 @@ class SerialSGD(t.nn.Module):
         
         policy_ser = policy_ser.to(dtype = DTYPE, device = device)
 
-        if GPU:
+        if CUDA_GRAPHS:
             policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 5, 64, 64), dtype = DTYPE, device = device),))
 
         self.policy = MonteCarlo(policy_ser, device)
@@ -83,9 +83,15 @@ class DistSyncSGD(t.nn.Module):
         policy_ser = policy_ser.to(dtype = DTYPE, device = device)
 
         if GPU:
-            self.policy = DDP(MonteCarlo(policy_ser, device), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [device])
+            if CUDA_GRAPHS:
+                policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 5, 64, 64), dtype = DTYPE, device = device),))
+            mc = MonteCarlo(policy_ser, device)
+            mc = mc.to(dtype = DTYPE, device = device)
+            self.policy = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [device])
         else:
-            self.policy = DDP(MonteCarlo(policy_ser, device), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
+            mc = MonteCarlo(policy_ser, device)
+            mc = mc.to(dtype = DTYPE, device = device)
+            self.policy = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
         
         self.device = device
 

@@ -104,7 +104,7 @@ def train_loop(agent, env):
            
             # Sample a trajectory
             while True:
-                with t.autocast(device_type = 'cuda' if GPU else 'cpu', dtype = t.float16, enabled = GPU and AMP):
+                with t.autocast(device_type = 'cuda' if GPU else 'cpu', dtype = t.float16 if GPU else t.bfloat16, enabled = GPU and AMP):
                     action, func_args_dists, func_args_dists_old, func_args_actions, crit = agent.step(timestep_t)
 
                 timestep_tt, = env.step([action])

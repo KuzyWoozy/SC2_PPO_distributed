@@ -13,4 +13,4 @@ source sc_virt/bin/activate
 python -m pip install --upgrade pip==22.0.4
 python -m pip install setuptools
 python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 --no-cache-dir
-python -m pip install -r data/requirements.txt
+python -m pip install -r scripts/requirements.txt
