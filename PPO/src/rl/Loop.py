@@ -4,7 +4,7 @@ import torch as t
 import torch.distributed as dist
 
 from src.Parallel import SerialSGD
-from src.Config import MAX_AGENT_STEPS, MAX_NETWORK_UPDATES, MAX_TIME, TIMER_INTERVAL, ROOT, SYNC, DTYPE, TIMING_EPISODE_DELAY, TRAJ, PROFILE, REWARD_DEATH_SCALE, GPU, AMP
+from src.Config import MAX_AGENT_STEPS, MAX_NETWORK_UPDATES, MAX_TIME, TIMER_INTERVAL, ROOT, SYNC, TIMING_EPISODE_DELAY, TRAJ, PROFILE, REWARD_DEATH_SCALE, GPU, AMP
 
 
 def network_update(agent, episode_info, terminate):
@@ -12,7 +12,7 @@ def network_update(agent, episode_info, terminate):
     agent.optim.zero_grad()
 
     if terminate:
-        bootstrap = t.tensor([0.0], dtype = DTYPE, device = agent.policy.device)
+        bootstrap = t.tensor([0.0], device = agent.policy.device)
         loss = agent.policy.mc_loss(agent, episode_info, bootstrap)
 
         agent.scaler.scale(loss).backward()
@@ -121,7 +121,7 @@ def train_loop(agent, env):
                 if (reward == -1):
                     reward *= REWARD_DEATH_SCALE
 
-                episode_info.append((t.tensor([reward], dtype = DTYPE, device = agent.policy.device), func_args_dists, func_args_dists_old, func_args_actions, crit))
+                episode_info.append((t.tensor([reward], device = agent.policy.device), func_args_dists, func_args_dists_old, func_args_actions, crit))
 
                 episode_steps += 1           
                 if (episode_steps % TRAJ == 0) or (terminate := timestep_tt.last()):                    

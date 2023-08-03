@@ -12,7 +12,7 @@
 
 module load nvidia/nvhpc/22.11
 
-source ../sc_virt/bin/activate
+source ./sc_virt/bin/activate
 
 # Change to the submission directory
 cd $SLURM_SUBMIT_DIR

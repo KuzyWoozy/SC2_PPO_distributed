@@ -6,7 +6,7 @@ from pysc2.agents import base_agent
 from pysc2.lib import actions
 
 from src.Misc import CheckpointManager, categorical_sample
-from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, DTYPE, CHECK_LOAD, GPU, AMP, NUM_ACTIONS, GAMMA_DECAY
+from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, CHECK_LOAD, GPU, AMP, NUM_ACTIONS, LR_DECAY
 
 
 class MiniStarAgent(base_agent.BaseAgent):
@@ -18,7 +18,7 @@ class MiniStarAgent(base_agent.BaseAgent):
         self.old_policy = copy.deepcopy(policy).requires_grad_(False)
 
         self.optim = t.optim.Adam(policy.parameters(), maximize = False, lr = LEARNING_RATE) 
-        self.lr_scheduler = t.optim.lr_scheduler.ExponentialLR(self.optim, GAMMA_DECAY)
+        self.lr_scheduler = t.optim.lr_scheduler.ExponentialLR(self.optim, LR_DECAY)
 
         self.scaler = t.cuda.amp.GradScaler(enabled = GPU and AMP)
 
@@ -46,7 +46,7 @@ class MiniStarAgent(base_agent.BaseAgent):
         
         if CHECK_LOAD:
             self.optim.load_state_dict(t.load(CHECK_LOAD)["optim"])
-            self.lr_scheduler.load_state_dict(t.load(CHECK_LOAD)["lr_scheduler"])
+            #self.lr_scheduler.load_state_dict(t.load(CHECK_LOAD)["lr_scheduler"])
 
     def obs_to_state(self, obs):
         
@@ -64,7 +64,7 @@ class MiniStarAgent(base_agent.BaseAgent):
                 #obs.observation.feature_minimap.player_relative / 4,
                 #obs.observation.feature_minimap.selected
 
-                ), axis = 0), 0)).type(DTYPE)
+                ), axis = 0), 0)).float()
 
         if GPU:
             state = state.to(device = self.policy.device)
@@ -77,10 +77,10 @@ class MiniStarAgent(base_agent.BaseAgent):
         
         state = self.obs_to_state(obs)
         
-        mask = t.zeros((1, NUM_ACTIONS), dtype = DTYPE, device = t.device("cpu"))
+        mask = t.zeros((1, NUM_ACTIONS), device = t.device("cpu"))
         mask[:, [self.function2policy[act] for act in obs.observation.available_actions if act in self.function2policy]] = 1.0
 
-        mask = mask.to(dtype = DTYPE, device = self.policy.device)
+        mask = mask.to(device = self.policy.device)
 
         policy_distributions = self.policy(state)
         policy_distributions_old = self.old_policy(state)
@@ -89,7 +89,7 @@ class MiniStarAgent(base_agent.BaseAgent):
         
         actor_prob_masked_norm = actor_prob_masked - actor_prob_masked.logsumexp(dim=-1, keepdim=True)
 
-        actor_prob_masked_norm_cpu = actor_prob_masked_norm.to(dtype = DTYPE, device = t.device("cpu"))
+        actor_prob_masked_norm_cpu = actor_prob_masked_norm.to(device = t.device("cpu"))
         actor_choice = categorical_sample(actor_prob_masked_norm_cpu)
         function_id = self.policy2function[actor_choice]
 

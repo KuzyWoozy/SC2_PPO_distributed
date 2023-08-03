@@ -1,6 +1,6 @@
 import torch as t
 
-from src.Config import NN_HIDDEN_LAYER, NUM_ACTIONS, DTYPE
+from src.Config import NN_HIDDEN_LAYER, NUM_ACTIONS
 from src.Misc import categorical_sample
 
 class AtariNet(t.nn.Module):
@@ -44,8 +44,8 @@ class AtariNet(t.nn.Module):
 
         # Smart_screen
         if func_id == 451:
-            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            x1_prob_cpu = x1_prob.to(device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(device = t.device("cpu"))
 
             x1_choice = categorical_sample(x1_prob_cpu)
             y1_choice = categorical_sample(y1_prob_cpu)
@@ -54,10 +54,10 @@ class AtariNet(t.nn.Module):
 
         # Select_rect
         elif func_id == 3:
-            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            x2_prob_cpu = x2_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            y2_prob_cpu = y2_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            x1_prob_cpu = x1_prob.to(device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(device = t.device("cpu"))
+            x2_prob_cpu = x2_prob.to(device = t.device("cpu"))
+            y2_prob_cpu = y2_prob.to(device = t.device("cpu"))
 
 
             x1_choice = categorical_sample(x1_prob_cpu)
@@ -70,8 +70,8 @@ class AtariNet(t.nn.Module):
 
         # Select_control_group
         elif func_id == 4:
-            cg_act_prob_cpu = cg_act_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            cg_id_prob_cpu = cg_id_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            cg_act_prob_cpu = cg_act_prob.to(device = t.device("cpu"))
+            cg_id_prob_cpu = cg_id_prob.to(device = t.device("cpu"))
 
             cg_act_choice = categorical_sample(cg_act_prob_cpu) 
             cg_id_choice = categorical_sample(cg_id_prob_cpu)
@@ -84,9 +84,9 @@ class AtariNet(t.nn.Module):
 
         # Select_point
         elif func_id == 2:
-            point_add_prob_cpu = point_add_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            x1_prob_cpu = x1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            y1_prob_cpu = y1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            point_add_prob_cpu = point_add_prob.to(device = t.device("cpu"))
+            x1_prob_cpu = x1_prob.to(device = t.device("cpu"))
+            y1_prob_cpu = y1_prob.to(device = t.device("cpu"))
 
             point_add_choice = categorical_sample(point_add_prob_cpu)
             x1_choice = categorical_sample(x1_prob_cpu)
@@ -100,7 +100,7 @@ class AtariNet(t.nn.Module):
 
         # Select army
         elif func_id == 7:
-            army_add_prob_cpu = army_add_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            army_add_prob_cpu = army_add_prob.to(device = t.device("cpu"))
             
             army_add_choice = categorical_sample(army_add_prob_cpu)
             return [[army_add_choice]], [army_add_prob], [army_add_prob_old], [army_add_choice]
@@ -151,7 +151,7 @@ class FullyConv(t.nn.Module):
 
         # Smart_screen
         if func_id == 451:
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            coords1_prob_cpu = coords1_prob.to(device = t.device("cpu"))
             
             coords1_choice = categorical_sample(coords1_prob_cpu)
             
@@ -163,8 +163,8 @@ class FullyConv(t.nn.Module):
         # Select_rect
         elif func_id == 3:
             
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            coords2_prob_cpu = coords2_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            coords1_prob_cpu = coords1_prob.to(device = t.device("cpu"))
+            coords2_prob_cpu = coords2_prob.to(device = t.device("cpu"))
 
             coords1_choice = categorical_sample(coords1_prob_cpu)
             coords2_choice = categorical_sample(coords2_prob_cpu)
@@ -180,8 +180,8 @@ class FullyConv(t.nn.Module):
 
         # Select_control_group
         elif func_id == 4:
-            cg_act_prob_cpu = cg_act_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            cg_id_prob_cpu = cg_id_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            cg_act_prob_cpu = cg_act_prob.to(device = t.device("cpu"))
+            cg_id_prob_cpu = cg_id_prob.to(device = t.device("cpu"))
 
             cg_act_choice = categorical_sample(cg_act_prob_cpu) 
             cg_id_choice = categorical_sample(cg_id_prob_cpu)
@@ -194,8 +194,8 @@ class FullyConv(t.nn.Module):
 
         # Select_point
         elif func_id == 2:
-            point_add_prob_cpu = point_add_prob.to(dtype = DTYPE, device = t.device("cpu"))
-            coords1_prob_cpu = coords1_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            point_add_prob_cpu = point_add_prob.to(device = t.device("cpu"))
+            coords1_prob_cpu = coords1_prob.to(device = t.device("cpu"))
 
             point_add_choice = categorical_sample(point_add_prob_cpu)
             coords1_choice = categorical_sample(coords1_prob_cpu)
@@ -211,7 +211,7 @@ class FullyConv(t.nn.Module):
 
         # Select army
         elif func_id == 7:
-            army_add_prob_cpu = army_add_prob.to(dtype = DTYPE, device = t.device("cpu"))
+            army_add_prob_cpu = army_add_prob.to(device = t.device("cpu"))
             
             army_add_choice = categorical_sample(army_add_prob_cpu)
 

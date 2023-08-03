@@ -4,11 +4,11 @@ import os
 
 DEBUG = False
 
-ATARI_NET = False
+ATARI_NET = True
 
 # Hyperparam
 LEARNING_RATE = 1e-4
-GAMMA_DECAY = 0.9999
+LR_DECAY = 0.9999
 
 
 GAMMA = 0.99
@@ -21,15 +21,14 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-#CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-1350000.chkpt"
-CHECK_LOAD = None
+CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-2390000.chkpt"
+#CHECK_LOAD = None
 CHECK_INTERVAL = 10_000
 
 # Environment
 MINIGAME_NAME = "DefeatZerglingsAndBanelings"
 TIMING_EPISODE_DELAY = 2
 TRAJ = 10
-DTYPE = t.float32
 
 # Distributed
 PROFILE = False
@@ -47,9 +46,9 @@ if MAX_TIME is not None:
 
 
 # Params for regression test
-SEED = 0
-SYNC = True
-GPU = True
+SEED = 5
+SYNC = False
+GPU = False
 CUDA_GRAPHS = False
 AMP = False
 COMPILE = False

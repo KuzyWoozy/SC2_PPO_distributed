@@ -10,7 +10,7 @@ from src.rl.Approximator import AtariNet, FullyConv
 from src.starcraft.Agent import MiniStarAgent
 from src.starcraft.Environment import StarcraftMinigame
 from src.Parallel import DistSyncSGD, SerialSGD
-from src.Config import SYNC, GPU, DTYPE, PROCS_PER_NODE, PROCS, CHECK_LOAD, DEBUG, SEED, ATARI_NET, COMPILE
+from src.Config import SYNC, GPU, PROCS_PER_NODE, PROCS, CHECK_LOAD, DEBUG, SEED, ATARI_NET, COMPILE
 from src.Misc import module_params_count, verify_config
 
 
@@ -35,11 +35,9 @@ def init():
         t.autograd.set_detect_anomaly(True, check_nan=True)
         if GPU:
             t.cuda.set_sync_debug_mode(1) # Objectively best flag to ever be implemented in a library
-
-    t.set_default_dtype(DTYPE)
-
-
-
+    
+    t.set_default_dtype(t.float32)
+    
 def main(argv):
 
     verify_config()
@@ -73,7 +71,7 @@ def main(argv):
         
     if CHECK_LOAD:
         policy.load_state_dict(t.load(CHECK_LOAD)["policy"])
-
+    
     
     # Apply a parallel enabling wrapper to policy
     if SYNC:
