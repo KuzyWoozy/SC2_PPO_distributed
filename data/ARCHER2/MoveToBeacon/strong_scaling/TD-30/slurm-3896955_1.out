@@ -1,0 +1,1342 @@
+master_addr is only used for static rdzv_backend and when rdzv_endpoint is not specified.
+pygame 2.3.0 (SDL 2.24.2, Python 3.9.13)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+I0710 18:27:41.014145 22456633404288 distributed_c10d.py:442] Added key: store_based_barrier_key:1 to store for rank: 0
+I0710 18:27:41.014527 22456633404288 distributed_c10d.py:476] Rank 0: Completed store-based barrier for key:store_based_barrier_key:1 with 1 nodes.
+I0710 18:27:41.220231 22456633404288 sc_process.py:130] Launching SC2: /work/m22oc/m22oc/s2402307/StarCraftII/Versions/Base75025/SC2_x64 -listen 127.0.0.1 -port 33267 -dataDir /work/m22oc/m22oc/s2402307/StarCraftII/ -tempDir /tmp/sc-re90y6zx/
+I0710 18:27:41.285333 22456633404288 remote_controller.py:162] Connecting to: ws://127.0.0.1:33267/sc2api, attempt: 0, running: True
+Version: B75025 (SC2.4.9.c)
+Build: Apr 15 2020 17:25:27
+Command Line: '"/work/m22oc/m22oc/s2402307/StarCraftII/Versions/Base75025/SC2_x64" -listen 127.0.0.1 -port 33267 -dataDir /work/m22oc/m22oc/s2402307/StarCraftII/ -tempDir /tmp/sc-re90y6zx/'
+Starting up...
+Startup Phase 1 complete
+I0710 18:27:42.289328 22456633404288 remote_controller.py:162] Connecting to: ws://127.0.0.1:33267/sc2api, attempt: 1, running: True
+I0710 18:27:43.290687 22456633404288 remote_controller.py:162] Connecting to: ws://127.0.0.1:33267/sc2api, attempt: 2, running: True
+Startup Phase 2 complete
+Creating stub renderer...
+I0710 18:27:44.292055 22456633404288 remote_controller.py:162] Connecting to: ws://127.0.0.1:33267/sc2api, attempt: 3, running: True
+Listening on: 127.0.0.1:33267
+Startup Phase 3 complete. Ready for commands.
+I0710 18:27:45.293431 22456633404288 remote_controller.py:162] Connecting to: ws://127.0.0.1:33267/sc2api, attempt: 4, running: True
+ConnectHandler: Request from 127.0.0.1:36998 accepted
+ReadyHandler: 127.0.0.1:36998 ready
+Requesting to join a single player game
+Configuring interface options
+Configure: raw interface disabled
+Configure: feature layer interface enabled
+Configure: score interface enabled
+Configure: render interface disabled
+Launching next game.
+Next launch phase started: 2
+Next launch phase started: 3
+Next launch phase started: 4
+Next launch phase started: 5
+Next launch phase started: 6
+Next launch phase started: 7
+Next launch phase started: 8
+Game has started.
+Using default stable ids, none found at: /work/m22oc/m22oc/s2402307/StarCraftII/stableid.json
+Successfully loaded stable ids: GameData\stableid.json
+Sending ResponseJoinGame
+I0710 18:27:52.863523 22456633404288 sc2_env.py:288] Environment is ready
+I0710 18:27:52.866052 22456633404288 sc2_env.py:493] Starting episode 1: [terran] on MoveToBeacon
+[W reducer.cpp:1300] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+I0710 18:27:55.498819 22456633404288 sc2_env.py:710] Episode 1 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:27:55.584724 22456633404288 sc2_env.py:493] Starting episode 2: [terran] on MoveToBeacon
+I0710 18:27:57.670660 22456633404288 sc2_env.py:710] Episode 2 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:27:57.690975 22456633404288 sc2_env.py:493] Starting episode 3: [terran] on MoveToBeacon
+I0710 18:27:59.722386 22456633404288 sc2_env.py:710] Episode 3 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:27:59.802747 22456633404288 sc2_env.py:493] Starting episode 4: [terran] on MoveToBeacon
+I0710 18:28:01.962691 22456633404288 sc2_env.py:710] Episode 4 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:01.982651 22456633404288 sc2_env.py:493] Starting episode 5: [terran] on MoveToBeacon
+I0710 18:28:04.226148 22456633404288 sc2_env.py:710] Episode 5 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:04.310792 22456633404288 sc2_env.py:493] Starting episode 6: [terran] on MoveToBeacon
+I0710 18:28:06.475342 22456633404288 sc2_env.py:710] Episode 6 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:06.496376 22456633404288 sc2_env.py:493] Starting episode 7: [terran] on MoveToBeacon
+I0710 18:28:08.706569 22456633404288 sc2_env.py:710] Episode 7 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:08.786329 22456633404288 sc2_env.py:493] Starting episode 8: [terran] on MoveToBeacon
+I0710 18:28:11.030493 22456633404288 sc2_env.py:710] Episode 8 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:11.052738 22456633404288 sc2_env.py:493] Starting episode 9: [terran] on MoveToBeacon
+I0710 18:28:13.271055 22456633404288 sc2_env.py:710] Episode 9 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:13.351901 22456633404288 sc2_env.py:493] Starting episode 10: [terran] on MoveToBeacon
+I0710 18:28:15.566529 22456633404288 sc2_env.py:710] Episode 10 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:28:15.589875 22456633404288 sc2_env.py:493] Starting episode 11: [terran] on MoveToBeacon
+I0710 18:28:17.714922 22456633404288 sc2_env.py:710] Episode 11 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:17.790533 22456633404288 sc2_env.py:493] Starting episode 12: [terran] on MoveToBeacon
+I0710 18:28:20.009739 22456633404288 sc2_env.py:710] Episode 12 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:20.031738 22456633404288 sc2_env.py:493] Starting episode 13: [terran] on MoveToBeacon
+I0710 18:28:22.208084 22456633404288 sc2_env.py:710] Episode 13 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:28:22.281117 22456633404288 sc2_env.py:493] Starting episode 14: [terran] on MoveToBeacon
+I0710 18:28:24.432976 22456633404288 sc2_env.py:710] Episode 14 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:24.453719 22456633404288 sc2_env.py:493] Starting episode 15: [terran] on MoveToBeacon
+I0710 18:28:26.647570 22456633404288 sc2_env.py:710] Episode 15 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:26.727884 22456633404288 sc2_env.py:493] Starting episode 16: [terran] on MoveToBeacon
+I0710 18:28:28.928093 22456633404288 sc2_env.py:710] Episode 16 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:28.950753 22456633404288 sc2_env.py:493] Starting episode 17: [terran] on MoveToBeacon
+I0710 18:28:31.169205 22456633404288 sc2_env.py:710] Episode 17 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:31.249635 22456633404288 sc2_env.py:493] Starting episode 18: [terran] on MoveToBeacon
+I0710 18:28:33.578155 22456633404288 sc2_env.py:710] Episode 18 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:33.599044 22456633404288 sc2_env.py:493] Starting episode 19: [terran] on MoveToBeacon
+I0710 18:28:35.808830 22456633404288 sc2_env.py:710] Episode 19 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:28:35.884115 22456633404288 sc2_env.py:493] Starting episode 20: [terran] on MoveToBeacon
+I0710 18:28:38.213003 22456633404288 sc2_env.py:710] Episode 20 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:38.235720 22456633404288 sc2_env.py:493] Starting episode 21: [terran] on MoveToBeacon
+I0710 18:28:40.474900 22456633404288 sc2_env.py:710] Episode 21 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:28:40.556334 22456633404288 sc2_env.py:493] Starting episode 22: [terran] on MoveToBeacon
+I0710 18:28:42.832618 22456633404288 sc2_env.py:710] Episode 22 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:42.853404 22456633404288 sc2_env.py:493] Starting episode 23: [terran] on MoveToBeacon
+I0710 18:28:45.133908 22456633404288 sc2_env.py:710] Episode 23 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:45.221125 22456633404288 sc2_env.py:493] Starting episode 24: [terran] on MoveToBeacon
+I0710 18:28:47.570375 22456633404288 sc2_env.py:710] Episode 24 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:28:47.591147 22456633404288 sc2_env.py:493] Starting episode 25: [terran] on MoveToBeacon
+I0710 18:28:49.831118 22456633404288 sc2_env.py:710] Episode 25 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:49.913770 22456633404288 sc2_env.py:493] Starting episode 26: [terran] on MoveToBeacon
+I0710 18:28:52.305442 22456633404288 sc2_env.py:710] Episode 26 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:52.328098 22456633404288 sc2_env.py:493] Starting episode 27: [terran] on MoveToBeacon
+I0710 18:28:54.656829 22456633404288 sc2_env.py:710] Episode 27 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:28:54.744024 22456633404288 sc2_env.py:493] Starting episode 28: [terran] on MoveToBeacon
+I0710 18:28:57.096753 22456633404288 sc2_env.py:710] Episode 28 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:57.120061 22456633404288 sc2_env.py:493] Starting episode 29: [terran] on MoveToBeacon
+I0710 18:28:59.402581 22456633404288 sc2_env.py:710] Episode 29 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:28:59.490728 22456633404288 sc2_env.py:493] Starting episode 30: [terran] on MoveToBeacon
+I0710 18:29:01.845451 22456633404288 sc2_env.py:710] Episode 30 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:01.868885 22456633404288 sc2_env.py:493] Starting episode 31: [terran] on MoveToBeacon
+I0710 18:29:04.032393 22456633404288 sc2_env.py:710] Episode 31 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:04.109701 22456633404288 sc2_env.py:493] Starting episode 32: [terran] on MoveToBeacon
+I0710 18:29:06.564060 22456633404288 sc2_env.py:710] Episode 32 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:06.586178 22456633404288 sc2_env.py:493] Starting episode 33: [terran] on MoveToBeacon
+I0710 18:29:08.952480 22456633404288 sc2_env.py:710] Episode 33 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:09.039258 22456633404288 sc2_env.py:493] Starting episode 34: [terran] on MoveToBeacon
+I0710 18:29:11.466965 22456633404288 sc2_env.py:710] Episode 34 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:29:11.487758 22456633404288 sc2_env.py:493] Starting episode 35: [terran] on MoveToBeacon
+I0710 18:29:13.807578 22456633404288 sc2_env.py:710] Episode 35 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:13.897790 22456633404288 sc2_env.py:493] Starting episode 36: [terran] on MoveToBeacon
+I0710 18:29:16.262593 22456633404288 sc2_env.py:710] Episode 36 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:29:16.283357 22456633404288 sc2_env.py:493] Starting episode 37: [terran] on MoveToBeacon
+I0710 18:29:18.540970 22456633404288 sc2_env.py:710] Episode 37 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:18.626299 22456633404288 sc2_env.py:493] Starting episode 38: [terran] on MoveToBeacon
+I0710 18:29:21.054866 22456633404288 sc2_env.py:710] Episode 38 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:21.078190 22456633404288 sc2_env.py:493] Starting episode 39: [terran] on MoveToBeacon
+I0710 18:29:23.321731 22456633404288 sc2_env.py:710] Episode 39 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:23.402789 22456633404288 sc2_env.py:493] Starting episode 40: [terran] on MoveToBeacon
+I0710 18:29:25.764821 22456633404288 sc2_env.py:710] Episode 40 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:29:25.786224 22456633404288 sc2_env.py:493] Starting episode 41: [terran] on MoveToBeacon
+I0710 18:29:28.046202 22456633404288 sc2_env.py:710] Episode 41 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:28.128374 22456633404288 sc2_env.py:493] Starting episode 42: [terran] on MoveToBeacon
+I0710 18:29:30.552587 22456633404288 sc2_env.py:710] Episode 42 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:30.574690 22456633404288 sc2_env.py:493] Starting episode 43: [terran] on MoveToBeacon
+I0710 18:29:32.899671 22456633404288 sc2_env.py:710] Episode 43 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:32.982503 22456633404288 sc2_env.py:493] Starting episode 44: [terran] on MoveToBeacon
+I0710 18:29:35.331954 22456633404288 sc2_env.py:710] Episode 44 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:35.352654 22456633404288 sc2_env.py:493] Starting episode 45: [terran] on MoveToBeacon
+I0710 18:29:37.618042 22456633404288 sc2_env.py:710] Episode 45 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:29:37.702016 22456633404288 sc2_env.py:493] Starting episode 46: [terran] on MoveToBeacon
+I0710 18:29:40.077033 22456633404288 sc2_env.py:710] Episode 46 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:29:40.097835 22456633404288 sc2_env.py:493] Starting episode 47: [terran] on MoveToBeacon
+I0710 18:29:42.372783 22456633404288 sc2_env.py:710] Episode 47 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:42.458943 22456633404288 sc2_env.py:493] Starting episode 48: [terran] on MoveToBeacon
+I0710 18:29:44.898792 22456633404288 sc2_env.py:710] Episode 48 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:44.920831 22456633404288 sc2_env.py:493] Starting episode 49: [terran] on MoveToBeacon
+I0710 18:29:47.241373 22456633404288 sc2_env.py:710] Episode 49 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:47.325676 22456633404288 sc2_env.py:493] Starting episode 50: [terran] on MoveToBeacon
+I0710 18:29:49.734074 22456633404288 sc2_env.py:710] Episode 50 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:49.755444 22456633404288 sc2_env.py:493] Starting episode 51: [terran] on MoveToBeacon
+I0710 18:29:52.077500 22456633404288 sc2_env.py:710] Episode 51 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:29:52.162630 22456633404288 sc2_env.py:493] Starting episode 52: [terran] on MoveToBeacon
+I0710 18:29:54.602472 22456633404288 sc2_env.py:710] Episode 52 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:54.624611 22456633404288 sc2_env.py:493] Starting episode 53: [terran] on MoveToBeacon
+I0710 18:29:56.995015 22456633404288 sc2_env.py:710] Episode 53 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:57.081018 22456633404288 sc2_env.py:493] Starting episode 54: [terran] on MoveToBeacon
+I0710 18:29:59.471311 22456633404288 sc2_env.py:710] Episode 54 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:29:59.492161 22456633404288 sc2_env.py:493] Starting episode 55: [terran] on MoveToBeacon
+I0710 18:30:01.781885 22456633404288 sc2_env.py:710] Episode 55 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:30:01.866536 22456633404288 sc2_env.py:493] Starting episode 56: [terran] on MoveToBeacon
+I0710 18:30:04.228326 22456633404288 sc2_env.py:710] Episode 56 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:04.250291 22456633404288 sc2_env.py:493] Starting episode 57: [terran] on MoveToBeacon
+I0710 18:30:06.588338 22456633404288 sc2_env.py:710] Episode 57 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:30:06.668358 22456633404288 sc2_env.py:493] Starting episode 58: [terran] on MoveToBeacon
+I0710 18:30:09.065436 22456633404288 sc2_env.py:710] Episode 58 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:09.087569 22456633404288 sc2_env.py:493] Starting episode 59: [terran] on MoveToBeacon
+I0710 18:30:11.397943 22456633404288 sc2_env.py:710] Episode 59 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:11.481142 22456633404288 sc2_env.py:493] Starting episode 60: [terran] on MoveToBeacon
+I0710 18:30:13.796857 22456633404288 sc2_env.py:710] Episode 60 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:13.818845 22456633404288 sc2_env.py:493] Starting episode 61: [terran] on MoveToBeacon
+I0710 18:30:16.112781 22456633404288 sc2_env.py:710] Episode 61 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:30:16.193289 22456633404288 sc2_env.py:493] Starting episode 62: [terran] on MoveToBeacon
+I0710 18:30:18.621571 22456633404288 sc2_env.py:710] Episode 62 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:18.644250 22456633404288 sc2_env.py:493] Starting episode 63: [terran] on MoveToBeacon
+I0710 18:30:21.000017 22456633404288 sc2_env.py:710] Episode 63 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:21.081717 22456633404288 sc2_env.py:493] Starting episode 64: [terran] on MoveToBeacon
+I0710 18:30:23.432937 22456633404288 sc2_env.py:710] Episode 64 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:23.454321 22456633404288 sc2_env.py:493] Starting episode 65: [terran] on MoveToBeacon
+I0710 18:30:25.775320 22456633404288 sc2_env.py:710] Episode 65 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:30:25.857067 22456633404288 sc2_env.py:493] Starting episode 66: [terran] on MoveToBeacon
+I0710 18:30:28.230332 22456633404288 sc2_env.py:710] Episode 66 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:28.251801 22456633404288 sc2_env.py:493] Starting episode 67: [terran] on MoveToBeacon
+I0710 18:30:30.574412 22456633404288 sc2_env.py:710] Episode 67 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:30.660279 22456633404288 sc2_env.py:493] Starting episode 68: [terran] on MoveToBeacon
+I0710 18:30:33.073908 22456633404288 sc2_env.py:710] Episode 68 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:33.097284 22456633404288 sc2_env.py:493] Starting episode 69: [terran] on MoveToBeacon
+I0710 18:30:35.452227 22456633404288 sc2_env.py:710] Episode 69 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:35.542848 22456633404288 sc2_env.py:493] Starting episode 70: [terran] on MoveToBeacon
+I0710 18:30:37.954605 22456633404288 sc2_env.py:710] Episode 70 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:37.977905 22456633404288 sc2_env.py:493] Starting episode 71: [terran] on MoveToBeacon
+I0710 18:30:40.307554 22456633404288 sc2_env.py:710] Episode 71 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:30:40.399414 22456633404288 sc2_env.py:493] Starting episode 72: [terran] on MoveToBeacon
+I0710 18:30:42.799457 22456633404288 sc2_env.py:710] Episode 72 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:42.820180 22456633404288 sc2_env.py:493] Starting episode 73: [terran] on MoveToBeacon
+I0710 18:30:45.176823 22456633404288 sc2_env.py:710] Episode 73 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:45.258769 22456633404288 sc2_env.py:493] Starting episode 74: [terran] on MoveToBeacon
+I0710 18:30:47.627444 22456633404288 sc2_env.py:710] Episode 74 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:30:47.648190 22456633404288 sc2_env.py:493] Starting episode 75: [terran] on MoveToBeacon
+I0710 18:30:49.933654 22456633404288 sc2_env.py:710] Episode 75 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:50.016009 22456633404288 sc2_env.py:493] Starting episode 76: [terran] on MoveToBeacon
+I0710 18:30:52.372137 22456633404288 sc2_env.py:710] Episode 76 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:52.393524 22456633404288 sc2_env.py:493] Starting episode 77: [terran] on MoveToBeacon
+I0710 18:30:54.691245 22456633404288 sc2_env.py:710] Episode 77 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:54.778699 22456633404288 sc2_env.py:493] Starting episode 78: [terran] on MoveToBeacon
+I0710 18:30:57.151216 22456633404288 sc2_env.py:710] Episode 78 finished after 1920 game steps. Outcome: [1], reward: [0], score: [3]
+Game has started.
+I0710 18:30:57.171895 22456633404288 sc2_env.py:493] Starting episode 79: [terran] on MoveToBeacon
+I0710 18:30:59.464160 22456633404288 sc2_env.py:710] Episode 79 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:30:59.547184 22456633404288 sc2_env.py:493] Starting episode 80: [terran] on MoveToBeacon
+I0710 18:31:01.899652 22456633404288 sc2_env.py:710] Episode 80 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:01.921001 22456633404288 sc2_env.py:493] Starting episode 81: [terran] on MoveToBeacon
+I0710 18:31:04.182386 22456633404288 sc2_env.py:710] Episode 81 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:04.264139 22456633404288 sc2_env.py:493] Starting episode 82: [terran] on MoveToBeacon
+I0710 18:31:06.610952 22456633404288 sc2_env.py:710] Episode 82 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:31:06.633020 22456633404288 sc2_env.py:493] Starting episode 83: [terran] on MoveToBeacon
+I0710 18:31:08.888303 22456633404288 sc2_env.py:710] Episode 83 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:31:08.967393 22456633404288 sc2_env.py:493] Starting episode 84: [terran] on MoveToBeacon
+I0710 18:31:11.371560 22456633404288 sc2_env.py:710] Episode 84 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:31:11.393492 22456633404288 sc2_env.py:493] Starting episode 85: [terran] on MoveToBeacon
+I0710 18:31:13.699860 22456633404288 sc2_env.py:710] Episode 85 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:31:13.783874 22456633404288 sc2_env.py:493] Starting episode 86: [terran] on MoveToBeacon
+I0710 18:31:16.155783 22456633404288 sc2_env.py:710] Episode 86 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:16.179108 22456633404288 sc2_env.py:493] Starting episode 87: [terran] on MoveToBeacon
+I0710 18:31:18.502941 22456633404288 sc2_env.py:710] Episode 87 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:18.591208 22456633404288 sc2_env.py:493] Starting episode 88: [terran] on MoveToBeacon
+I0710 18:31:21.050322 22456633404288 sc2_env.py:710] Episode 88 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:21.071070 22456633404288 sc2_env.py:493] Starting episode 89: [terran] on MoveToBeacon
+I0710 18:31:23.337455 22456633404288 sc2_env.py:710] Episode 89 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:23.422917 22456633404288 sc2_env.py:493] Starting episode 90: [terran] on MoveToBeacon
+I0710 18:31:25.805375 22456633404288 sc2_env.py:710] Episode 90 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:25.828022 22456633404288 sc2_env.py:493] Starting episode 91: [terran] on MoveToBeacon
+I0710 18:31:28.149629 22456633404288 sc2_env.py:710] Episode 91 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:28.235276 22456633404288 sc2_env.py:493] Starting episode 92: [terran] on MoveToBeacon
+I0710 18:31:30.594013 22456633404288 sc2_env.py:710] Episode 92 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:30.616647 22456633404288 sc2_env.py:493] Starting episode 93: [terran] on MoveToBeacon
+I0710 18:31:32.942252 22456633404288 sc2_env.py:710] Episode 93 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:31:33.017644 22456633404288 sc2_env.py:493] Starting episode 94: [terran] on MoveToBeacon
+I0710 18:31:35.391213 22456633404288 sc2_env.py:710] Episode 94 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:31:35.411955 22456633404288 sc2_env.py:493] Starting episode 95: [terran] on MoveToBeacon
+I0710 18:31:37.745931 22456633404288 sc2_env.py:710] Episode 95 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:31:37.830777 22456633404288 sc2_env.py:493] Starting episode 96: [terran] on MoveToBeacon
+I0710 18:31:40.243868 22456633404288 sc2_env.py:710] Episode 96 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:31:40.264678 22456633404288 sc2_env.py:493] Starting episode 97: [terran] on MoveToBeacon
+I0710 18:31:42.595406 22456633404288 sc2_env.py:710] Episode 97 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:31:42.685601 22456633404288 sc2_env.py:493] Starting episode 98: [terran] on MoveToBeacon
+I0710 18:31:45.093113 22456633404288 sc2_env.py:710] Episode 98 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:45.115766 22456633404288 sc2_env.py:493] Starting episode 99: [terran] on MoveToBeacon
+I0710 18:31:47.464209 22456633404288 sc2_env.py:710] Episode 99 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:47.548685 22456633404288 sc2_env.py:493] Starting episode 100: [terran] on MoveToBeacon
+I0710 18:31:49.946837 22456633404288 sc2_env.py:710] Episode 100 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:31:49.968981 22456633404288 sc2_env.py:493] Starting episode 101: [terran] on MoveToBeacon
+I0710 18:31:52.322138 22456633404288 sc2_env.py:710] Episode 101 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:31:52.406242 22456633404288 sc2_env.py:493] Starting episode 102: [terran] on MoveToBeacon
+I0710 18:31:54.798262 22456633404288 sc2_env.py:710] Episode 102 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:31:54.818979 22456633404288 sc2_env.py:493] Starting episode 103: [terran] on MoveToBeacon
+I0710 18:31:57.159399 22456633404288 sc2_env.py:710] Episode 103 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:31:57.242918 22456633404288 sc2_env.py:493] Starting episode 104: [terran] on MoveToBeacon
+I0710 18:31:59.642548 22456633404288 sc2_env.py:710] Episode 104 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:31:59.663904 22456633404288 sc2_env.py:493] Starting episode 105: [terran] on MoveToBeacon
+I0710 18:32:01.999539 22456633404288 sc2_env.py:710] Episode 105 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:32:02.087251 22456633404288 sc2_env.py:493] Starting episode 106: [terran] on MoveToBeacon
+I0710 18:32:04.508020 22456633404288 sc2_env.py:710] Episode 106 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:04.530629 22456633404288 sc2_env.py:493] Starting episode 107: [terran] on MoveToBeacon
+I0710 18:32:06.903028 22456633404288 sc2_env.py:710] Episode 107 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:32:06.990491 22456633404288 sc2_env.py:493] Starting episode 108: [terran] on MoveToBeacon
+I0710 18:32:09.438857 22456633404288 sc2_env.py:710] Episode 108 finished after 1920 game steps. Outcome: [1], reward: [0], score: [3]
+Game has started.
+I0710 18:32:09.460150 22456633404288 sc2_env.py:493] Starting episode 109: [terran] on MoveToBeacon
+I0710 18:32:11.799225 22456633404288 sc2_env.py:710] Episode 109 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:11.893242 22456633404288 sc2_env.py:493] Starting episode 110: [terran] on MoveToBeacon
+I0710 18:32:14.243936 22456633404288 sc2_env.py:710] Episode 110 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:14.265858 22456633404288 sc2_env.py:493] Starting episode 111: [terran] on MoveToBeacon
+I0710 18:32:16.573535 22456633404288 sc2_env.py:710] Episode 111 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:32:16.662006 22456633404288 sc2_env.py:493] Starting episode 112: [terran] on MoveToBeacon
+I0710 18:32:19.004482 22456633404288 sc2_env.py:710] Episode 112 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:19.025017 22456633404288 sc2_env.py:493] Starting episode 113: [terran] on MoveToBeacon
+I0710 18:32:21.310720 22456633404288 sc2_env.py:710] Episode 113 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:32:21.396807 22456633404288 sc2_env.py:493] Starting episode 114: [terran] on MoveToBeacon
+I0710 18:32:23.711573 22456633404288 sc2_env.py:710] Episode 114 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:23.732740 22456633404288 sc2_env.py:493] Starting episode 115: [terran] on MoveToBeacon
+I0710 18:32:26.044282 22456633404288 sc2_env.py:710] Episode 115 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:32:26.128971 22456633404288 sc2_env.py:493] Starting episode 116: [terran] on MoveToBeacon
+I0710 18:32:28.502142 22456633404288 sc2_env.py:710] Episode 116 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:28.524105 22456633404288 sc2_env.py:493] Starting episode 117: [terran] on MoveToBeacon
+I0710 18:32:30.767915 22456633404288 sc2_env.py:710] Episode 117 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:32:30.852405 22456633404288 sc2_env.py:493] Starting episode 118: [terran] on MoveToBeacon
+I0710 18:32:33.175754 22456633404288 sc2_env.py:710] Episode 118 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:32:33.198963 22456633404288 sc2_env.py:493] Starting episode 119: [terran] on MoveToBeacon
+I0710 18:32:35.494281 22456633404288 sc2_env.py:710] Episode 119 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:35.583664 22456633404288 sc2_env.py:493] Starting episode 120: [terran] on MoveToBeacon
+I0710 18:32:37.889284 22456633404288 sc2_env.py:710] Episode 120 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:37.911092 22456633404288 sc2_env.py:493] Starting episode 121: [terran] on MoveToBeacon
+I0710 18:32:40.119431 22456633404288 sc2_env.py:710] Episode 121 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:40.214938 22456633404288 sc2_env.py:493] Starting episode 122: [terran] on MoveToBeacon
+I0710 18:32:42.516626 22456633404288 sc2_env.py:710] Episode 122 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:42.538492 22456633404288 sc2_env.py:493] Starting episode 123: [terran] on MoveToBeacon
+I0710 18:32:44.821438 22456633404288 sc2_env.py:710] Episode 123 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:32:44.904418 22456633404288 sc2_env.py:493] Starting episode 124: [terran] on MoveToBeacon
+I0710 18:32:47.250410 22456633404288 sc2_env.py:710] Episode 124 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:32:47.270955 22456633404288 sc2_env.py:493] Starting episode 125: [terran] on MoveToBeacon
+I0710 18:32:49.572074 22456633404288 sc2_env.py:710] Episode 125 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:49.659053 22456633404288 sc2_env.py:493] Starting episode 126: [terran] on MoveToBeacon
+I0710 18:32:52.027632 22456633404288 sc2_env.py:710] Episode 126 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:52.048140 22456633404288 sc2_env.py:493] Starting episode 127: [terran] on MoveToBeacon
+I0710 18:32:54.308423 22456633404288 sc2_env.py:710] Episode 127 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:32:54.393529 22456633404288 sc2_env.py:493] Starting episode 128: [terran] on MoveToBeacon
+I0710 18:32:56.764457 22456633404288 sc2_env.py:710] Episode 128 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:56.785037 22456633404288 sc2_env.py:493] Starting episode 129: [terran] on MoveToBeacon
+I0710 18:32:59.064604 22456633404288 sc2_env.py:710] Episode 129 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:32:59.145381 22456633404288 sc2_env.py:493] Starting episode 130: [terran] on MoveToBeacon
+I0710 18:33:01.518222 22456633404288 sc2_env.py:710] Episode 130 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:01.538724 22456633404288 sc2_env.py:493] Starting episode 131: [terran] on MoveToBeacon
+I0710 18:33:03.852232 22456633404288 sc2_env.py:710] Episode 131 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:03.934770 22456633404288 sc2_env.py:493] Starting episode 132: [terran] on MoveToBeacon
+I0710 18:33:06.288551 22456633404288 sc2_env.py:710] Episode 132 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:06.310339 22456633404288 sc2_env.py:493] Starting episode 133: [terran] on MoveToBeacon
+I0710 18:33:08.601171 22456633404288 sc2_env.py:710] Episode 133 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:08.689243 22456633404288 sc2_env.py:493] Starting episode 134: [terran] on MoveToBeacon
+I0710 18:33:11.059180 22456633404288 sc2_env.py:710] Episode 134 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:11.081009 22456633404288 sc2_env.py:493] Starting episode 135: [terran] on MoveToBeacon
+I0710 18:33:13.378578 22456633404288 sc2_env.py:710] Episode 135 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:33:13.465686 22456633404288 sc2_env.py:493] Starting episode 136: [terran] on MoveToBeacon
+I0710 18:33:15.805690 22456633404288 sc2_env.py:710] Episode 136 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:15.826189 22456633404288 sc2_env.py:493] Starting episode 137: [terran] on MoveToBeacon
+I0710 18:33:18.149880 22456633404288 sc2_env.py:710] Episode 137 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Unable to do fast restart because gameLoop 263176 >= restartGameLoop 262144
+Performing a full restart of the game.
+Launching next game.
+Next launch phase started: 2
+Next launch phase started: 3
+Next launch phase started: 4
+Next launch phase started: 5
+Next launch phase started: 6
+Next launch phase started: 7
+Next launch phase started: 8
+Game has started.
+I0710 18:33:20.687297 22456633404288 sc2_env.py:493] Starting episode 138: [terran] on MoveToBeacon
+I0710 18:33:23.098772 22456633404288 sc2_env.py:710] Episode 138 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:33:23.120012 22456633404288 sc2_env.py:493] Starting episode 139: [terran] on MoveToBeacon
+I0710 18:33:25.445717 22456633404288 sc2_env.py:710] Episode 139 finished after 1920 game steps. Outcome: [1], reward: [0], score: [3]
+Game has started.
+I0710 18:33:25.532191 22456633404288 sc2_env.py:493] Starting episode 140: [terran] on MoveToBeacon
+I0710 18:33:27.888474 22456633404288 sc2_env.py:710] Episode 140 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:27.910395 22456633404288 sc2_env.py:493] Starting episode 141: [terran] on MoveToBeacon
+I0710 18:33:30.224114 22456633404288 sc2_env.py:710] Episode 141 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:30.312848 22456633404288 sc2_env.py:493] Starting episode 142: [terran] on MoveToBeacon
+I0710 18:33:32.744633 22456633404288 sc2_env.py:710] Episode 142 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:32.765771 22456633404288 sc2_env.py:493] Starting episode 143: [terran] on MoveToBeacon
+I0710 18:33:35.040421 22456633404288 sc2_env.py:710] Episode 143 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:33:35.123662 22456633404288 sc2_env.py:493] Starting episode 144: [terran] on MoveToBeacon
+I0710 18:33:37.483529 22456633404288 sc2_env.py:710] Episode 144 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:37.504183 22456633404288 sc2_env.py:493] Starting episode 145: [terran] on MoveToBeacon
+I0710 18:33:39.769815 22456633404288 sc2_env.py:710] Episode 145 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:39.853607 22456633404288 sc2_env.py:493] Starting episode 146: [terran] on MoveToBeacon
+I0710 18:33:42.118517 22456633404288 sc2_env.py:710] Episode 146 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:33:42.139128 22456633404288 sc2_env.py:493] Starting episode 147: [terran] on MoveToBeacon
+I0710 18:33:44.405877 22456633404288 sc2_env.py:710] Episode 147 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:44.490573 22456633404288 sc2_env.py:493] Starting episode 148: [terran] on MoveToBeacon
+I0710 18:33:46.801381 22456633404288 sc2_env.py:710] Episode 148 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:46.822013 22456633404288 sc2_env.py:493] Starting episode 149: [terran] on MoveToBeacon
+I0710 18:33:49.127001 22456633404288 sc2_env.py:710] Episode 149 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:33:49.215305 22456633404288 sc2_env.py:493] Starting episode 150: [terran] on MoveToBeacon
+I0710 18:33:51.543756 22456633404288 sc2_env.py:710] Episode 150 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:51.565675 22456633404288 sc2_env.py:493] Starting episode 151: [terran] on MoveToBeacon
+I0710 18:33:53.786896 22456633404288 sc2_env.py:710] Episode 151 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:53.867987 22456633404288 sc2_env.py:493] Starting episode 152: [terran] on MoveToBeacon
+I0710 18:33:56.171381 22456633404288 sc2_env.py:710] Episode 152 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:56.191823 22456633404288 sc2_env.py:493] Starting episode 153: [terran] on MoveToBeacon
+I0710 18:33:58.461559 22456633404288 sc2_env.py:710] Episode 153 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:33:58.547299 22456633404288 sc2_env.py:493] Starting episode 154: [terran] on MoveToBeacon
+I0710 18:34:00.903454 22456633404288 sc2_env.py:710] Episode 154 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:34:00.925898 22456633404288 sc2_env.py:493] Starting episode 155: [terran] on MoveToBeacon
+I0710 18:34:03.204402 22456633404288 sc2_env.py:710] Episode 155 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:03.286049 22456633404288 sc2_env.py:493] Starting episode 156: [terran] on MoveToBeacon
+I0710 18:34:05.630484 22456633404288 sc2_env.py:710] Episode 156 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:34:05.652323 22456633404288 sc2_env.py:493] Starting episode 157: [terran] on MoveToBeacon
+I0710 18:34:07.929998 22456633404288 sc2_env.py:710] Episode 157 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:34:08.013428 22456633404288 sc2_env.py:493] Starting episode 158: [terran] on MoveToBeacon
+I0710 18:34:10.350517 22456633404288 sc2_env.py:710] Episode 158 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:10.373725 22456633404288 sc2_env.py:493] Starting episode 159: [terran] on MoveToBeacon
+I0710 18:34:12.686926 22456633404288 sc2_env.py:710] Episode 159 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:12.775785 22456633404288 sc2_env.py:493] Starting episode 160: [terran] on MoveToBeacon
+I0710 18:34:15.140179 22456633404288 sc2_env.py:710] Episode 160 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:15.161966 22456633404288 sc2_env.py:493] Starting episode 161: [terran] on MoveToBeacon
+I0710 18:34:17.438789 22456633404288 sc2_env.py:710] Episode 161 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:17.523087 22456633404288 sc2_env.py:493] Starting episode 162: [terran] on MoveToBeacon
+I0710 18:34:19.830682 22456633404288 sc2_env.py:710] Episode 162 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:19.853085 22456633404288 sc2_env.py:493] Starting episode 163: [terran] on MoveToBeacon
+I0710 18:34:22.100925 22456633404288 sc2_env.py:710] Episode 163 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:34:22.188154 22456633404288 sc2_env.py:493] Starting episode 164: [terran] on MoveToBeacon
+I0710 18:34:24.557669 22456633404288 sc2_env.py:710] Episode 164 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:24.579562 22456633404288 sc2_env.py:493] Starting episode 165: [terran] on MoveToBeacon
+I0710 18:34:26.857179 22456633404288 sc2_env.py:710] Episode 165 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:34:26.945291 22456633404288 sc2_env.py:493] Starting episode 166: [terran] on MoveToBeacon
+I0710 18:34:29.293560 22456633404288 sc2_env.py:710] Episode 166 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:34:29.314219 22456633404288 sc2_env.py:493] Starting episode 167: [terran] on MoveToBeacon
+I0710 18:34:31.616822 22456633404288 sc2_env.py:710] Episode 167 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:31.706314 22456633404288 sc2_env.py:493] Starting episode 168: [terran] on MoveToBeacon
+I0710 18:34:34.058626 22456633404288 sc2_env.py:710] Episode 168 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:34.081756 22456633404288 sc2_env.py:493] Starting episode 169: [terran] on MoveToBeacon
+I0710 18:34:36.364905 22456633404288 sc2_env.py:710] Episode 169 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:34:36.457185 22456633404288 sc2_env.py:493] Starting episode 170: [terran] on MoveToBeacon
+I0710 18:34:38.803328 22456633404288 sc2_env.py:710] Episode 170 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:34:38.826411 22456633404288 sc2_env.py:493] Starting episode 171: [terran] on MoveToBeacon
+I0710 18:34:41.146541 22456633404288 sc2_env.py:710] Episode 171 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:41.229649 22456633404288 sc2_env.py:493] Starting episode 172: [terran] on MoveToBeacon
+I0710 18:34:43.611133 22456633404288 sc2_env.py:710] Episode 172 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:43.631644 22456633404288 sc2_env.py:493] Starting episode 173: [terran] on MoveToBeacon
+I0710 18:34:45.935615 22456633404288 sc2_env.py:710] Episode 173 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:34:46.023253 22456633404288 sc2_env.py:493] Starting episode 174: [terran] on MoveToBeacon
+I0710 18:34:48.341780 22456633404288 sc2_env.py:710] Episode 174 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:48.363691 22456633404288 sc2_env.py:493] Starting episode 175: [terran] on MoveToBeacon
+I0710 18:34:50.659234 22456633404288 sc2_env.py:710] Episode 175 finished after 1920 game steps. Outcome: [1], reward: [0], score: [4]
+Game has started.
+I0710 18:34:50.744676 22456633404288 sc2_env.py:493] Starting episode 176: [terran] on MoveToBeacon
+I0710 18:34:53.057904 22456633404288 sc2_env.py:710] Episode 176 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:53.078500 22456633404288 sc2_env.py:493] Starting episode 177: [terran] on MoveToBeacon
+I0710 18:34:55.368854 22456633404288 sc2_env.py:710] Episode 177 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:34:55.457505 22456633404288 sc2_env.py:493] Starting episode 178: [terran] on MoveToBeacon
+I0710 18:34:57.838487 22456633404288 sc2_env.py:710] Episode 178 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:34:57.859161 22456633404288 sc2_env.py:493] Starting episode 179: [terran] on MoveToBeacon
+I0710 18:35:00.151085 22456633404288 sc2_env.py:710] Episode 179 finished after 1920 game steps. Outcome: [1], reward: [0], score: [4]
+Game has started.
+I0710 18:35:00.231250 22456633404288 sc2_env.py:493] Starting episode 180: [terran] on MoveToBeacon
+I0710 18:35:02.578357 22456633404288 sc2_env.py:710] Episode 180 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:02.600229 22456633404288 sc2_env.py:493] Starting episode 181: [terran] on MoveToBeacon
+I0710 18:35:04.855399 22456633404288 sc2_env.py:710] Episode 181 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:04.940245 22456633404288 sc2_env.py:493] Starting episode 182: [terran] on MoveToBeacon
+I0710 18:35:07.313393 22456633404288 sc2_env.py:710] Episode 182 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:07.335954 22456633404288 sc2_env.py:493] Starting episode 183: [terran] on MoveToBeacon
+I0710 18:35:09.645463 22456633404288 sc2_env.py:710] Episode 183 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:09.730121 22456633404288 sc2_env.py:493] Starting episode 184: [terran] on MoveToBeacon
+I0710 18:35:12.035067 22456633404288 sc2_env.py:710] Episode 184 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:12.056910 22456633404288 sc2_env.py:493] Starting episode 185: [terran] on MoveToBeacon
+I0710 18:35:14.342805 22456633404288 sc2_env.py:710] Episode 185 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:35:14.428238 22456633404288 sc2_env.py:493] Starting episode 186: [terran] on MoveToBeacon
+I0710 18:35:16.750312 22456633404288 sc2_env.py:710] Episode 186 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:16.770863 22456633404288 sc2_env.py:493] Starting episode 187: [terran] on MoveToBeacon
+I0710 18:35:19.048120 22456633404288 sc2_env.py:710] Episode 187 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:19.132138 22456633404288 sc2_env.py:493] Starting episode 188: [terran] on MoveToBeacon
+I0710 18:35:21.490546 22456633404288 sc2_env.py:710] Episode 188 finished after 1920 game steps. Outcome: [1], reward: [0], score: [3]
+Game has started.
+I0710 18:35:21.511696 22456633404288 sc2_env.py:493] Starting episode 189: [terran] on MoveToBeacon
+I0710 18:35:23.802203 22456633404288 sc2_env.py:710] Episode 189 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:35:23.887864 22456633404288 sc2_env.py:493] Starting episode 190: [terran] on MoveToBeacon
+I0710 18:35:26.272083 22456633404288 sc2_env.py:710] Episode 190 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:35:26.294572 22456633404288 sc2_env.py:493] Starting episode 191: [terran] on MoveToBeacon
+I0710 18:35:28.589320 22456633404288 sc2_env.py:710] Episode 191 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:35:28.679651 22456633404288 sc2_env.py:493] Starting episode 192: [terran] on MoveToBeacon
+I0710 18:35:31.021398 22456633404288 sc2_env.py:710] Episode 192 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:31.042022 22456633404288 sc2_env.py:493] Starting episode 193: [terran] on MoveToBeacon
+I0710 18:35:33.325392 22456633404288 sc2_env.py:710] Episode 193 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:33.406904 22456633404288 sc2_env.py:493] Starting episode 194: [terran] on MoveToBeacon
+I0710 18:35:35.738502 22456633404288 sc2_env.py:710] Episode 194 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:35:35.761638 22456633404288 sc2_env.py:493] Starting episode 195: [terran] on MoveToBeacon
+I0710 18:35:38.065801 22456633404288 sc2_env.py:710] Episode 195 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:38.149549 22456633404288 sc2_env.py:493] Starting episode 196: [terran] on MoveToBeacon
+I0710 18:35:40.504531 22456633404288 sc2_env.py:710] Episode 196 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:40.525644 22456633404288 sc2_env.py:493] Starting episode 197: [terran] on MoveToBeacon
+I0710 18:35:42.783456 22456633404288 sc2_env.py:710] Episode 197 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:35:42.873901 22456633404288 sc2_env.py:493] Starting episode 198: [terran] on MoveToBeacon
+I0710 18:35:45.229913 22456633404288 sc2_env.py:710] Episode 198 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:35:45.253112 22456633404288 sc2_env.py:493] Starting episode 199: [terran] on MoveToBeacon
+I0710 18:35:47.533733 22456633404288 sc2_env.py:710] Episode 199 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:47.621688 22456633404288 sc2_env.py:493] Starting episode 200: [terran] on MoveToBeacon
+I0710 18:35:49.989910 22456633404288 sc2_env.py:710] Episode 200 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:50.010496 22456633404288 sc2_env.py:493] Starting episode 201: [terran] on MoveToBeacon
+I0710 18:35:52.297834 22456633404288 sc2_env.py:710] Episode 201 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:52.384570 22456633404288 sc2_env.py:493] Starting episode 202: [terran] on MoveToBeacon
+I0710 18:35:54.712131 22456633404288 sc2_env.py:710] Episode 202 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:35:54.733911 22456633404288 sc2_env.py:493] Starting episode 203: [terran] on MoveToBeacon
+I0710 18:35:57.024870 22456633404288 sc2_env.py:710] Episode 203 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:57.116448 22456633404288 sc2_env.py:493] Starting episode 204: [terran] on MoveToBeacon
+I0710 18:35:59.469575 22456633404288 sc2_env.py:710] Episode 204 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:35:59.490710 22456633404288 sc2_env.py:493] Starting episode 205: [terran] on MoveToBeacon
+I0710 18:36:01.842283 22456633404288 sc2_env.py:710] Episode 205 finished after 1920 game steps. Outcome: [1], reward: [0], score: [3]
+Game has started.
+I0710 18:36:01.928929 22456633404288 sc2_env.py:493] Starting episode 206: [terran] on MoveToBeacon
+I0710 18:36:04.276714 22456633404288 sc2_env.py:710] Episode 206 finished after 1920 game steps. Outcome: [1], reward: [0], score: [3]
+Game has started.
+I0710 18:36:04.299785 22456633404288 sc2_env.py:493] Starting episode 207: [terran] on MoveToBeacon
+I0710 18:36:06.540867 22456633404288 sc2_env.py:710] Episode 207 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:36:06.623821 22456633404288 sc2_env.py:493] Starting episode 208: [terran] on MoveToBeacon
+I0710 18:36:08.945930 22456633404288 sc2_env.py:710] Episode 208 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:08.967630 22456633404288 sc2_env.py:493] Starting episode 209: [terran] on MoveToBeacon
+I0710 18:36:11.242960 22456633404288 sc2_env.py:710] Episode 209 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:11.324526 22456633404288 sc2_env.py:493] Starting episode 210: [terran] on MoveToBeacon
+I0710 18:36:13.640877 22456633404288 sc2_env.py:710] Episode 210 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:13.661962 22456633404288 sc2_env.py:493] Starting episode 211: [terran] on MoveToBeacon
+I0710 18:36:15.889654 22456633404288 sc2_env.py:710] Episode 211 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:15.978579 22456633404288 sc2_env.py:493] Starting episode 212: [terran] on MoveToBeacon
+I0710 18:36:18.267413 22456633404288 sc2_env.py:710] Episode 212 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:18.289703 22456633404288 sc2_env.py:493] Starting episode 213: [terran] on MoveToBeacon
+I0710 18:36:20.591632 22456633404288 sc2_env.py:710] Episode 213 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:36:20.671445 22456633404288 sc2_env.py:493] Starting episode 214: [terran] on MoveToBeacon
+I0710 18:36:23.024474 22456633404288 sc2_env.py:710] Episode 214 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:36:23.044899 22456633404288 sc2_env.py:493] Starting episode 215: [terran] on MoveToBeacon
+I0710 18:36:25.290877 22456633404288 sc2_env.py:710] Episode 215 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:25.379079 22456633404288 sc2_env.py:493] Starting episode 216: [terran] on MoveToBeacon
+I0710 18:36:27.710992 22456633404288 sc2_env.py:710] Episode 216 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:36:27.732617 22456633404288 sc2_env.py:493] Starting episode 217: [terran] on MoveToBeacon
+I0710 18:36:29.961048 22456633404288 sc2_env.py:710] Episode 217 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:30.048651 22456633404288 sc2_env.py:493] Starting episode 218: [terran] on MoveToBeacon
+I0710 18:36:32.367100 22456633404288 sc2_env.py:710] Episode 218 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:32.388817 22456633404288 sc2_env.py:493] Starting episode 219: [terran] on MoveToBeacon
+I0710 18:36:34.585906 22456633404288 sc2_env.py:710] Episode 219 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:34.669812 22456633404288 sc2_env.py:493] Starting episode 220: [terran] on MoveToBeacon
+I0710 18:36:36.986676 22456633404288 sc2_env.py:710] Episode 220 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:36:37.007091 22456633404288 sc2_env.py:493] Starting episode 221: [terran] on MoveToBeacon
+I0710 18:36:39.248917 22456633404288 sc2_env.py:710] Episode 221 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:39.338741 22456633404288 sc2_env.py:493] Starting episode 222: [terran] on MoveToBeacon
+I0710 18:36:41.658815 22456633404288 sc2_env.py:710] Episode 222 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:41.680399 22456633404288 sc2_env.py:493] Starting episode 223: [terran] on MoveToBeacon
+I0710 18:36:43.962810 22456633404288 sc2_env.py:710] Episode 223 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:36:44.052688 22456633404288 sc2_env.py:493] Starting episode 224: [terran] on MoveToBeacon
+I0710 18:36:46.432465 22456633404288 sc2_env.py:710] Episode 224 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:46.454261 22456633404288 sc2_env.py:493] Starting episode 225: [terran] on MoveToBeacon
+I0710 18:36:48.696692 22456633404288 sc2_env.py:710] Episode 225 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:36:48.786999 22456633404288 sc2_env.py:493] Starting episode 226: [terran] on MoveToBeacon
+I0710 18:36:51.095632 22456633404288 sc2_env.py:710] Episode 226 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:36:51.118261 22456633404288 sc2_env.py:493] Starting episode 227: [terran] on MoveToBeacon
+I0710 18:36:53.395716 22456633404288 sc2_env.py:710] Episode 227 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:36:53.482039 22456633404288 sc2_env.py:493] Starting episode 228: [terran] on MoveToBeacon
+I0710 18:36:55.775584 22456633404288 sc2_env.py:710] Episode 228 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:55.797190 22456633404288 sc2_env.py:493] Starting episode 229: [terran] on MoveToBeacon
+I0710 18:36:57.994652 22456633404288 sc2_env.py:710] Episode 229 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:36:58.078624 22456633404288 sc2_env.py:493] Starting episode 230: [terran] on MoveToBeacon
+I0710 18:37:00.365870 22456633404288 sc2_env.py:710] Episode 230 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:00.388160 22456633404288 sc2_env.py:493] Starting episode 231: [terran] on MoveToBeacon
+I0710 18:37:02.655447 22456633404288 sc2_env.py:710] Episode 231 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:02.742525 22456633404288 sc2_env.py:493] Starting episode 232: [terran] on MoveToBeacon
+I0710 18:37:05.071162 22456633404288 sc2_env.py:710] Episode 232 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:05.093074 22456633404288 sc2_env.py:493] Starting episode 233: [terran] on MoveToBeacon
+I0710 18:37:07.358123 22456633404288 sc2_env.py:710] Episode 233 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:07.446885 22456633404288 sc2_env.py:493] Starting episode 234: [terran] on MoveToBeacon
+I0710 18:37:09.776656 22456633404288 sc2_env.py:710] Episode 234 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:09.798300 22456633404288 sc2_env.py:493] Starting episode 235: [terran] on MoveToBeacon
+I0710 18:37:12.074084 22456633404288 sc2_env.py:710] Episode 235 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:12.158452 22456633404288 sc2_env.py:493] Starting episode 236: [terran] on MoveToBeacon
+I0710 18:37:14.457115 22456633404288 sc2_env.py:710] Episode 236 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:37:14.480155 22456633404288 sc2_env.py:493] Starting episode 237: [terran] on MoveToBeacon
+I0710 18:37:16.710870 22456633404288 sc2_env.py:710] Episode 237 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:16.792443 22456633404288 sc2_env.py:493] Starting episode 238: [terran] on MoveToBeacon
+I0710 18:37:19.144992 22456633404288 sc2_env.py:710] Episode 238 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:37:19.167265 22456633404288 sc2_env.py:493] Starting episode 239: [terran] on MoveToBeacon
+I0710 18:37:21.450434 22456633404288 sc2_env.py:710] Episode 239 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:37:21.536542 22456633404288 sc2_env.py:493] Starting episode 240: [terran] on MoveToBeacon
+I0710 18:37:23.887159 22456633404288 sc2_env.py:710] Episode 240 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:37:23.909016 22456633404288 sc2_env.py:493] Starting episode 241: [terran] on MoveToBeacon
+I0710 18:37:26.182674 22456633404288 sc2_env.py:710] Episode 241 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:26.263461 22456633404288 sc2_env.py:493] Starting episode 242: [terran] on MoveToBeacon
+I0710 18:37:28.592207 22456633404288 sc2_env.py:710] Episode 242 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:37:28.614047 22456633404288 sc2_env.py:493] Starting episode 243: [terran] on MoveToBeacon
+I0710 18:37:30.874976 22456633404288 sc2_env.py:710] Episode 243 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:30.961784 22456633404288 sc2_env.py:493] Starting episode 244: [terran] on MoveToBeacon
+I0710 18:37:33.274191 22456633404288 sc2_env.py:710] Episode 244 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:37:33.297194 22456633404288 sc2_env.py:493] Starting episode 245: [terran] on MoveToBeacon
+I0710 18:37:35.546064 22456633404288 sc2_env.py:710] Episode 245 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:37:35.629086 22456633404288 sc2_env.py:493] Starting episode 246: [terran] on MoveToBeacon
+I0710 18:37:37.925986 22456633404288 sc2_env.py:710] Episode 246 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:37:37.946399 22456633404288 sc2_env.py:493] Starting episode 247: [terran] on MoveToBeacon
+I0710 18:37:40.212377 22456633404288 sc2_env.py:710] Episode 247 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:40.298527 22456633404288 sc2_env.py:493] Starting episode 248: [terran] on MoveToBeacon
+I0710 18:37:42.635421 22456633404288 sc2_env.py:710] Episode 248 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:42.656467 22456633404288 sc2_env.py:493] Starting episode 249: [terran] on MoveToBeacon
+I0710 18:37:44.895101 22456633404288 sc2_env.py:710] Episode 249 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:37:44.988751 22456633404288 sc2_env.py:493] Starting episode 250: [terran] on MoveToBeacon
+I0710 18:37:47.309336 22456633404288 sc2_env.py:710] Episode 250 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:37:47.332353 22456633404288 sc2_env.py:493] Starting episode 251: [terran] on MoveToBeacon
+I0710 18:37:49.545910 22456633404288 sc2_env.py:710] Episode 251 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:49.626958 22456633404288 sc2_env.py:493] Starting episode 252: [terran] on MoveToBeacon
+I0710 18:37:51.984164 22456633404288 sc2_env.py:710] Episode 252 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:37:52.004646 22456633404288 sc2_env.py:493] Starting episode 253: [terran] on MoveToBeacon
+I0710 18:37:54.243082 22456633404288 sc2_env.py:710] Episode 253 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:37:54.331187 22456633404288 sc2_env.py:493] Starting episode 254: [terran] on MoveToBeacon
+I0710 18:37:56.650178 22456633404288 sc2_env.py:710] Episode 254 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:37:56.691126 22456633404288 sc2_env.py:493] Starting episode 255: [terran] on MoveToBeacon
+I0710 18:37:58.993439 22456633404288 sc2_env.py:710] Episode 255 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:37:59.074466 22456633404288 sc2_env.py:493] Starting episode 256: [terran] on MoveToBeacon
+I0710 18:38:01.420917 22456633404288 sc2_env.py:710] Episode 256 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:38:01.442772 22456633404288 sc2_env.py:493] Starting episode 257: [terran] on MoveToBeacon
+I0710 18:38:03.702059 22456633404288 sc2_env.py:710] Episode 257 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:03.782751 22456633404288 sc2_env.py:493] Starting episode 258: [terran] on MoveToBeacon
+I0710 18:38:06.130465 22456633404288 sc2_env.py:710] Episode 258 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:06.152689 22456633404288 sc2_env.py:493] Starting episode 259: [terran] on MoveToBeacon
+I0710 18:38:08.420869 22456633404288 sc2_env.py:710] Episode 259 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:38:08.504905 22456633404288 sc2_env.py:493] Starting episode 260: [terran] on MoveToBeacon
+I0710 18:38:10.898973 22456633404288 sc2_env.py:710] Episode 260 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:38:10.920536 22456633404288 sc2_env.py:493] Starting episode 261: [terran] on MoveToBeacon
+I0710 18:38:13.170997 22456633404288 sc2_env.py:710] Episode 261 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:13.253823 22456633404288 sc2_env.py:493] Starting episode 262: [terran] on MoveToBeacon
+I0710 18:38:15.533822 22456633404288 sc2_env.py:710] Episode 262 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:15.555579 22456633404288 sc2_env.py:493] Starting episode 263: [terran] on MoveToBeacon
+I0710 18:38:17.769002 22456633404288 sc2_env.py:710] Episode 263 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:38:17.848087 22456633404288 sc2_env.py:493] Starting episode 264: [terran] on MoveToBeacon
+I0710 18:38:20.154518 22456633404288 sc2_env.py:710] Episode 264 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:20.174888 22456633404288 sc2_env.py:493] Starting episode 265: [terran] on MoveToBeacon
+I0710 18:38:22.393299 22456633404288 sc2_env.py:710] Episode 265 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:22.486213 22456633404288 sc2_env.py:493] Starting episode 266: [terran] on MoveToBeacon
+I0710 18:38:24.786496 22456633404288 sc2_env.py:710] Episode 266 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:24.809424 22456633404288 sc2_env.py:493] Starting episode 267: [terran] on MoveToBeacon
+I0710 18:38:27.054132 22456633404288 sc2_env.py:710] Episode 267 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:27.139889 22456633404288 sc2_env.py:493] Starting episode 268: [terran] on MoveToBeacon
+I0710 18:38:29.424167 22456633404288 sc2_env.py:710] Episode 268 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:38:29.445166 22456633404288 sc2_env.py:493] Starting episode 269: [terran] on MoveToBeacon
+I0710 18:38:31.619095 22456633404288 sc2_env.py:710] Episode 269 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:31.703429 22456633404288 sc2_env.py:493] Starting episode 270: [terran] on MoveToBeacon
+I0710 18:38:34.010793 22456633404288 sc2_env.py:710] Episode 270 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:38:34.031734 22456633404288 sc2_env.py:493] Starting episode 271: [terran] on MoveToBeacon
+I0710 18:38:36.276531 22456633404288 sc2_env.py:710] Episode 271 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:36.359943 22456633404288 sc2_env.py:493] Starting episode 272: [terran] on MoveToBeacon
+I0710 18:38:38.680403 22456633404288 sc2_env.py:710] Episode 272 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:38:38.701338 22456633404288 sc2_env.py:493] Starting episode 273: [terran] on MoveToBeacon
+I0710 18:38:40.916059 22456633404288 sc2_env.py:710] Episode 273 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:41.005610 22456633404288 sc2_env.py:493] Starting episode 274: [terran] on MoveToBeacon
+I0710 18:38:43.341020 22456633404288 sc2_env.py:710] Episode 274 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Unable to do fast restart because gameLoop 263176 >= restartGameLoop 262144
+Performing a full restart of the game.
+Launching next game.
+Next launch phase started: 2
+Next launch phase started: 3
+Next launch phase started: 4
+Next launch phase started: 5
+Next launch phase started: 6
+Next launch phase started: 7
+Next launch phase started: 8
+Game has started.
+I0710 18:38:45.809411 22456633404288 sc2_env.py:493] Starting episode 275: [terran] on MoveToBeacon
+I0710 18:38:48.079604 22456633404288 sc2_env.py:710] Episode 275 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:38:48.164497 22456633404288 sc2_env.py:493] Starting episode 276: [terran] on MoveToBeacon
+I0710 18:38:50.475197 22456633404288 sc2_env.py:710] Episode 276 finished after 1920 game steps. Outcome: [1], reward: [0], score: [3]
+Game has started.
+I0710 18:38:50.496964 22456633404288 sc2_env.py:493] Starting episode 277: [terran] on MoveToBeacon
+I0710 18:38:52.776249 22456633404288 sc2_env.py:710] Episode 277 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:52.862788 22456633404288 sc2_env.py:493] Starting episode 278: [terran] on MoveToBeacon
+I0710 18:38:55.207477 22456633404288 sc2_env.py:710] Episode 278 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:55.227800 22456633404288 sc2_env.py:493] Starting episode 279: [terran] on MoveToBeacon
+I0710 18:38:57.488670 22456633404288 sc2_env.py:710] Episode 279 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:38:57.575955 22456633404288 sc2_env.py:493] Starting episode 280: [terran] on MoveToBeacon
+I0710 18:38:59.870645 22456633404288 sc2_env.py:710] Episode 280 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:38:59.892865 22456633404288 sc2_env.py:493] Starting episode 281: [terran] on MoveToBeacon
+I0710 18:39:02.137388 22456633404288 sc2_env.py:710] Episode 281 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:02.226213 22456633404288 sc2_env.py:493] Starting episode 282: [terran] on MoveToBeacon
+I0710 18:39:04.520054 22456633404288 sc2_env.py:710] Episode 282 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:04.540438 22456633404288 sc2_env.py:493] Starting episode 283: [terran] on MoveToBeacon
+I0710 18:39:06.789420 22456633404288 sc2_env.py:710] Episode 283 finished after 1920 game steps. Outcome: [1], reward: [0], score: [3]
+Game has started.
+I0710 18:39:06.873485 22456633404288 sc2_env.py:493] Starting episode 284: [terran] on MoveToBeacon
+I0710 18:39:09.138393 22456633404288 sc2_env.py:710] Episode 284 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:39:09.160031 22456633404288 sc2_env.py:493] Starting episode 285: [terran] on MoveToBeacon
+I0710 18:39:11.473159 22456633404288 sc2_env.py:710] Episode 285 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:39:11.560248 22456633404288 sc2_env.py:493] Starting episode 286: [terran] on MoveToBeacon
+I0710 18:39:13.837925 22456633404288 sc2_env.py:710] Episode 286 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:39:13.860765 22456633404288 sc2_env.py:493] Starting episode 287: [terran] on MoveToBeacon
+I0710 18:39:16.103326 22456633404288 sc2_env.py:710] Episode 287 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:39:16.187639 22456633404288 sc2_env.py:493] Starting episode 288: [terran] on MoveToBeacon
+I0710 18:39:18.554395 22456633404288 sc2_env.py:710] Episode 288 finished after 1920 game steps. Outcome: [1], reward: [0], score: [3]
+Game has started.
+I0710 18:39:18.575260 22456633404288 sc2_env.py:493] Starting episode 289: [terran] on MoveToBeacon
+I0710 18:39:20.844912 22456633404288 sc2_env.py:710] Episode 289 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:20.925749 22456633404288 sc2_env.py:493] Starting episode 290: [terran] on MoveToBeacon
+I0710 18:39:23.222691 22456633404288 sc2_env.py:710] Episode 290 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:23.245667 22456633404288 sc2_env.py:493] Starting episode 291: [terran] on MoveToBeacon
+I0710 18:39:25.506441 22456633404288 sc2_env.py:710] Episode 291 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:25.591605 22456633404288 sc2_env.py:493] Starting episode 292: [terran] on MoveToBeacon
+I0710 18:39:27.922181 22456633404288 sc2_env.py:710] Episode 292 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:27.944317 22456633404288 sc2_env.py:493] Starting episode 293: [terran] on MoveToBeacon
+I0710 18:39:30.222982 22456633404288 sc2_env.py:710] Episode 293 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:39:30.304098 22456633404288 sc2_env.py:493] Starting episode 294: [terran] on MoveToBeacon
+I0710 18:39:32.569648 22456633404288 sc2_env.py:710] Episode 294 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:32.589955 22456633404288 sc2_env.py:493] Starting episode 295: [terran] on MoveToBeacon
+I0710 18:39:34.892347 22456633404288 sc2_env.py:710] Episode 295 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:34.980539 22456633404288 sc2_env.py:493] Starting episode 296: [terran] on MoveToBeacon
+I0710 18:39:37.324775 22456633404288 sc2_env.py:710] Episode 296 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:39:37.344951 22456633404288 sc2_env.py:493] Starting episode 297: [terran] on MoveToBeacon
+I0710 18:39:39.600724 22456633404288 sc2_env.py:710] Episode 297 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:39:39.686440 22456633404288 sc2_env.py:493] Starting episode 298: [terran] on MoveToBeacon
+I0710 18:39:42.034538 22456633404288 sc2_env.py:710] Episode 298 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:42.056179 22456633404288 sc2_env.py:493] Starting episode 299: [terran] on MoveToBeacon
+I0710 18:39:44.307555 22456633404288 sc2_env.py:710] Episode 299 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:39:44.391637 22456633404288 sc2_env.py:493] Starting episode 300: [terran] on MoveToBeacon
+I0710 18:39:46.744639 22456633404288 sc2_env.py:710] Episode 300 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:46.767574 22456633404288 sc2_env.py:493] Starting episode 301: [terran] on MoveToBeacon
+I0710 18:39:49.055220 22456633404288 sc2_env.py:710] Episode 301 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:39:49.145824 22456633404288 sc2_env.py:493] Starting episode 302: [terran] on MoveToBeacon
+I0710 18:39:51.453081 22456633404288 sc2_env.py:710] Episode 302 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:39:51.473952 22456633404288 sc2_env.py:493] Starting episode 303: [terran] on MoveToBeacon
+I0710 18:39:53.727818 22456633404288 sc2_env.py:710] Episode 303 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:53.812251 22456633404288 sc2_env.py:493] Starting episode 304: [terran] on MoveToBeacon
+I0710 18:39:56.104416 22456633404288 sc2_env.py:710] Episode 304 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:39:56.126582 22456633404288 sc2_env.py:493] Starting episode 305: [terran] on MoveToBeacon
+I0710 18:39:58.416704 22456633404288 sc2_env.py:710] Episode 305 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:39:58.503000 22456633404288 sc2_env.py:493] Starting episode 306: [terran] on MoveToBeacon
+I0710 18:40:00.847541 22456633404288 sc2_env.py:710] Episode 306 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:40:00.867796 22456633404288 sc2_env.py:493] Starting episode 307: [terran] on MoveToBeacon
+I0710 18:40:03.143180 22456633404288 sc2_env.py:710] Episode 307 finished after 1920 game steps. Outcome: [1], reward: [0], score: [3]
+Game has started.
+I0710 18:40:03.224790 22456633404288 sc2_env.py:493] Starting episode 308: [terran] on MoveToBeacon
+I0710 18:40:05.544903 22456633404288 sc2_env.py:710] Episode 308 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:40:05.566374 22456633404288 sc2_env.py:493] Starting episode 309: [terran] on MoveToBeacon
+I0710 18:40:07.841610 22456633404288 sc2_env.py:710] Episode 309 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:40:07.924486 22456633404288 sc2_env.py:493] Starting episode 310: [terran] on MoveToBeacon
+I0710 18:40:10.285976 22456633404288 sc2_env.py:710] Episode 310 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:10.309087 22456633404288 sc2_env.py:493] Starting episode 311: [terran] on MoveToBeacon
+I0710 18:40:12.596134 22456633404288 sc2_env.py:710] Episode 311 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:12.679207 22456633404288 sc2_env.py:493] Starting episode 312: [terran] on MoveToBeacon
+I0710 18:40:15.027289 22456633404288 sc2_env.py:710] Episode 312 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:40:15.048521 22456633404288 sc2_env.py:493] Starting episode 313: [terran] on MoveToBeacon
+I0710 18:40:17.332302 22456633404288 sc2_env.py:710] Episode 313 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:40:17.417734 22456633404288 sc2_env.py:493] Starting episode 314: [terran] on MoveToBeacon
+I0710 18:40:19.744433 22456633404288 sc2_env.py:710] Episode 314 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:40:19.765777 22456633404288 sc2_env.py:493] Starting episode 315: [terran] on MoveToBeacon
+I0710 18:40:22.036431 22456633404288 sc2_env.py:710] Episode 315 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:22.120320 22456633404288 sc2_env.py:493] Starting episode 316: [terran] on MoveToBeacon
+I0710 18:40:24.431441 22456633404288 sc2_env.py:710] Episode 316 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:24.451695 22456633404288 sc2_env.py:493] Starting episode 317: [terran] on MoveToBeacon
+I0710 18:40:26.715595 22456633404288 sc2_env.py:710] Episode 317 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:26.797764 22456633404288 sc2_env.py:493] Starting episode 318: [terran] on MoveToBeacon
+I0710 18:40:29.154927 22456633404288 sc2_env.py:710] Episode 318 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:29.177615 22456633404288 sc2_env.py:493] Starting episode 319: [terran] on MoveToBeacon
+I0710 18:40:31.447222 22456633404288 sc2_env.py:710] Episode 319 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:40:31.529138 22456633404288 sc2_env.py:493] Starting episode 320: [terran] on MoveToBeacon
+I0710 18:40:33.881333 22456633404288 sc2_env.py:710] Episode 320 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:33.903420 22456633404288 sc2_env.py:493] Starting episode 321: [terran] on MoveToBeacon
+I0710 18:40:36.175988 22456633404288 sc2_env.py:710] Episode 321 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:36.262371 22456633404288 sc2_env.py:493] Starting episode 322: [terran] on MoveToBeacon
+I0710 18:40:38.584976 22456633404288 sc2_env.py:710] Episode 322 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:40:38.606214 22456633404288 sc2_env.py:493] Starting episode 323: [terran] on MoveToBeacon
+I0710 18:40:40.870004 22456633404288 sc2_env.py:710] Episode 323 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:40.953230 22456633404288 sc2_env.py:493] Starting episode 324: [terran] on MoveToBeacon
+I0710 18:40:43.291950 22456633404288 sc2_env.py:710] Episode 324 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:40:43.313801 22456633404288 sc2_env.py:493] Starting episode 325: [terran] on MoveToBeacon
+I0710 18:40:45.577681 22456633404288 sc2_env.py:710] Episode 325 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:40:45.662096 22456633404288 sc2_env.py:493] Starting episode 326: [terran] on MoveToBeacon
+I0710 18:40:47.996177 22456633404288 sc2_env.py:710] Episode 326 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:40:48.016919 22456633404288 sc2_env.py:493] Starting episode 327: [terran] on MoveToBeacon
+I0710 18:40:50.304326 22456633404288 sc2_env.py:710] Episode 327 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:50.390880 22456633404288 sc2_env.py:493] Starting episode 328: [terran] on MoveToBeacon
+I0710 18:40:52.738881 22456633404288 sc2_env.py:710] Episode 328 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:40:52.758919 22456633404288 sc2_env.py:493] Starting episode 329: [terran] on MoveToBeacon
+I0710 18:40:55.017276 22456633404288 sc2_env.py:710] Episode 329 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:55.103586 22456633404288 sc2_env.py:493] Starting episode 330: [terran] on MoveToBeacon
+I0710 18:40:57.452531 22456633404288 sc2_env.py:710] Episode 330 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:40:57.475196 22456633404288 sc2_env.py:493] Starting episode 331: [terran] on MoveToBeacon
+I0710 18:40:59.813220 22456633404288 sc2_env.py:710] Episode 331 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:40:59.894580 22456633404288 sc2_env.py:493] Starting episode 332: [terran] on MoveToBeacon
+I0710 18:41:02.206500 22456633404288 sc2_env.py:710] Episode 332 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:02.227678 22456633404288 sc2_env.py:493] Starting episode 333: [terran] on MoveToBeacon
+I0710 18:41:04.505467 22456633404288 sc2_env.py:710] Episode 333 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:04.586014 22456633404288 sc2_env.py:493] Starting episode 334: [terran] on MoveToBeacon
+I0710 18:41:06.907903 22456633404288 sc2_env.py:710] Episode 334 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:06.930503 22456633404288 sc2_env.py:493] Starting episode 335: [terran] on MoveToBeacon
+I0710 18:41:09.151375 22456633404288 sc2_env.py:710] Episode 335 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:41:09.238656 22456633404288 sc2_env.py:493] Starting episode 336: [terran] on MoveToBeacon
+I0710 18:41:11.539877 22456633404288 sc2_env.py:710] Episode 336 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:41:11.561093 22456633404288 sc2_env.py:493] Starting episode 337: [terran] on MoveToBeacon
+I0710 18:41:13.808501 22456633404288 sc2_env.py:710] Episode 337 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:13.894280 22456633404288 sc2_env.py:493] Starting episode 338: [terran] on MoveToBeacon
+I0710 18:41:16.230818 22456633404288 sc2_env.py:710] Episode 338 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:16.252250 22456633404288 sc2_env.py:493] Starting episode 339: [terran] on MoveToBeacon
+I0710 18:41:18.523371 22456633404288 sc2_env.py:710] Episode 339 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:41:18.607831 22456633404288 sc2_env.py:493] Starting episode 340: [terran] on MoveToBeacon
+I0710 18:41:20.923650 22456633404288 sc2_env.py:710] Episode 340 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:20.944248 22456633404288 sc2_env.py:493] Starting episode 341: [terran] on MoveToBeacon
+I0710 18:41:23.202107 22456633404288 sc2_env.py:710] Episode 341 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:41:23.287887 22456633404288 sc2_env.py:493] Starting episode 342: [terran] on MoveToBeacon
+I0710 18:41:25.598282 22456633404288 sc2_env.py:710] Episode 342 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:25.619524 22456633404288 sc2_env.py:493] Starting episode 343: [terran] on MoveToBeacon
+I0710 18:41:27.842358 22456633404288 sc2_env.py:710] Episode 343 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:27.925073 22456633404288 sc2_env.py:493] Starting episode 344: [terran] on MoveToBeacon
+I0710 18:41:30.265283 22456633404288 sc2_env.py:710] Episode 344 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:41:30.286477 22456633404288 sc2_env.py:493] Starting episode 345: [terran] on MoveToBeacon
+I0710 18:41:32.511877 22456633404288 sc2_env.py:710] Episode 345 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:32.591549 22456633404288 sc2_env.py:493] Starting episode 346: [terran] on MoveToBeacon
+I0710 18:41:34.905607 22456633404288 sc2_env.py:710] Episode 346 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:34.928090 22456633404288 sc2_env.py:493] Starting episode 347: [terran] on MoveToBeacon
+I0710 18:41:37.162370 22456633404288 sc2_env.py:710] Episode 347 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:37.249857 22456633404288 sc2_env.py:493] Starting episode 348: [terran] on MoveToBeacon
+I0710 18:41:39.595365 22456633404288 sc2_env.py:710] Episode 348 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:41:39.616680 22456633404288 sc2_env.py:493] Starting episode 349: [terran] on MoveToBeacon
+I0710 18:41:41.867606 22456633404288 sc2_env.py:710] Episode 349 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:41:41.953418 22456633404288 sc2_env.py:493] Starting episode 350: [terran] on MoveToBeacon
+I0710 18:41:44.259275 22456633404288 sc2_env.py:710] Episode 350 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:41:44.279288 22456633404288 sc2_env.py:493] Starting episode 351: [terran] on MoveToBeacon
+I0710 18:41:46.560957 22456633404288 sc2_env.py:710] Episode 351 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:41:46.641956 22456633404288 sc2_env.py:493] Starting episode 352: [terran] on MoveToBeacon
+I0710 18:41:48.970726 22456633404288 sc2_env.py:710] Episode 352 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:48.992613 22456633404288 sc2_env.py:493] Starting episode 353: [terran] on MoveToBeacon
+I0710 18:41:51.219345 22456633404288 sc2_env.py:710] Episode 353 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:51.301266 22456633404288 sc2_env.py:493] Starting episode 354: [terran] on MoveToBeacon
+I0710 18:41:53.601183 22456633404288 sc2_env.py:710] Episode 354 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:53.621144 22456633404288 sc2_env.py:493] Starting episode 355: [terran] on MoveToBeacon
+I0710 18:41:55.888291 22456633404288 sc2_env.py:710] Episode 355 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:55.976467 22456633404288 sc2_env.py:493] Starting episode 356: [terran] on MoveToBeacon
+I0710 18:41:58.269164 22456633404288 sc2_env.py:710] Episode 356 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:41:58.291661 22456633404288 sc2_env.py:493] Starting episode 357: [terran] on MoveToBeacon
+I0710 18:42:00.532775 22456633404288 sc2_env.py:710] Episode 357 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:00.620753 22456633404288 sc2_env.py:493] Starting episode 358: [terran] on MoveToBeacon
+I0710 18:42:02.954859 22456633404288 sc2_env.py:710] Episode 358 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:02.976232 22456633404288 sc2_env.py:493] Starting episode 359: [terran] on MoveToBeacon
+I0710 18:42:05.239160 22456633404288 sc2_env.py:710] Episode 359 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:42:05.320473 22456633404288 sc2_env.py:493] Starting episode 360: [terran] on MoveToBeacon
+I0710 18:42:07.660611 22456633404288 sc2_env.py:710] Episode 360 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:07.680616 22456633404288 sc2_env.py:493] Starting episode 361: [terran] on MoveToBeacon
+I0710 18:42:09.945702 22456633404288 sc2_env.py:710] Episode 361 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:10.037722 22456633404288 sc2_env.py:493] Starting episode 362: [terran] on MoveToBeacon
+I0710 18:42:12.339781 22456633404288 sc2_env.py:710] Episode 362 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:12.361105 22456633404288 sc2_env.py:493] Starting episode 363: [terran] on MoveToBeacon
+I0710 18:42:14.644183 22456633404288 sc2_env.py:710] Episode 363 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:14.730312 22456633404288 sc2_env.py:493] Starting episode 364: [terran] on MoveToBeacon
+I0710 18:42:17.059081 22456633404288 sc2_env.py:710] Episode 364 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:42:17.079132 22456633404288 sc2_env.py:493] Starting episode 365: [terran] on MoveToBeacon
+I0710 18:42:19.319797 22456633404288 sc2_env.py:710] Episode 365 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:19.411769 22456633404288 sc2_env.py:493] Starting episode 366: [terran] on MoveToBeacon
+I0710 18:42:21.731064 22456633404288 sc2_env.py:710] Episode 366 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:21.752377 22456633404288 sc2_env.py:493] Starting episode 367: [terran] on MoveToBeacon
+I0710 18:42:24.027745 22456633404288 sc2_env.py:710] Episode 367 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:24.111504 22456633404288 sc2_env.py:493] Starting episode 368: [terran] on MoveToBeacon
+I0710 18:42:26.406385 22456633404288 sc2_env.py:710] Episode 368 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:42:26.426406 22456633404288 sc2_env.py:493] Starting episode 369: [terran] on MoveToBeacon
+I0710 18:42:28.648269 22456633404288 sc2_env.py:710] Episode 369 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:28.727307 22456633404288 sc2_env.py:493] Starting episode 370: [terran] on MoveToBeacon
+I0710 18:42:31.075590 22456633404288 sc2_env.py:710] Episode 370 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:42:31.096961 22456633404288 sc2_env.py:493] Starting episode 371: [terran] on MoveToBeacon
+I0710 18:42:33.339251 22456633404288 sc2_env.py:710] Episode 371 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:42:33.417719 22456633404288 sc2_env.py:493] Starting episode 372: [terran] on MoveToBeacon
+I0710 18:42:35.771375 22456633404288 sc2_env.py:710] Episode 372 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:42:35.793310 22456633404288 sc2_env.py:493] Starting episode 373: [terran] on MoveToBeacon
+I0710 18:42:38.050099 22456633404288 sc2_env.py:710] Episode 373 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:38.140020 22456633404288 sc2_env.py:493] Starting episode 374: [terran] on MoveToBeacon
+I0710 18:42:40.483521 22456633404288 sc2_env.py:710] Episode 374 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:42:40.504060 22456633404288 sc2_env.py:493] Starting episode 375: [terran] on MoveToBeacon
+I0710 18:42:42.783924 22456633404288 sc2_env.py:710] Episode 375 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:42:42.870277 22456633404288 sc2_env.py:493] Starting episode 376: [terran] on MoveToBeacon
+I0710 18:42:45.173569 22456633404288 sc2_env.py:710] Episode 376 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:45.195461 22456633404288 sc2_env.py:493] Starting episode 377: [terran] on MoveToBeacon
+I0710 18:42:47.485145 22456633404288 sc2_env.py:710] Episode 377 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:42:47.568811 22456633404288 sc2_env.py:493] Starting episode 378: [terran] on MoveToBeacon
+I0710 18:42:49.854224 22456633404288 sc2_env.py:710] Episode 378 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:42:49.876815 22456633404288 sc2_env.py:493] Starting episode 379: [terran] on MoveToBeacon
+I0710 18:42:52.097972 22456633404288 sc2_env.py:710] Episode 379 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:42:52.174241 22456633404288 sc2_env.py:493] Starting episode 380: [terran] on MoveToBeacon
+I0710 18:42:54.546042 22456633404288 sc2_env.py:710] Episode 380 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:42:54.567321 22456633404288 sc2_env.py:493] Starting episode 381: [terran] on MoveToBeacon
+I0710 18:42:56.793918 22456633404288 sc2_env.py:710] Episode 381 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:42:56.877457 22456633404288 sc2_env.py:493] Starting episode 382: [terran] on MoveToBeacon
+I0710 18:42:59.187739 22456633404288 sc2_env.py:710] Episode 382 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:42:59.209041 22456633404288 sc2_env.py:493] Starting episode 383: [terran] on MoveToBeacon
+I0710 18:43:01.448632 22456633404288 sc2_env.py:710] Episode 383 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:43:01.531079 22456633404288 sc2_env.py:493] Starting episode 384: [terran] on MoveToBeacon
+I0710 18:43:03.879276 22456633404288 sc2_env.py:710] Episode 384 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:03.899364 22456633404288 sc2_env.py:493] Starting episode 385: [terran] on MoveToBeacon
+I0710 18:43:06.171579 22456633404288 sc2_env.py:710] Episode 385 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:43:06.255170 22456633404288 sc2_env.py:493] Starting episode 386: [terran] on MoveToBeacon
+I0710 18:43:08.572602 22456633404288 sc2_env.py:710] Episode 386 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:08.595247 22456633404288 sc2_env.py:493] Starting episode 387: [terran] on MoveToBeacon
+I0710 18:43:10.841825 22456633404288 sc2_env.py:710] Episode 387 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:43:10.927916 22456633404288 sc2_env.py:493] Starting episode 388: [terran] on MoveToBeacon
+I0710 18:43:13.263234 22456633404288 sc2_env.py:710] Episode 388 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:13.285847 22456633404288 sc2_env.py:493] Starting episode 389: [terran] on MoveToBeacon
+I0710 18:43:15.523765 22456633404288 sc2_env.py:710] Episode 389 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:15.607231 22456633404288 sc2_env.py:493] Starting episode 390: [terran] on MoveToBeacon
+I0710 18:43:17.943609 22456633404288 sc2_env.py:710] Episode 390 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:17.963580 22456633404288 sc2_env.py:493] Starting episode 391: [terran] on MoveToBeacon
+I0710 18:43:20.254994 22456633404288 sc2_env.py:710] Episode 391 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:20.333199 22456633404288 sc2_env.py:493] Starting episode 392: [terran] on MoveToBeacon
+I0710 18:43:22.653461 22456633404288 sc2_env.py:710] Episode 392 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:22.676071 22456633404288 sc2_env.py:493] Starting episode 393: [terran] on MoveToBeacon
+I0710 18:43:24.926259 22456633404288 sc2_env.py:710] Episode 393 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:25.014398 22456633404288 sc2_env.py:493] Starting episode 394: [terran] on MoveToBeacon
+I0710 18:43:27.363824 22456633404288 sc2_env.py:710] Episode 394 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:43:27.386434 22456633404288 sc2_env.py:493] Starting episode 395: [terran] on MoveToBeacon
+I0710 18:43:29.641049 22456633404288 sc2_env.py:710] Episode 395 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:29.729037 22456633404288 sc2_env.py:493] Starting episode 396: [terran] on MoveToBeacon
+I0710 18:43:32.061099 22456633404288 sc2_env.py:710] Episode 396 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:43:32.083023 22456633404288 sc2_env.py:493] Starting episode 397: [terran] on MoveToBeacon
+I0710 18:43:34.334670 22456633404288 sc2_env.py:710] Episode 397 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:43:34.422667 22456633404288 sc2_env.py:493] Starting episode 398: [terran] on MoveToBeacon
+I0710 18:43:36.690805 22456633404288 sc2_env.py:710] Episode 398 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:36.710821 22456633404288 sc2_env.py:493] Starting episode 399: [terran] on MoveToBeacon
+I0710 18:43:38.995068 22456633404288 sc2_env.py:710] Episode 399 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:43:39.081353 22456633404288 sc2_env.py:493] Starting episode 400: [terran] on MoveToBeacon
+I0710 18:43:41.386901 22456633404288 sc2_env.py:710] Episode 400 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:41.408785 22456633404288 sc2_env.py:493] Starting episode 401: [terran] on MoveToBeacon
+I0710 18:43:43.746907 22456633404288 sc2_env.py:710] Episode 401 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:43.834631 22456633404288 sc2_env.py:493] Starting episode 402: [terran] on MoveToBeacon
+I0710 18:43:46.144253 22456633404288 sc2_env.py:710] Episode 402 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:43:46.165564 22456633404288 sc2_env.py:493] Starting episode 403: [terran] on MoveToBeacon
+I0710 18:43:48.357283 22456633404288 sc2_env.py:710] Episode 403 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:48.444607 22456633404288 sc2_env.py:493] Starting episode 404: [terran] on MoveToBeacon
+I0710 18:43:50.755970 22456633404288 sc2_env.py:710] Episode 404 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:43:50.775887 22456633404288 sc2_env.py:493] Starting episode 405: [terran] on MoveToBeacon
+I0710 18:43:53.023977 22456633404288 sc2_env.py:710] Episode 405 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:43:53.107389 22456633404288 sc2_env.py:493] Starting episode 406: [terran] on MoveToBeacon
+I0710 18:43:55.402025 22456633404288 sc2_env.py:710] Episode 406 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:55.423859 22456633404288 sc2_env.py:493] Starting episode 407: [terran] on MoveToBeacon
+I0710 18:43:57.683065 22456633404288 sc2_env.py:710] Episode 407 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:43:57.768604 22456633404288 sc2_env.py:493] Starting episode 408: [terran] on MoveToBeacon
+I0710 18:44:00.097198 22456633404288 sc2_env.py:710] Episode 408 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:44:00.119772 22456633404288 sc2_env.py:493] Starting episode 409: [terran] on MoveToBeacon
+I0710 18:44:02.334974 22456633404288 sc2_env.py:710] Episode 409 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:44:02.421589 22456633404288 sc2_env.py:493] Starting episode 410: [terran] on MoveToBeacon
+I0710 18:44:04.715805 22456633404288 sc2_env.py:710] Episode 410 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:44:04.737651 22456633404288 sc2_env.py:493] Starting episode 411: [terran] on MoveToBeacon
+I0710 18:44:06.993727 22456633404288 sc2_env.py:710] Episode 411 finished after 1920 game steps. Outcome: [1], reward: [0], score: [5]
+Unable to do fast restart because gameLoop 263176 >= restartGameLoop 262144
+Performing a full restart of the game.
+Launching next game.
+Next launch phase started: 2
+Next launch phase started: 3
+Next launch phase started: 4
+Next launch phase started: 5
+Next launch phase started: 6
+Next launch phase started: 7
+Next launch phase started: 8
+Game has started.
+I0710 18:44:09.493807 22456633404288 sc2_env.py:493] Starting episode 412: [terran] on MoveToBeacon
+I0710 18:44:11.825158 22456633404288 sc2_env.py:710] Episode 412 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:44:11.845306 22456633404288 sc2_env.py:493] Starting episode 413: [terran] on MoveToBeacon
+I0710 18:44:14.083590 22456633404288 sc2_env.py:710] Episode 413 finished after 1920 game steps. Outcome: [1], reward: [0], score: [2]
+Game has started.
+I0710 18:44:14.164636 22456633404288 sc2_env.py:493] Starting episode 414: [terran] on MoveToBeacon
+I0710 18:44:16.494780 22456633404288 sc2_env.py:710] Episode 414 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:44:16.515327 22456633404288 sc2_env.py:493] Starting episode 415: [terran] on MoveToBeacon
+I0710 18:44:18.756097 22456633404288 sc2_env.py:710] Episode 415 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:44:18.846857 22456633404288 sc2_env.py:493] Starting episode 416: [terran] on MoveToBeacon
+I0710 18:44:21.142920 22456633404288 sc2_env.py:710] Episode 416 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:44:21.164243 22456633404288 sc2_env.py:493] Starting episode 417: [terran] on MoveToBeacon
+I0710 18:44:23.409374 22456633404288 sc2_env.py:710] Episode 417 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:44:23.495996 22456633404288 sc2_env.py:493] Starting episode 418: [terran] on MoveToBeacon
+I0710 18:44:25.828079 22456633404288 sc2_env.py:710] Episode 418 finished after 1920 game steps. Outcome: [1], reward: [0], score: [1]
+Game has started.
+I0710 18:44:25.849270 22456633404288 sc2_env.py:493] Starting episode 419: [terran] on MoveToBeacon
+I0710 18:44:28.083798 22456633404288 sc2_env.py:710] Episode 419 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:44:28.167537 22456633404288 sc2_env.py:493] Starting episode 420: [terran] on MoveToBeacon
+I0710 18:44:30.467775 22456633404288 sc2_env.py:710] Episode 420 finished after 1920 game steps. Outcome: [1], reward: [0], score: [0]
+Game has started.
+I0710 18:44:30.488286 22456633404288 sc2_env.py:493] Starting episode 421: [terran] on MoveToBeacon
+Took 990.282 seconds for 100019 steps
+I0710 18:44:32.378591 22456633404288 sc2_env.py:740] Environment Close
+RequestQuit command received.
+DataHandler: unable to parse websocket frame.
+Closing Application...
+CloseHandler: 127.0.0.1:36998 disconnected
+ResponseThread: No connection, dropping the response.
+I0710 18:44:32.479593 22456633404288 sc_process.py:227] Shutdown gracefully.
+I0710 18:44:32.479789 22456633404288 sc_process.py:205] Shutdown with return code: -15
