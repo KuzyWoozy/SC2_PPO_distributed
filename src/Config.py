@@ -29,7 +29,7 @@ NN_HIDDEN_LAYER = 256
 
 
 # Model to load before training/evaluation
-CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-2400000.chkpt"
+CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-2270000.chkpt"
 #CHECK_LOAD = None
 
 # Save the model every # environment steps
@@ -61,7 +61,7 @@ if MAX_TIME is not None:
 
 
 # Pseudorandom generator seed
-SEED = None
+SEED = 1
 # Whenever model will be used in a distributed setting
 SYNC = False
 # Whenever model will make use of a GPU (in serial or distributed setting)

@@ -17,26 +17,33 @@ The installation requires agreement to the terms of [BLIZZARD STARCRAFT II AI AN
 Note that **pip** may throw a recommendation to update warning, however this should be <ins>ignored</ins> as the installation script downgrades pip to satisfy specific dependencies.
 
 # Evaluating a model locally:
-1. `(Optional) Select model in src/Config.py using the 'CHECK_LOAD' parameter.`
-2. `make eval`
+The repository provides the best trained model on *DefeatZerglingsAndBanelings* for evaluation, as the default setting.
+
+1. `(Optional) Select model in configs/evaluate_config.py using the 'CHECK_LOAD' parameter and adjust the environment with 'MINIGAME_NAME' if necessary.`
+2. `make eval_defeatZergsAndBanes`
 
 # Training on ARCHER2:
 <img src="data/images/archer2_logo.png" alt="drawing" width="200"/>
 
-1. `(Optional) Modify 'src/Config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc.`
+1. `(Optional) Modify 'config/train_archer2_config.py' to adjust hyperpameters, distributed training, policy model, pseudorandom seeds etc.`
 2. `make train_archer2`
 3. `Saved models will be periodically saved in 'checkpoints/'`
 
 # Training on Cirrus:
 <img src="data/images/cirrus_logo.png" alt="drawing" width="180"/>
 
-1. `(Optional) Modify 'src/Config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc.`
-2. <ins>**CPU:**</ins> `make train_cirrus_cpu`
-
+1. `(Optional) Modify 'config/train_cirrus_config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc`
+2. `make train_cirrus`
 3. `Saved models will be periodically saved in 'checkpoints/'`
 
+# Training locally (not recommended):
+1. `(Optional) Modify 'config/train_local_config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc`
+2. `(Optional) To configure number of parallel agents modify '--nproc_per_node=' in the Makefile under the **train_local** routine`
+3. `make train_local`
+4. `Saved models will be periodically saved in 'checkpoints/'`
+
 # Running regression tests:
-* `make test`
+* `make regression_test`
   
 # Directories overview:
 - `evaluate.py`

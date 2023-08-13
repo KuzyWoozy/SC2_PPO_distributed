@@ -4,7 +4,7 @@ import copy
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from src.Config import GAMMA, PPO_CLIP, DTYPE, GPU, ENTROPY, VALUE_COEFF
+from src.Config import GAMMA, PPO_CLIP, GPU, CUDA_GRAPHS, ENTROPY, VALUE_COEFF
 
 
 
@@ -29,9 +29,9 @@ class MonteCarlo(t.nn.Module):
         
     
     def forward(self, agent, episode_info, bootstrap):
-        actor_gain = t.tensor([0.0], dtype = DTYPE, device = self.device)
-        critic_loss = t.tensor([0.0], dtype = DTYPE, device = self.device)
-        entropy = t.tensor([0.0], dtype = DTYPE, device = self.device)
+        actor_gain = t.tensor([0.0], device = self.device)
+        critic_loss = t.tensor([0.0], device = self.device)
+        entropy = t.tensor([0.0], device = self.device)
 
         episode_length = len(episode_info)
 
@@ -51,10 +51,10 @@ class SerialSGD(t.nn.Module):
     def __init__(self, policy_ser, device):
         super().__init__()
         
-        policy_ser = policy_ser.to(dtype = DTYPE, device = device)
+        policy_ser = policy_ser.to(device = device)
 
-        #if GPU:
-        #    policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 5, 64, 64), dtype = DTYPE, device = device),))
+        if CUDA_GRAPHS:
+            policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 5, 64, 64), device = device),))
 
         self.policy = MonteCarlo(policy_ser, device)
         self.device = device
@@ -80,12 +80,18 @@ class DistSyncSGD(t.nn.Module):
     def __init__(self, policy_ser, device):
         super().__init__()
         
-        policy_ser = policy_ser.to(dtype = DTYPE, device = device)
+        policy_ser = policy_ser.to(device = device)
 
         if GPU:
-            self.policy = DDP(MonteCarlo(policy_ser, device), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [device])
+            if CUDA_GRAPHS:
+                policy_ser = t.cuda.make_graphed_callables(policy_ser, (t.randn((1, 5, 64, 64), device = device),))
+            mc = MonteCarlo(policy_ser, device)
+            mc = mc.to(device = device)
+            self.policy = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False, device_ids = [device])
         else:
-            self.policy = DDP(MonteCarlo(policy_ser, device), find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
+            mc = MonteCarlo(policy_ser, device)
+            mc = mc.to(device = device)
+            self.policy = DDP(mc, find_unused_parameters = True, gradient_as_bucket_view = True, broadcast_buffers = False)
         
         self.device = device
 
