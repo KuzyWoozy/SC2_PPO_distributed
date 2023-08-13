@@ -1,9 +1,7 @@
-PPO/checkpoints/*
 
-PPO/SC2.4.9.3*
+SC2.4.9.3*
 PPO_testing/
 sc_virt/
-PPO/sc_virt/
 
 led / optimized / DLL files
 __pycache__/
