@@ -17,7 +17,7 @@ The installation requires agreement to the terms of [BLIZZARD STARCRAFT II AI AN
 Note that **pip** may throw a recommendation to update warning, however this should be <ins>ignored</ins> as the installation script downgrades pip to satisfy specific dependencies.
 
 # Evaluating a model locally:
-The repository provides the best trained model on *DefeatZerglingsAndBanelings* for evaluation, as the default setting.
+The repository provides the best trained model on *DefeatZerglingsAndBanelings* for evaluation, as the default setting. Note that the visualizations will not be rendered realtime and hence will be fast, this is due to a limitation of PySC2 which is unable to render realtime and remain deterministic. Hence with the realtime setting results are not reproducible, and is thus avoided.
 
 1. `(Optional) Select model in configs/evaluate_config.py using the 'CHECK_LOAD' parameter and adjust the environment with 'MINIGAME_NAME' if necessary.`
 2. `make eval_defeatZergsAndBanes`
@@ -46,6 +46,8 @@ The repository provides the best trained model on *DefeatZerglingsAndBanelings* 
 * `make regression_test`
   
 # Directories overview:
+- `Minutes/`
+	* Formal write-ups of meetings, containing points of discussion, updates and actions to be completed.
 - `evaluate.py`
 	* Evaluates a model checkpoint.
 - `train.py`
