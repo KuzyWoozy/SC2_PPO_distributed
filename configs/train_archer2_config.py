@@ -4,15 +4,15 @@ import os
 
 DEBUG = False
 
-ATARI_NET = True
+ATARI_NET = False
 
 # Hyperparam
-LEARNING_RATE = 1e-4
-LR_DECAY = 0.99996
+LEARNING_RATE = 3e-5
+GAMMA_DECAY = 0.99998
 
 
 GAMMA = 0.99
-ENTROPY = 3e-3
+ENTROPY = 3e-4
 VALUE_COEFF = 1.0
 
 NUM_ACTIONS = 7
@@ -21,7 +21,7 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-#CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-450000.chkpt"
+#CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-1350000.chkpt"
 CHECK_LOAD = None
 CHECK_INTERVAL = 10_000
 
@@ -48,7 +48,7 @@ if MAX_TIME is not None:
 # Params for regression test
 SEED = None
 SYNC = True
-GPU = False
+GPU = True
 CUDA_GRAPHS = False
 AMP = False
 COMPILE = False
