@@ -44,7 +44,7 @@ The repository provides the best trained model on *DefeatZerglingsAndBanelings* 
 
 # Training locally (not recommended):
 1. `(Optional) Modify 'config/train_local_config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc`
-2. `(Optional) To configure number of parallel agents modify '--nproc_per_node=' in the Makefile under the **train_local** routine`
+2. `(Optional) To configure number of parallel agents modify '--nproc_per_node=' in the Makefile under the 'train_local' routine`
 3. `make train_local`
 4. `Saved models will be periodically saved in 'checkpoints/'`
 
