@@ -10,11 +10,11 @@ train_local:
 
 .PHONY: train_ARCHER2
 train_ARCHER2:
-	sbatch scripts/ARCHER2.slurm
+	cp configs/train_archer2_config.py src/Config.py && sbatch scripts/ARCHER2.slurm
 
-.PHONY: train_cirrus
-train_cirrus:
-	sbatch scripts/Cirrus_cpu.slurm
+.PHONY: train_Cirrus
+train_Cirrus:
+	cp configs/train_archer2_config.py src/Config.py && sbatch scripts/Cirrus.slurm
 
 
 .PHONY: regression_test

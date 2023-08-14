@@ -13,11 +13,13 @@
 
 module load nvidia/nvhpc/22.11
 
-source ../sc_virt/bin/activate
 
-# Change to the submission directory
 cd $SLURM_SUBMIT_DIR
-export SC2PATH="/work/m22oc/m22oc/s2402307/SC2.4.9.3/StarCraftII"
+
+source sc_virt/bin/activate
+export SC2PATH="${SLURM_SUBMIT_DIR}/SC2.4.9.3/StarCraftII"
+
+
 # Enforce threading to 1 in case underlying libraries are threaded
 export OMP_NUM_THREADS=1
 

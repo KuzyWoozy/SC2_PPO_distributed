@@ -10,9 +10,10 @@
 #SBATCH --partition=standard
 #SBATCH --qos=standard
 
-source ../sc_virt/bin/activate
+cd $SLURM_SUBMIT_DIR
 
-export SC2PATH="/work/m22oc/m22oc/s2402307/StarCraftII"
+source sc_virt/bin/activate
+export SC2PATH="${SLURM_SUBMIT_DIR}/SC2.4.9.3/StarCraftII"
 
 # Change to the submission directory
 cd $SLURM_SUBMIT_DIR

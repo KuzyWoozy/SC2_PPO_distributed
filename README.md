@@ -15,7 +15,7 @@ The installation requires agreement to the terms of [BLIZZARD STARCRAFT II AI AN
 * `make install_cirrus`
 
 <ins>**Locally:**</ins>
-
+* `Make sure Python3.9 is installed and callable`
 * `make install_local`
 
 Note that **pip** may throw a recommendation to update warning, however this should be <ins>ignored</ins> as the installation script downgrades pip to satisfy specific dependencies.
@@ -31,7 +31,7 @@ The repository provides the best trained model on *DefeatZerglingsAndBanelings* 
 
 1. `(Optional) Modify 'config/train_archer2_config.py' to adjust hyperpameters, distributed training, policy model, pseudorandom seeds etc.`
 2. `Adjust 'scripts/ARCHER2.slurm' with your ARCHER2 account id`
-3. `make train_archer2`
+3. `make train_ARCHER2`
 4. `Saved models will be periodically saved in 'checkpoints/'`
 
 # Training on Cirrus:
@@ -39,7 +39,7 @@ The repository provides the best trained model on *DefeatZerglingsAndBanelings* 
 
 1. `(Optional) Modify 'config/train_cirrus_config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc`
 2. `Adjust 'scripts/ARCHER2.slurm' with your ARCHER2 account id`
-3. `make train_cirrus`
+3. `make train_Cirrus`
 4. `Saved models will be periodically saved in 'checkpoints/'`
 
 # Training locally (not recommended):
