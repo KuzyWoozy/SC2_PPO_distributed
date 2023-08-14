@@ -21,8 +21,7 @@ NN_HIDDEN_LAYER = 256
 PPO_CLIP = 0.2
 
 # Checkpointing
-CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-7350000.chkpt"
-#CHECK_LOAD = None
+CHECK_LOAD = None
 CHECK_INTERVAL = 10_000
 
 # Environment
