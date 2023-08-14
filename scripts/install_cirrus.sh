@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 wget https://blzdistsc2-a.akamaihd.net/Linux/SC2.4.9.3.zip
 unzip SC2.4.9.3.zip

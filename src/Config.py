@@ -29,8 +29,8 @@ NN_HIDDEN_LAYER = 256
 
 
 # Model to load before training/evaluation
-#CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-2400000.chkpt"
-CHECK_LOAD = None
+CHECK_LOAD = "checkpoints/DefeatZerglingsAndBanelings-2270000.chkpt"
+#CHECK_LOAD = None
 
 # Save the model every # environment steps
 CHECK_INTERVAL = 10_000
@@ -41,7 +41,7 @@ MINIGAME_NAME = "DefeatZerglingsAndBanelings"
 TIMING_EPISODE_DELAY = 2
 
 # Enable collective operations to keep track of correct metadata (for example, number of steps across ALL agents)
-PROFILE = False
+PROFILE = True
 # Which process to be designated as root
 ROOT = 0
 
@@ -61,7 +61,7 @@ if MAX_TIME is not None:
 
 
 # Pseudorandom generator seed
-SEED = 0
+SEED = 1
 # Whenever model will be used in a distributed setting
 SYNC = False
 # Whenever model will make use of a GPU (in serial or distributed setting)
@@ -73,7 +73,7 @@ AMP = False
 COMPILE = False
 
 # Maximum number of steps to take for an agent (enable PROFILE if want across ALL agents)
-MAX_AGENT_STEPS = 1_000
+MAX_AGENT_STEPS = 2_000
 
 
 

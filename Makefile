@@ -14,7 +14,7 @@ train_ARCHER2:
 
 .PHONY: train_Cirrus
 train_Cirrus:
-	cp configs/train_archer2_config.py src/Config.py && sbatch scripts/Cirrus.slurm
+	cp configs/train_cirrus_config.py src/Config.py && sbatch scripts/Cirrus.slurm
 
 
 .PHONY: regression_test
