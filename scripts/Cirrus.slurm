@@ -1,12 +1,12 @@
 #!/bin/bash
 
 #SBATCH --job-name=PPO-sc2-agent
-#SBATCH --time=1:00:00
+#SBATCH --time=24:00:00
 #SBATCH --nodes=1
 
 #SBATCH --account=m22oc-s2402307
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:4
 #SBATCH --qos=gpu
 #SBATCH --exclusive
 
@@ -25,5 +25,4 @@ export OMP_NUM_THREADS=1
 
 export MASTER_ADDR=$(scontrol show hostname ${SLURM_NODELIST} | head -n 1)
 
-srun python evaluate.py
-#srun --ntasks=$SLURM_JOB_NUM_NODES --tasks-per-node=1 torchrun --nnodes=$SLURM_JOB_NUM_NODES --nproc_per_node=4 --rdzv_id=100 --rdzv_backend=c10d --rdzv_endpoint=$MASTER_ADDR:29400 train.py
+srun --ntasks=$SLURM_JOB_NUM_NODES --tasks-per-node=1 torchrun --nnodes=$SLURM_JOB_NUM_NODES --nproc_per_node=4 --rdzv_id=100 --rdzv_backend=c10d --rdzv_endpoint=$MASTER_ADDR:29400 train.py
