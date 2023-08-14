@@ -1,8 +1,8 @@
 
 
-.PHONY: eval_defeatZergsAndBanes
-eval_defeatZergsAndBanes:
-	. sc_virt/bin/activate && cp configs/evaluate_defeatZergsAndBanes_config.py src/Config.py && SC2PATH="$(PWD)/SC2.4.9.3/StarCraftII" python evaluate.py
+.PHONY: evaluate
+evaluate:
+	. sc_virt/bin/activate && cp configs/evaluate_config.py src/Config.py && SC2PATH="$(PWD)/SC2.4.9.3/StarCraftII" python evaluate.py
 
 .PHONY: train_local
 train_local:
@@ -29,4 +29,6 @@ install_archer2:
 install_cirrus:	
 	 chmod a+x scripts/* && ./scripts/install_cirrus.sh
 
-
+.PHONY: install_local
+install_local:
+	chmod a+x scripts/* && ./scripts/install_local.sh
