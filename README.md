@@ -1,5 +1,5 @@
 # PPO on StarCraft II LE
-Implementation of the *Proximal Policy Optimization* Reinforcement Learning algorithm, uses DeepMind's StarCraft II Learning Environment for the variety of mini-games that it provides.
+Implementation of the *Proximal Policy Optimization* Reinforcement Learning algorithm, uses DeepMind's StarCraft II Learning Environment for the variety of mini-games that it provides. Note that the Makefile targets should be used for all operations regarding this project, such as installing, training and evaluating models. Running the Python scripts directly will not invoke required dependency operations.
 
 [![](data/images/thumbnail.png)](https://www.youtube.com/embed/uk2abOIxBak)
 
@@ -44,7 +44,7 @@ The repository provides the best trained model on *DefeatZerglingsAndBanelings* 
 
 # Training locally (not recommended):
 1. `(Optional) Modify 'config/train_local_config.py' to adjust hyperpameters, distributed/gpu training, policy model, pseudorandom seeds etc`
-2. `(Optional) To configure number of parallel agents modify '--nproc_per_node=' in the Makefile under the 'train_local' routine`
+2. `(Optional) To configure number of parallel agents modify '--nproc_per_node=' in the Makefile under the 'train_local' target`
 3. `make train_local`
 4. `Saved models will be periodically saved in 'checkpoints/'`
 
@@ -61,7 +61,9 @@ The repository provides the best trained model on *DefeatZerglingsAndBanelings* 
 - `checkpoints/`
 	* Saved models or models to be evaluated location.
 - `scripts/`
--	* SLURM job scripts for ARCHER2 and Cirrus work launching.
+	* SLURM job scripts for ARCHER2 and Cirrus work launching.
+- `configs/`
+	* Configuration files for various Makefile target operations. 
 - `data/`
 	* Data from experiment/SLURM runs.
 - `src/`
