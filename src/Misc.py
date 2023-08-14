@@ -8,6 +8,19 @@ from src.Config import LEARNING_RATE, GAMMA, ENTROPY, NN_HIDDEN_LAYER, NUM_ACTIO
 class CheckpointManager:
         
     def __init__(self, directory : str, name : str, rate : int = 10_000) -> None:
+        """
+        Responsible for storing models at a given rate within the specified directory. 
+
+        Parameters
+        ----------
+        directory : str
+            Directory to store saved models.
+        name : str
+            Model name.
+        rate : int    
+            Save every # steps.
+        """
+
         self.directory = directory
         self.name = name
         self.rate = rate
@@ -18,6 +31,20 @@ class CheckpointManager:
 
 
     def time_to_save(self, step : int) -> bool:
+        """
+        Check whenever it is time to save a model. 
+
+        Parameters
+        ----------
+        step : int
+            Current agent step.
+
+        Returns
+        -------
+        out : bool
+            True if time to save, False otherwise.
+        """
+
         if step >= self.next_checkpoint:
             self.next_checkpoint += self.rate
             return True
@@ -25,17 +52,58 @@ class CheckpointManager:
     
 
     def save(self, step : int, state_dict) -> None:
+        """
+        Save the model state.
+
+        Parameters
+        ----------
+        step : int
+            Current step in training.
+        state_dict : dict[str, t.nn.Model]
+            Pytorch model dictionary.
+        """
+
         t.save(state_dict, self.directory + "/" + self.name + f"-{step}.chkpt")
     
 
 def categorical_sample(probs):
+    """
+    Perform a categorical sample from the specified log probabilities.
+
+    Parameters
+    ----------
+    step : t.Tensor
+        Log probabilities to sample from.
+
+    Returns
+    -------
+    out : int
+        Sampled categorical element.
+    """
+    
     return t.distributions.Categorical(logits = probs).sample((1,)).item()
 
 
 def module_params_count(module):
+    """
+    Count the number of learnable parameters in the specified model.
+
+    Parameters
+    ----------
+    module : t.nn.Module
+        Model to count parameters from.
+
+    Returns
+    -------
+    out : int
+        Number of model parameters.
+    """
+
     return sum([par.numel() for par in module.parameters()])
 
 def verify_config():
+    "Verify configuration is sensible."
+
     assert LEARNING_RATE < 0.1 and "Learning rate too high (>= 0.1)"
     assert GAMMA >= 0.0 and GAMMA <= 1.0 and "Lambda must be in range [0.0, 1.0]"
     assert ENTROPY < 1.0 and "Entropy too high (>= 1.0)"

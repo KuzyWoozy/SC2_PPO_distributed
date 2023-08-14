@@ -11,11 +11,44 @@ from src.Config import GAMMA, PPO_CLIP, GPU, CUDA_GRAPHS, ENTROPY, VALUE_COEFF
 class MonteCarlo(t.nn.Module):
 
     def __init__(self, policy_ser, device):
+        """
+        Wrapper class to allow distributed forward propogation using PyTorch's DDP class.
+
+        Parameters
+        ----------
+        policy_ser : t.nn.Module
+            Serial policy to augment for parallelism.
+        device: t.device
+            Device to perform model computation on.
+        """
+
         super().__init__()
         self.policy_ser = policy_ser
         self.device = device
 
     def loss(self, actor_gain, critic_loss, entropy, func_args_dists, func_args_dists_old, actions, adv):
+        """
+        Compute the losses for backpropogation. 
+
+        Parameters
+        ----------
+        actor_gain : t.Tensor
+            Accumulate actor loss.
+        critic_loss : t.Tensor
+            Accumulate critic loss.
+        entropy : t.Tensor    
+            Accumulate entropy loss.
+        func_args_dists : list[t.Tensor]
+            Action probabilities of # steps of experience.
+        func_args_dists_old: list[t.Tensor]
+            Action probabilities from the previous iteration of # steps of experience.
+        actions: list[int]
+            Actions sampled by the agent.            
+        adv: list[t.Tensor]
+            Calculated advantage estimates.
+        """
+
+
         # Note that we're minimizing
 
         adv_detached = adv.detach()
@@ -29,6 +62,25 @@ class MonteCarlo(t.nn.Module):
         
     
     def forward(self, agent, episode_info, bootstrap):
+        """
+        Forward propogation across the trajectory. 
+
+        Parameters
+        ----------
+        agent: t.nn.Module:
+            Propogating agent.
+        episode_info: list[list[t.Tensor]]
+            Trajectory of experience to calculate the loss on.
+        bootstrap: list[t.Tensor]
+            Bootstrapped values.
+        
+        Returns
+        -------
+        out : t.Tensor
+            Complete loss for the trajectory.
+        """
+
+
         actor_gain = t.tensor([0.0], device = self.device)
         critic_loss = t.tensor([0.0], device = self.device)
         entropy = t.tensor([0.0], device = self.device)
@@ -48,7 +100,18 @@ class MonteCarlo(t.nn.Module):
 
 class SerialSGD(t.nn.Module):
 
-    def __init__(self, policy_ser, device):
+    def __init__(self, policy_ser, device): 
+        """
+        Wrapper class to allow serial forward propogation.
+
+        Parameters
+        ----------
+        policy_ser : t.nn.Module
+            Serial policy to augment for parallelism.
+        device: t.device
+            Device to perform model computation on.
+        """
+
         super().__init__()
         
         policy_ser = policy_ser.to(device = device)
@@ -78,6 +141,18 @@ class SerialSGD(t.nn.Module):
 class DistSyncSGD(t.nn.Module):
 
     def __init__(self, policy_ser, device):
+        """
+        Wrapper class to for Synchronous SGD.
+
+        Parameters
+        ----------
+        policy_ser : t.nn.Module
+            Serial policy to augment for parallelism.
+        device: t.device
+            Device to perform model computation on.
+        """
+
+
         super().__init__()
         
         policy_ser = policy_ser.to(device = device)

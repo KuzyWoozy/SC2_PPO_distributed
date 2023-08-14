@@ -6,6 +6,17 @@ from src.Config import MINIGAME_NAME, SEED
 class StarcraftMinigame(sc2_env.SC2Env):
 
     def __init__(self, agent, viz = False):
+        """
+        StarCraft II minigame wrapper.
+
+        Parameters
+        ----------
+        agent : BaseAgent 
+            Serial policy to augment for parallelism.
+        viz: bool
+            True for visualization, False otherwise.
+        """
+
         if viz:
             super().__init__(map_name = MINIGAME_NAME,
                 battle_net_map = False,

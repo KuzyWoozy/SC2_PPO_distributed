@@ -12,6 +12,15 @@ from src.Config import MINIGAME_NAME, CHECK_INTERVAL, LEARNING_RATE, CHECK_LOAD,
 class MiniStarAgent(base_agent.BaseAgent):
 
     def __init__(self, policy) -> None:
+        """
+        StarCraft II Agent class that interacts with the environments.
+
+        Parameters
+        ----------
+        policy : t.nn.Module 
+            Policy for the agent to use.
+        """
+
         super().__init__()
 
         self.policy = policy
@@ -49,7 +58,20 @@ class MiniStarAgent(base_agent.BaseAgent):
             #self.lr_scheduler.load_state_dict(t.load(CHECK_LOAD)["lr_scheduler"])
 
     def obs_to_state(self, obs):
-        
+        """
+        Convert PySC2 Observation into PyTorch representation. 
+
+        Parameters
+        ----------
+        obs : Observation
+            PySC2 observation from the environment.
+
+        Returns
+        -------
+        out : t.Tensor
+            PyTorch observation representation.
+        """
+
         state = t.from_numpy(np.expand_dims(np.stack((
                 #obs.observation.feature_screen.visibility_map / 3,
                 obs.observation.feature_screen.player_relative / 4,
@@ -73,6 +95,21 @@ class MiniStarAgent(base_agent.BaseAgent):
        
     
     def step(self, obs):
+        """
+        Follow the policy and execute an action based on the input observation. 
+
+        Parameters
+        ----------
+        obs : Observation
+            PySC2 observation from the environment.
+
+        Returns
+        -------
+        out : FunctionCall
+            PySC2 action to execute within the environment.
+        """
+
+
         super().step(obs)
         
         state = self.obs_to_state(obs)
@@ -108,10 +145,12 @@ class MiniStarAgent(base_agent.BaseAgent):
 
     
     def save_if_rdy(self, agent_steps):
+        """Check whenever to save the policy."""
         if self.check_manager.time_to_save(agent_steps):
             self.save(agent_steps)
 
     def save(self, agent_steps):
+        """Save the policy."""
         self.check_manager.save(agent_steps, {"policy" : self.policy.get_state_dict(), "optim" : self.optim.state_dict(), "lr_scheduler" : self.optim.state_dict()})
 
 
@@ -119,6 +158,7 @@ class MiniStarAgent(base_agent.BaseAgent):
 class RandomAgent(base_agent.BaseAgent):
     
     def __init__(self) -> None:
+        """Agent that executes random actions."""
         super().__init__()
 
         self.acts = []
