@@ -6,6 +6,7 @@ from src.Misc import categorical_sample
 class AtariNet(t.nn.Module):
 
     def __init__(self):
+        """Initialize Atari-net model."""
         super().__init__()
 
         self.convolve1 = t.nn.Conv2d(5, 16, 8, stride = 4)
@@ -26,6 +27,7 @@ class AtariNet(t.nn.Module):
 
     
     def forward(self, inp):
+        """Run the policy on the input and compute action probabilities."""
 
         hid = t.relu(self.actor_dense1(t.flatten(t.relu(self.convolve2(t.relu(self.convolve1(inp)))), start_dim = 1)))
 
@@ -41,6 +43,7 @@ class AtariNet(t.nn.Module):
                 self.critic(hid)
 
     def sample_args(self, func_id, x1_prob, y1_prob, x2_prob, y2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob, x1_prob_old, y1_prob_old, x2_prob_old, y2_prob_old, cg_act_prob_old, cg_id_prob_old, point_add_prob_old, army_add_prob_old):
+        """Sample from the action probabilities."""
 
         # Smart_screen
         if func_id == 451:
@@ -113,6 +116,7 @@ class AtariNet(t.nn.Module):
 class FullyConv(t.nn.Module):
 
     def __init__(self):
+        """Initialize FullyConv model."""
         super().__init__()
 
         self.convolve1 = t.nn.Conv2d(5, 16, 5, stride = 1, padding = "same")
@@ -133,7 +137,8 @@ class FullyConv(t.nn.Module):
 
 
     def forward(self, inp):
-
+        """Run the policy on the input and compute action probabilities."""
+        
         convolution = t.relu(self.convolve2(t.relu(self.convolve1(inp))))
 
         hid = t.relu(self.dense(t.flatten(convolution, start_dim = 1)))
@@ -148,7 +153,8 @@ class FullyConv(t.nn.Module):
                 self.critic(hid)
 
     def sample_args(self, func_id, coords1_prob, coords2_prob, cg_act_prob, cg_id_prob, point_add_prob, army_add_prob, coords1_prob_old, coords2_prob_old, cg_act_prob_old, cg_id_prob_old, point_add_prob_old, army_add_prob_old):
-
+        """Sample from the action probabilities."""
+        
         # Smart_screen
         if func_id == 451:
             coords1_prob_cpu = coords1_prob.to(device = t.device("cpu"))

@@ -8,7 +8,18 @@ from src.Config import MAX_AGENT_STEPS, MAX_NETWORK_UPDATES, MAX_TIME, TIMER_INT
 
 
 def network_update(agent, episode_info, terminate):
-     
+    """
+    Update the policy based on the trajectory. 
+
+    Parameters
+    ----------
+    episode_info : list[list[t.Tensor]]
+        Observed trajectory from # steps of the environment.
+    terminate : bool
+        Whenever this trajectory terminates the environment.
+    """
+
+
     agent.optim.zero_grad()
 
     if terminate:
@@ -29,6 +40,26 @@ def network_update(agent, episode_info, terminate):
 
 
 def evaluate_loop(agent, env, epi = 25):
+    """
+    Evaluate the agent score on the environment. 
+
+    Parameters
+    ----------
+    agent : BaseAgent
+        Agent to evaluate the policy of.
+    env : SC2_Env 
+        Environment to evaluate the agent's policy on.
+    epi : int
+        Number of seeds to evaluate the agent on.
+
+    Returns
+    -------
+    out : float
+        Averaged agent score performance.
+    """
+    
+
+
     steps = 0
     episodes = 0
     score = 0
@@ -73,6 +104,17 @@ def evaluate_loop(agent, env, epi = 25):
 
 
 def train_loop(agent, env):
+    
+    """
+    Train the agent on the environment. 
+
+    Parameters
+    ----------
+    agent : BaseAgent
+        Agent to evaluate the policy of.
+    env : SC2_Env 
+        Environment to evaluate the agent's policy on.
+    """
     
     steps = 0
     episodes = 0
